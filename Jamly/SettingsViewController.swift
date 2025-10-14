@@ -31,7 +31,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         content.text = settingsOptions[indexPath.row]
         cell.contentConfiguration = content
         
-        return cell 
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (settingsOptions[indexPath.row] == "Account") {
+            
+        } else if (settingsOptions[indexPath.row] == "About") {
+            
+        } else if (settingsOptions[indexPath.row] == "Log out") {
+            
+        }
     }
     
 

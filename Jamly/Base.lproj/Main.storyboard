@@ -96,6 +96,69 @@
             </objects>
             <point key="canvasLocation" x="1107.6335877862596" y="130.98591549295776"/>
         </scene>
+        <!--Account SettingsVC-->
+        <scene sceneID="ssU-bM-erg">
+            <objects>
+                <viewController id="d22-Pt-uzn" customClass="AccountSettingsVC" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vuc-It-6hL">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Your name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBu-O6-9Kz">
+                                <rect key="frame" x="75" y="135" width="81" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="yourname@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVZ-sJ-pG3">
+                                <rect key="frame" x="75" y="171" width="170" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jHQ-pu-sw9">
+                                <rect key="frame" x="0.0" y="192" width="393" height="592"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AccountTextCell" textLabel="o2D-EO-LhE" style="IBUITableViewCellStyleDefault" id="TiV-OV-Qa9">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="51"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TiV-OV-Qa9" id="cA2-Xv-28D">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o2D-EO-LhE">
+                                                    <rect key="frame" x="20" y="0.0" width="353" height="51"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6kw-Lh-o9g"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="6kw-Lh-o9g" firstAttribute="trailing" secondItem="jHQ-pu-sw9" secondAttribute="trailing" id="3PN-ab-CLb"/>
+                            <constraint firstItem="jHQ-pu-sw9" firstAttribute="leading" secondItem="6kw-Lh-o9g" secondAttribute="leading" id="56z-3s-24l"/>
+                            <constraint firstItem="dBu-O6-9Kz" firstAttribute="top" secondItem="6kw-Lh-o9g" secondAttribute="top" constant="17" id="6z4-oJ-YQ9"/>
+                            <constraint firstItem="jHQ-pu-sw9" firstAttribute="top" secondItem="KVZ-sJ-pG3" secondAttribute="bottom" id="9OF-fF-NyE"/>
+                            <constraint firstItem="KVZ-sJ-pG3" firstAttribute="top" secondItem="dBu-O6-9Kz" secondAttribute="bottom" constant="15" id="UTR-oX-YXb"/>
+                            <constraint firstItem="6kw-Lh-o9g" firstAttribute="bottom" secondItem="jHQ-pu-sw9" secondAttribute="bottom" id="aXo-c9-77h"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="accSettingsTableView" destination="jHQ-pu-sw9" id="jud-jM-NaD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="O0A-hu-Sss" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1930.534351145038" y="130.98591549295776"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
