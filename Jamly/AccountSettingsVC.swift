@@ -13,6 +13,11 @@ class AccountSettingsVC: UIViewController, UITableViewDelegate, UITableViewDataS
 
     @IBOutlet weak var accSettingsTableView: UITableView!
     
+    @IBOutlet weak var nameField: UITextField!
+    
+    @IBOutlet weak var emailField: UITextField!
+    
+    @IBOutlet weak var mobileNumberField: UITextField!
     let textCellIdentifier = "AccountTextCell"
     
     override func viewDidLoad() {
