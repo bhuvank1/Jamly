@@ -19,6 +19,16 @@ class SignupViewController: UIViewController {
         emailField.placeholder = "Enter your email"
         passwordField.placeholder = "Enter your password"
         passwordField.isSecureTextEntry = true
+        
+        // watches for a change in login status
+        Auth.auth().addStateDidChangeListener() {
+            (auth, user) in
+            if user != nil {
+                self.performSegue(withIdentifier: "createdAccountSegue", sender: nil)
+                self.emailField.text = ""
+                self.passwordField.text = ""
+            }
+        }
 
         
     }

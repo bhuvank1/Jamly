@@ -89,6 +89,7 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="createAccountButtonPressed:" destination="NpA-g2-O6Q" eventType="touchUpInside" id="0yW-13-2kD"/>
+                                    <segue destination="BYZ-38-t0r" kind="presentation" identifier="createdAccountSegue" modalPresentationStyle="fullScreen" id="WyU-2f-n3T"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Already have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6E-AA-vSn">
@@ -216,10 +217,13 @@
             <point key="canvasLocation" x="-724.4274809160305" y="103.52112676056339"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="WyU-2f-n3T"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="Jamly_LogoPDF" width="159" height="160"/>
         <systemColor name="groupTableViewBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
