@@ -1,13 +1,13 @@
 //
-//  TempViewController.swift
+//  CreatePostViewController.swift
 //  Jamly
 //
-//  Created by Mitra, Monita on 10/16/25.
+//  Created by Ajisegiri, Fareedah I on 10/16/25.
 //
 
 import UIKit
 
-class TempViewController: UIViewController {
+class CreatePostViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
