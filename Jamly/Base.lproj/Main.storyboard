@@ -15,26 +15,6 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8s-fL-y7R">
-                                <rect key="frame" x="145" y="277" width="75" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                <connections>
-                                    <segue destination="LwU-F1-cpj" kind="presentation" modalPresentationStyle="fullScreen" id="o4d-Ro-b26"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1XB-MT-0rV">
-                                <rect key="frame" x="128" y="471" width="138" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="To create page"/>
-                                <connections>
-                                    <segue destination="T8y-GN-jSP" kind="presentation" modalPresentationStyle="fullScreen" id="0gM-bp-EiI"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
@@ -42,24 +22,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="139" y="131"/>
-        </scene>
-        <!--CreatePostVC-->
-        <scene sceneID="Znh-Hq-K7e">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Settings" referencedIdentifier="CreatePostVC" id="T8y-GN-jSP" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="DTR-q7-GEH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="631" y="225"/>
-        </scene>
-        <!--SettingsVC-->
-        <scene sceneID="MR6-m4-7EN">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Settings" referencedIdentifier="SettingsVC" id="LwU-F1-cpj" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="INR-MT-5an"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yly-MN-Mif" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="619" y="36"/>
         </scene>
     </scenes>
     <resources>
