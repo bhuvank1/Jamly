@@ -8,6 +8,8 @@
 import UIKit
 
 class FollowersViewController: UIViewController {
+    
+    @IBOutlet weak var followersTable: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()

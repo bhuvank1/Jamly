@@ -8,6 +8,8 @@
 import UIKit
 
 class FollowingViewController: UIViewController {
+    
+    @IBOutlet weak var followingTable: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
