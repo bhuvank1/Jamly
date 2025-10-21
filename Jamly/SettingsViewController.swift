@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import FirebaseAuth
 
-public let settingsOptions = ["Account", "Enable Push Notifications", "Night Mode", "About", "Log out"]
+public let settingsOptions = ["Account", "Enable Push Notifications", "Night Mode", "About", "Log out", "Delete Account"]
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -18,6 +19,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     let textCellIdentifier3 = "SettingsTextCell3"
     let textCellIdentifier4 = "SettingsTextCell4"
     let textCellIdentifier5 = "SettingsTextCell5"
+    let textCellIdentifier6 = "SettingsTextCell6"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,13 +32,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = settingsTableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath)
-//        var content = cell.defaultContentConfiguration()
-//        content.text = settingsOptions[indexPath.row]
-//        cell.contentConfiguration = content
-//        
-//        return cell
-        
         // Determine which cell identifier to use based on the row
                 let cell: UITableViewCell
                 
@@ -64,25 +59,23 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if (settingsOptions[indexPath.row] == "Account") {
-//            settingsTableView.deselectRow(at: indexPath, animated: false)
-//        } else if (settingsOptions[indexPath.row] == "About") {
-//            
-//        } else if (settingsOptions[indexPath.row] == "Log out") {
-//            
-//        }
+        if (settingsOptions[indexPath.row] == "Log out") {
+            do {
+                try Auth.auth().signOut()
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC") // IF ERROR, REMEMBER TO SET LOGIN VIEW CONTROLLER IN STORYBOARD'S ID TO LoginVC
+                
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let sceneDelegate = windowScene.delegate as? SceneDelegate,
+                   let window = sceneDelegate.window {
+                    window.rootViewController = loginVC
+                    window.makeKeyAndVisible()
+                }
+            } catch {
+                print("Sign out error")
+            }
+        }
         settingsTableView.deselectRow(at: indexPath, animated: false)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
