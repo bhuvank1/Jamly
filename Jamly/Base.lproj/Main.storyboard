@@ -33,10 +33,10 @@
             </objects>
             <point key="canvasLocation" x="1964" y="-80"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Main Tab Bar Controller-->
         <scene sceneID="VQ7-In-ZIX">
             <objects>
-                <tabBarController id="Tc6-Xj-VQ4" sceneMemberID="viewController">
+                <tabBarController id="Tc6-Xj-VQ4" customClass="MainTabBarController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="yf4-2k-rhX"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="PDI-TA-o82">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
@@ -248,10 +248,10 @@
             </objects>
             <point key="canvasLocation" x="-724.4274809160305" y="103.52112676056339"/>
         </scene>
-        <!--View Controller-->
+        <!--createPostTemp-->
         <scene sceneID="JAG-YE-2Od">
             <objects>
-                <viewController id="zPd-et-2q0" sceneMemberID="viewController">
+                <viewController title="createPostTemp" id="zPd-et-2q0" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vxy-he-i84">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -259,9 +259,6 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="Create" selectedImage="Create" id="tC7-Kl-hbM"/>
-                    <connections>
-                        <segue destination="oEW-aE-6uL" kind="presentation" modalPresentationStyle="fullScreen" id="HzD-tx-YPN"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7rJ-ub-DRT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -276,7 +273,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Choose song..." textAlignment="natural" minimumFontSize="17" background="magnifyingglass" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="fZt-a4-l6A">
-                                <rect key="frame" x="16" y="117" width="408" height="34"/>
+                                <rect key="frame" x="16" y="179" width="408" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="F3B-SZ-nZo"/>
                                     <constraint firstAttribute="width" constant="361" id="e3J-Pj-65C"/>
@@ -301,7 +298,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type here..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0IQ-y1-awL">
-                                <rect key="frame" x="16" y="670" width="408" height="70"/>
+                                <rect key="frame" x="16" y="636" width="408" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="5VE-a3-p8v"/>
                                     <constraint firstAttribute="height" constant="70" id="rJQ-jZ-viJ"/>
@@ -328,6 +325,16 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="close" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vk5-u2-E2Z">
+                                <rect key="frame" x="22" y="82" width="47" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonConfiguration key="configuration" style="plain" image="xmark" catalog="system">
+                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="cancelButtonTapped:" destination="oEW-aE-6uL" eventType="touchUpInside" id="iLe-O0-IKQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="gHa-H3-8DT"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -372,6 +379,7 @@
         <image name="Home 2" width="24" height="24"/>
         <image name="Jamly_LogoPDF" width="159" height="160"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

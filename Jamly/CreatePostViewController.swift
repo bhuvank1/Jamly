@@ -15,15 +15,14 @@ class CreatePostViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tabBarController?.tabBar.isHidden = true
-    }
-    
     @IBAction func postButtonPressed(_ sender: Any) {
-        tabBarController?.tabBar.isHidden = false
+        dismiss(animated: true)
         // go back to home once user creates the post
         tabBarController?.selectedIndex = 0
     }
     
+    
+    @IBAction func cancelButtonTapped(_ sender: Any) {
+        dismiss(animated: true)
+    }
 }
