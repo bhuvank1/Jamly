@@ -6,41 +6,28 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
-public let AccountSettingsOptions = ["Name", "Email account", "Mobile number"]
-
-class AccountSettingsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
-    @IBOutlet weak var accSettingsTableView: UITableView!
+class AccountSettingsVC: UIViewController{
     
     @IBOutlet weak var nameField: UITextField!
     
     @IBOutlet weak var emailField: UITextField!
     
     @IBOutlet weak var mobileNumberField: UITextField!
-    let textCellIdentifier = "AccountTextCell"
+    
+    let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        accSettingsTableView.delegate = self
-        accSettingsTableView.dataSource = self
     }
     
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AccountSettingsOptions.count
+    @IBAction func saveButtonPressed(_ sender: Any) {
+        // if at least one of the fields: name, email and number are not empty then add it to the database
+        if !nameField.text!.isEmpty && !emailField.text!.isEmpty && !mobileNumberField.text!.isEmpty {
+            
+        }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = accSettingsTableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath)
-        var content = cell.defaultContentConfiguration()
-        content.text = AccountSettingsOptions[indexPath.row]
-        cell.contentConfiguration = content
-        
-        return cell
-    }
-    
-
-
 }
