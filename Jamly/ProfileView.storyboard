@@ -44,7 +44,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="WbQ-Kq-78o">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="postCell" id="WbQ-Kq-78o">
                                         <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="WbQ-Kq-78o" id="6Ux-zI-ju2">
@@ -129,11 +129,11 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
-                        <outlet property="followersCountButton" destination="PiA-6e-ZUa" id="3uf-eD-IvN"/>
-                        <outlet property="followingCountButton" destination="Boc-k8-Z4I" id="Po2-h5-ecb"/>
-                        <outlet property="postTable" destination="dJk-sq-a0w" id="zTM-KW-pMW"/>
-                        <outlet property="userImage" destination="06F-0g-mC4" id="f1a-UD-ZVX"/>
-                        <outlet property="usernameLabel" destination="cmR-Db-YFk" id="hmA-bi-IaQ"/>
+                        <outlet property="followersCountButton" destination="PiA-6e-ZUa" id="hix-6B-RN2"/>
+                        <outlet property="followingCountButton" destination="Boc-k8-Z4I" id="cyg-Nn-Enr"/>
+                        <outlet property="postTable" destination="dJk-sq-a0w" id="9L1-7C-XjO"/>
+                        <outlet property="userImage" destination="06F-0g-mC4" id="jUl-eI-5rG"/>
+                        <outlet property="usernameLabel" destination="cmR-Db-YFk" id="GVl-rT-2vL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
