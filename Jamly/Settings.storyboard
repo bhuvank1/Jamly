@@ -213,12 +213,12 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add email" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ISs-fi-6ET">
-                                <rect key="frame" x="211" y="318" width="157" height="18.666666666666686"/>
+                                <rect key="frame" x="304" y="318" width="64" height="18.666666666666686"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add number" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8TH-gp-LgO">
-                                <rect key="frame" x="220" y="385.33333333333331" width="157" height="18.666666666666686"/>
+                                <rect key="frame" x="297.66666666666669" y="385.33333333333326" width="79.333333333333314" height="18.666666666666686"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -228,19 +228,19 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Email Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ftq-2C-rO0">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ftq-2C-rO0">
                                 <rect key="frame" x="27" y="318" width="109" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Mobile Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4KD-3b-ftN">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mobile Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4KD-3b-ftN">
                                 <rect key="frame" x="27" y="377" width="117" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmz-aV-YVD">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmz-aV-YVD">
                                 <rect key="frame" x="131" y="463" width="130" height="44"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Save changes"/>
@@ -266,11 +266,17 @@
                             <constraint firstItem="DMV-iR-qp9" firstAttribute="leading" secondItem="zHj-yO-L3u" secondAttribute="trailing" constant="40" id="OMQ-Q0-zIp"/>
                             <constraint firstItem="g4W-XX-aNw" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="27" id="RhM-D5-No3"/>
                             <constraint firstItem="rWk-wi-fUC" firstAttribute="bottom" secondItem="cmz-aV-YVD" secondAttribute="bottom" constant="311" id="SSR-HO-ejo"/>
+                            <constraint firstItem="ftq-2C-rO0" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="27" id="Ujc-bx-Vho"/>
                             <constraint firstItem="OiB-Ir-Nme" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="204" id="UmP-RW-uHW"/>
                             <constraint firstItem="OiB-Ir-Nme" firstAttribute="top" secondItem="DMV-iR-qp9" secondAttribute="bottom" constant="25" id="YLs-AR-cpE"/>
+                            <constraint firstItem="rWk-wi-fUC" firstAttribute="trailing" secondItem="ISs-fi-6ET" secondAttribute="trailing" constant="25" id="Zzm-de-Dz7"/>
                             <constraint firstItem="ftq-2C-rO0" firstAttribute="top" secondItem="g4W-XX-aNw" secondAttribute="bottom" constant="38" id="aOn-pm-7Ek"/>
+                            <constraint firstItem="rWk-wi-fUC" firstAttribute="trailing" secondItem="cmz-aV-YVD" secondAttribute="trailing" constant="132" id="cq4-Hf-SJL"/>
+                            <constraint firstItem="rWk-wi-fUC" firstAttribute="trailing" secondItem="8TH-gp-LgO" secondAttribute="trailing" constant="16" id="iQ3-mV-yVw"/>
                             <constraint firstItem="ISs-fi-6ET" firstAttribute="top" secondItem="Bx2-po-lfi" secondAttribute="bottom" constant="40" id="jYA-Fk-EXL"/>
+                            <constraint firstItem="cmz-aV-YVD" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="131" id="mgX-dg-JH2"/>
                             <constraint firstItem="4KD-3b-ftN" firstAttribute="top" secondItem="ftq-2C-rO0" secondAttribute="bottom" constant="38" id="poE-m0-IPw"/>
+                            <constraint firstItem="4KD-3b-ftN" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="27" id="tSL-Ul-PmZ"/>
                             <constraint firstItem="DMV-iR-qp9" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="204" id="tXP-PD-3lf"/>
                             <constraint firstItem="g4W-XX-aNw" firstAttribute="top" secondItem="zHj-yO-L3u" secondAttribute="bottom" constant="45" id="xeE-50-6ag"/>
                             <constraint firstItem="8TH-gp-LgO" firstAttribute="top" secondItem="ISs-fi-6ET" secondAttribute="bottom" constant="40" id="yWf-PS-QaU"/>
@@ -282,8 +288,10 @@
                     <navigationItem key="navigationItem" id="Egh-Us-xZy"/>
                     <connections>
                         <outlet property="emailField" destination="ISs-fi-6ET" id="Q2K-OU-z11"/>
+                        <outlet property="emailText" destination="OiB-Ir-Nme" id="KsC-dy-Mu0"/>
                         <outlet property="mobileNumberField" destination="8TH-gp-LgO" id="yOc-x7-vlr"/>
                         <outlet property="nameField" destination="Bx2-po-lfi" id="bgV-bx-sdb"/>
+                        <outlet property="nameText" destination="DMV-iR-qp9" id="sHS-C4-2F5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qz-Ki-ufN" sceneMemberID="firstResponder"/>
