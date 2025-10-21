@@ -79,6 +79,7 @@ class AccountSettingsVC: UIViewController{
         } else {
             print("All fields are empty. Nothing to save.")
         }
+        self.dismiss(animated: true)
     }
     
 }
