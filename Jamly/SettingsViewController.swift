@@ -67,9 +67,20 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (settingsOptions[indexPath.row] == "Log out") {
+            print("Logging out")
             do {
                 try Auth.auth().signOut()
-                self.dismiss(animated: true)
+                // Instantiate the login screen from storyboard
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC") // use your actual storyboard ID
+                
+                // Make the login screen the new root view controller
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let sceneDelegate = windowScene.delegate as? SceneDelegate,
+                   let window = sceneDelegate.window {
+                    window.rootViewController = loginVC
+                    window.makeKeyAndVisible()
+                }
             } catch {
                 print("Sign out error")
             }
