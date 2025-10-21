@@ -13,14 +13,28 @@ class Post {
     var caption: String
     var comments: [String]
     var musicName: String
-    var albumPic: UIImage
+    var userID: String
+    var postID: String
     
-    required init(rating: Int, likes: Int, caption: String, comments: [String], musicName: String, albumPic: UIImage) {
+    required init(userID: String, postID: String, rating: Int, likes: Int, caption: String, comments: [String], musicName: String) {
+        self.userID = userID
+        self.postID = postID
         self.rating = rating
         self.likes = likes
         self.caption = caption
         self.comments = comments
         self.musicName = musicName
-        self.albumPic = albumPic
+    }
+    
+    func toDictionary() -> [String: Any] {
+        return [
+            "userID": userID,
+            "postID": postID,
+            "rating": rating,
+            "likes": likes,
+            "caption": caption,
+            "comments": comments,
+            "musicName": musicName
+            ]
     }
 }
