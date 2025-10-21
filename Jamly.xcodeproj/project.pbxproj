@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F9957B3C2E9E9A09002F3E1A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F9957B3B2E9E9A09002F3E1A /* FirebaseAuth */; };
 		F9957B3E2E9E9A09002F3E1A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = F9957B3D2E9E9A09002F3E1A /* FirebaseCore */; };
+		F9EC5DF22EA80A3D0030BB49 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F9EC5DF12EA80A3D0030BB49 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			files = (
 				F9957B3E2E9E9A09002F3E1A /* FirebaseCore in Frameworks */,
 				F9957B3C2E9E9A09002F3E1A /* FirebaseAuth in Frameworks */,
+				F9EC5DF22EA80A3D0030BB49 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				F9957B3B2E9E9A09002F3E1A /* FirebaseAuth */,
 				F9957B3D2E9E9A09002F3E1A /* FirebaseCore */,
+				F9EC5DF12EA80A3D0030BB49 /* FirebaseFirestore */,
 			);
 			productName = Jamly;
 			productReference = 215E1E332E9DC2EA003211C0 /* Jamly.app */;
@@ -379,6 +382,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F9957B3A2E9E9A09002F3E1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		F9EC5DF12EA80A3D0030BB49 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9957B3A2E9E9A09002F3E1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

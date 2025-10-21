@@ -281,10 +281,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cal-bG-lfv">
-                                <rect key="frame" x="76" y="202" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Rating:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bUf-Bt-NGa">
                                 <rect key="frame" x="16" y="451" width="54" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -335,6 +331,10 @@
                                     <action selector="cancelButtonTapped:" destination="oEW-aE-6uL" eventType="touchUpInside" id="iLe-O0-IKQ"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cal-bG-lfv">
+                                <rect key="frame" x="76" y="202" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="gHa-H3-8DT"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -364,6 +364,10 @@
                         <color key="badgeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" id="K7W-5m-Ffk"/>
+                    <connections>
+                        <outlet property="captionField" destination="0IQ-y1-awL" id="fIq-sR-clW"/>
+                        <outlet property="ratingField" destination="7ZW-yU-ARI" id="w3z-aj-oNB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kAv-JM-Qvj" sceneMemberID="firstResponder"/>
             </objects>
