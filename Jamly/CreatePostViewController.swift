@@ -15,15 +15,15 @@ class CreatePostViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
     }
-    */
-
+    
+    @IBAction func postButtonPressed(_ sender: Any) {
+        tabBarController?.tabBar.isHidden = false
+        // go back to home once user creates the post
+        tabBarController?.selectedIndex = 0
+    }
+    
 }
