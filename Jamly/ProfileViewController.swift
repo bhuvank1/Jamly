@@ -15,25 +15,25 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var followersCountButton: UIButton!
     @IBOutlet weak var followingCountButton: UIButton!
     @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var postTable: UITableView!
+    @IBOutlet weak var displayPostTable: UITableView!
     @IBOutlet weak var userImage: UIImageView!
 
 
-    // Only reading documents
+
     private var postDocs: [QueryDocumentSnapshot] = []
     private var listener: ListenerRegistration?
 
-    // Show only the signed-in user's posts if this is a personal profile
+
     private let showOnlyCurrentUser = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        postTable.dataSource = self
-        postTable.delegate = self
-        postTable.isScrollEnabled = true
-        postTable.rowHeight = UITableView.automaticDimension
-        postTable.estimatedRowHeight = 72
+        displayPostTable.dataSource = self
+        displayPostTable.delegate = self
+        displayPostTable.isScrollEnabled = true
+        displayPostTable.rowHeight = UITableView.automaticDimension
+        displayPostTable.estimatedRowHeight = 72
 
         startListeningForPosts()
     }
@@ -60,7 +60,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 return
             }
             self.postDocs = snapshot?.documents ?? []
-            self.postTable.reloadData()
+            self.displayPostTable.reloadData()
         }
     }
 
@@ -72,7 +72,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         // If you have a custom cell with your own labels, dequeue it here instead
-        let cell = postTable.dequeueReusableCell(withIdentifier: "postCell")
+        let cell = displayPostTable.dequeueReusableCell(withIdentifier: "postCell")
             ?? UITableViewCell(style: .subtitle, reuseIdentifier: "postCell")
 
         let data = postDocs[indexPath.row].data()
@@ -93,6 +93,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        postTable.deselectRow(at: indexPath, animated: true)
+        displayPostTable.deselectRow(at: indexPath, animated: true)
     }
 }
