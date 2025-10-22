@@ -13,8 +13,8 @@ final class TokenManager {
     private init() {}
 
     // Hardcoding secrets is insecure. Replace with PKCE ASAP and reset Spotify App dashboard
-    private let clientID = "<YOUR_CLIENT_ID>"
-    private let clientSecret = "<YOUR_CLIENT_SECRET>"
+    private let clientID = "6b5771b30c644a27a476700829233bbc"
+    private let clientSecret = "30d3a879721742be8bc8cd531c0888d9"
 
     private let tokenURL = URL(string: "https://accounts.spotify.com/api/token")!
 

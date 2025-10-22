@@ -119,5 +119,5 @@ class SearchSongViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     //End of class
-    }
+}
 
