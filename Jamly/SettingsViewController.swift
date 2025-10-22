@@ -46,6 +46,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell4", for: indexPath)
                 case 4:
                     cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell5", for: indexPath)
+                case 5:
+                    cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell6", for: indexPath)
+
                 default:
                     cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell", for: indexPath)
                 }

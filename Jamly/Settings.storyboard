@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hBy-o9-y2I">
-                                <rect key="frame" x="0.0" y="206" width="393" height="578"/>
+                                <rect key="frame" x="0.0" y="260" width="393" height="524"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="SettingsTextCell" textLabel="HX9-94-HAe" imageView="fXw-MW-Dam" style="IBUITableViewCellStyleDefault" id="KQq-7z-DaV">
                                         <rect key="frame" x="0.0" y="50" width="393" height="51"/>
@@ -149,7 +149,7 @@
                                 </prototypes>
                             </tableView>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search for a setting..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MxT-Vb-PAI">
-                                <rect key="frame" x="16" y="162" width="361" height="34"/>
+                                <rect key="frame" x="16" y="216" width="361" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="361" id="7E4-rf-Dkn"/>
                                     <constraint firstAttribute="height" constant="34" id="gXe-K6-HIP"/>
@@ -158,11 +158,11 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bf7-sd-ieR">
-                                <rect key="frame" x="318" y="366" width="61" height="28"/>
+                                <rect key="frame" x="318" y="422" width="61" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LvK-bB-8EV">
-                                <rect key="frame" x="318" y="319" width="61" height="28"/>
+                                <rect key="frame" x="318" y="371" width="61" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </switch>
                         </subviews>
@@ -185,7 +185,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qXR-W1-xrK" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1107.6335877862596" y="130.98591549295776"/>
+            <point key="canvasLocation" x="2961.0687022900761" y="130.98591549295776"/>
         </scene>
         <!--Account SettingsVC-->
         <scene sceneID="M2Q-hC-obu">
@@ -296,7 +296,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qz-Ki-ufN" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1930.534351145038" y="130.98591549295776"/>
+            <point key="canvasLocation" x="3783.969465648855" y="130.98591549295776"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="pZR-je-PAl">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rZY-4q-hrn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="hLH-C8-lUM">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Jz2-t6-fsI" kind="relationship" relationship="rootViewController" id="eiR-MJ-8fV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3FD-Gc-aLJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2034.3511450381679" y="130.98591549295776"/>
         </scene>
     </scenes>
     <resources>
