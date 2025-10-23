@@ -1,4 +1,4 @@
-﻿Contributions
+Contributions
 Monita Mitra: 25%
 * Login/Signup Screen
 * Creating a Post (backend logic)
@@ -20,3 +20,7 @@ Bhuvan Kannaeganti: 25%
 
 Deviations
 Our original plan for this release was to have a very basic social feed show up on the home screen but we overlooked the fact that we have to work on creating the post functionality and this took up our whole time to get the functionality to work properly. We plan to work on the social feed in the beta release.
+
+Important Info
+To access the user statistics or song search features you need to connect your spotify account
+To connect you need to go to the profile screen, settings cog in the top right, Account, connect to spotify
