@@ -240,8 +240,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmz-aV-YVD">
-                                <rect key="frame" x="131" y="463" width="130" height="44"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmz-aV-YVD">
+                                <rect key="frame" x="44" y="463" width="130" height="44"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Save changes"/>
                                 <connections>
@@ -255,26 +255,49 @@
                                     <constraint firstAttribute="height" constant="112" id="rac-WM-pvY"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xti-y1-fOY">
+                                <rect key="frame" x="27" y="420" width="147" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Connect Spotify"/>
+                                <connections>
+                                    <action selector="spotifyButtonPressed:" destination="Wst-yF-9t1" eventType="touchUpInside" id="14X-fp-K8P"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Sv-Xp-3OX">
+                                <rect key="frame" x="222" y="463" width="117" height="44"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Cancel">
+                                    <color key="baseBackgroundColor" systemColor="systemRedColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="cancelButtonPressed:" destination="Wst-yF-9t1" eventType="touchUpInside" id="PmQ-7g-YNh"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="rWk-wi-fUC"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="cmz-aV-YVD" firstAttribute="top" secondItem="4KD-3b-ftN" secondAttribute="bottom" constant="65" id="08Z-H6-2SU"/>
                             <constraint firstItem="Bx2-po-lfi" firstAttribute="leading" secondItem="g4W-XX-aNw" secondAttribute="trailing" constant="139" id="0ib-Mr-mz5"/>
+                            <constraint firstItem="cmz-aV-YVD" firstAttribute="top" secondItem="Xti-y1-fOY" secondAttribute="bottom" constant="8" symbolic="YES" id="6D8-ao-oyn"/>
+                            <constraint firstItem="rWk-wi-fUC" firstAttribute="trailing" secondItem="7Sv-Xp-3OX" secondAttribute="trailing" constant="71" id="HDr-PM-02Q"/>
+                            <constraint firstItem="cmz-aV-YVD" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="44" id="HYq-Vq-7gK"/>
+                            <constraint firstItem="7Sv-Xp-3OX" firstAttribute="top" secondItem="8TH-gp-LgO" secondAttribute="bottom" constant="59.000000000000057" id="HZO-s4-0bP"/>
                             <constraint firstItem="DMV-iR-qp9" firstAttribute="top" secondItem="rWk-wi-fUC" secondAttribute="top" constant="43" id="LtL-FY-6Np"/>
                             <constraint firstItem="Bx2-po-lfi" firstAttribute="top" secondItem="rWk-wi-fUC" secondAttribute="top" constant="200" id="MrZ-ft-SM9"/>
                             <constraint firstItem="DMV-iR-qp9" firstAttribute="leading" secondItem="zHj-yO-L3u" secondAttribute="trailing" constant="40" id="OMQ-Q0-zIp"/>
                             <constraint firstItem="g4W-XX-aNw" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="27" id="RhM-D5-No3"/>
+                            <constraint firstItem="Xti-y1-fOY" firstAttribute="top" secondItem="4KD-3b-ftN" secondAttribute="bottom" constant="22" id="S6i-IH-M2K"/>
                             <constraint firstItem="rWk-wi-fUC" firstAttribute="bottom" secondItem="cmz-aV-YVD" secondAttribute="bottom" constant="311" id="SSR-HO-ejo"/>
                             <constraint firstItem="ftq-2C-rO0" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="27" id="Ujc-bx-Vho"/>
                             <constraint firstItem="OiB-Ir-Nme" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="204" id="UmP-RW-uHW"/>
+                            <constraint firstItem="rWk-wi-fUC" firstAttribute="bottom" secondItem="7Sv-Xp-3OX" secondAttribute="bottom" constant="311" id="Wzy-81-MJD"/>
                             <constraint firstItem="OiB-Ir-Nme" firstAttribute="top" secondItem="DMV-iR-qp9" secondAttribute="bottom" constant="25" id="YLs-AR-cpE"/>
                             <constraint firstItem="rWk-wi-fUC" firstAttribute="trailing" secondItem="ISs-fi-6ET" secondAttribute="trailing" constant="25" id="Zzm-de-Dz7"/>
                             <constraint firstItem="ftq-2C-rO0" firstAttribute="top" secondItem="g4W-XX-aNw" secondAttribute="bottom" constant="38" id="aOn-pm-7Ek"/>
-                            <constraint firstItem="rWk-wi-fUC" firstAttribute="trailing" secondItem="cmz-aV-YVD" secondAttribute="trailing" constant="132" id="cq4-Hf-SJL"/>
+                            <constraint firstItem="7Sv-Xp-3OX" firstAttribute="leading" secondItem="cmz-aV-YVD" secondAttribute="trailing" constant="48" id="e7y-oW-Idl"/>
                             <constraint firstItem="rWk-wi-fUC" firstAttribute="trailing" secondItem="8TH-gp-LgO" secondAttribute="trailing" constant="16" id="iQ3-mV-yVw"/>
                             <constraint firstItem="ISs-fi-6ET" firstAttribute="top" secondItem="Bx2-po-lfi" secondAttribute="bottom" constant="40" id="jYA-Fk-EXL"/>
-                            <constraint firstItem="cmz-aV-YVD" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="131" id="mgX-dg-JH2"/>
                             <constraint firstItem="4KD-3b-ftN" firstAttribute="top" secondItem="ftq-2C-rO0" secondAttribute="bottom" constant="38" id="poE-m0-IPw"/>
                             <constraint firstItem="4KD-3b-ftN" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="27" id="tSL-Ul-PmZ"/>
                             <constraint firstItem="DMV-iR-qp9" firstAttribute="leading" secondItem="rWk-wi-fUC" secondAttribute="leading" constant="204" id="tXP-PD-3lf"/>
@@ -292,6 +315,7 @@
                         <outlet property="mobileNumberField" destination="8TH-gp-LgO" id="yOc-x7-vlr"/>
                         <outlet property="nameField" destination="Bx2-po-lfi" id="bgV-bx-sdb"/>
                         <outlet property="nameText" destination="DMV-iR-qp9" id="sHS-C4-2F5"/>
+                        <outlet property="spotifyButton" destination="Xti-y1-fOY" id="XdW-et-gHT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qz-Ki-ufN" sceneMemberID="firstResponder"/>
@@ -325,6 +349,9 @@
         <image name="rectangle.portrait.and.arrow.forward" catalog="system" width="128" height="109"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
