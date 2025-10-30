@@ -10,6 +10,11 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController {
 
+    @IBOutlet weak var accountSubtitle: UILabel!
+    @IBOutlet weak var accountTitle: UILabel!
+    @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var segCtrl: UISegmentedControl!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
@@ -31,7 +36,24 @@ class LoginViewController: UIViewController {
         }
     }
     
-   
+    @IBAction func segCtrlChanged(_ sender: Any) {
+        switch segCtrl.selectedSegmentIndex {
+        case 0:
+            loginButton.isHidden = false
+            registerButton.isHidden = true
+            accountTitle.text = "Sign In"
+            accountSubtitle.text = "Enter your email and password"
+        case 1:
+            loginButton.isHidden = true
+            registerButton.isHidden = false
+            accountTitle.text = "Create Account"
+            accountSubtitle.text = "Enter your credentials to sign up for Jamly"
+        default:
+            print("user made unexpected choice!")
+        }
+        
+    }
+    
     @IBAction func loginButtonPressed(_ sender: Any) {
         Auth.auth().signIn(withEmail: emailField.text!, password: passwordField.text!) {
             (authResult, error) in
@@ -41,9 +63,17 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @IBAction func createAccountButtonPressed(_ sender: Any) {
-        self.performSegue(withIdentifier: "wantToCreateAccountSegue", sender: nil)
+    
+    @IBAction func createAccountButtonTapped(_ sender: Any) {
+        Auth.auth().createUser(withEmail: emailField.text!, password: passwordField.text!) {
+            (authResult, error) in
+            if let error = error as NSError? {
+                self.makePopup(popupTitle: "Error", popupMessage: error.localizedDescription)
+            }
+        }
     }
+    
+
     
     func makePopup(popupTitle:String, popupMessage:String) {
             
