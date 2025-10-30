@@ -1,15 +1,15 @@
 //
-//  FollowersViewController.swift
+//  FriendsViewController.swift
 //  Jamly
 //
-//  Created by Rohan Pant on 10/17/25.
+//  Created by Rohan Pant on 10/30/25.
 //
 
 import UIKit
 
-class FollowersViewController: UIViewController {
+class FriendsViewController: UIViewController {
     
-    @IBOutlet weak var followersTable: UITableView!
+    @IBOutlet weak var friendsTable: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,3 +29,4 @@ class FollowersViewController: UIViewController {
     */
 
 }
+
