@@ -19,18 +19,16 @@ class AccountSettingsVC: UIViewController{
     
     @IBOutlet weak var nameText: UILabel!
     @IBOutlet weak var emailText: UILabel!
-    @IBOutlet weak var spotifyButton: UIButton!
     
     let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchUserInfo()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        checkSpotifyConnection()
+        fetchUserInfo()
     }
     
     func fetchUserInfo() {
@@ -93,43 +91,4 @@ class AccountSettingsVC: UIViewController{
         self.dismiss(animated: true)
     }
     
-    @IBAction func spotifyButtonPressed(_ sender: Any) {
-        SpotifyAuthManager.shared.signIn {
-            success in DispatchQueue.main.async {
-                if success {
-                    
-                    let alert = UIAlertController(title: "Connected 🎉", message: "You can now use Spotify features.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self.setSpotifyButtonState(connected: true)
-                } else {
-                    let alert = UIAlertController(title: "Login Failed", message: "Please try again.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self.spotifyButton.titleLabel?.text = "Failed"
-                    self.present(alert, animated: true)
-                    
-                }
-            }
-        }
-    }
-    
-    //Helper function to set spotify button state
-    private func setSpotifyButtonState(connected: Bool) {
-        if connected {
-            spotifyButton.setTitle("Connected to Spotify", for: .normal)
-            spotifyButton.backgroundColor = .systemGreen
-        } else {
-            spotifyButton.setTitle("Connect Spotify", for: .normal)
-            spotifyButton.backgroundColor = .systemBlue
-        }
-    }
-    
-    //Helper function to check if there is already a valid connection
-    private func checkSpotifyConnection() {
-        SpotifyAuthManager.shared.getValidAccessToken { token in
-            DispatchQueue.main.async {
-                let connected = token != nil
-                self.setSpotifyButtonState(connected: connected)
-            }
-        }
-    }
 }
