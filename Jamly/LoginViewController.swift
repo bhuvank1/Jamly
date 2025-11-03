@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var accountSubtitle: UILabel!
     @IBOutlet weak var accountTitle: UILabel!
@@ -20,10 +20,17 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        emailField.delegate = self
+        passwordField.delegate = self
 
         emailField.placeholder = "Enter your email"
         passwordField.placeholder = "Enter your password"
         passwordField.isSecureTextEntry = true
+        
+        loginButton.isHidden = false
+        registerButton.isHidden = true
+        accountTitle.text = "Sign In"
+        accountSubtitle.text = "Enter your email and password"
         
         // watches for a change in login status
         Auth.auth().addStateDidChangeListener() {
@@ -73,8 +80,17 @@ class LoginViewController: UIViewController {
         }
     }
     
-
+    // Called when 'return' key pressed
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
+    // Called when the user clicks on the view outside of the UITextField
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+
     func makePopup(popupTitle:String, popupMessage:String) {
             
             let controller = UIAlertController(
