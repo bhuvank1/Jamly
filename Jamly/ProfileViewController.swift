@@ -70,10 +70,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        // If you have a custom cell with your own labels, dequeue it here instead
-        let cell = displayPostTable.dequeueReusableCell(withIdentifier: "postCell")
-            ?? UITableViewCell(style: .subtitle, reuseIdentifier: "postCell")
+        
+        guard let cell = displayPostTable.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as? PostThumbnailTableViewCell else {
+            fatalError("Could not deque timer cell")
+        }
 
         let data = postDocs[indexPath.row].data()
 
@@ -82,17 +82,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let rating = (data["rating"] as? Int) ?? (data["rating"] as? NSNumber)?.intValue ?? 0
         let likes  = (data["likes"]  as? Int) ?? (data["likes"]  as? NSNumber)?.intValue  ?? 0
         let music  = data["musicName"] as? String ?? ""
-
-        cell.textLabel?.numberOfLines = 0
-        cell.textLabel?.text = caption
-        cell.detailTextLabel?.text = "Rating: \(rating) • Likes: \(likes) • \(music)"
+          
+        cell.songName.text = music
+        cell.songRating.text = String(rating)
 
         return cell
     }
 
-    // MARK: UITableViewDelegate
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         displayPostTable.deselectRow(at: indexPath, animated: true)
     }
 }
