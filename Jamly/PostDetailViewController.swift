@@ -7,7 +7,15 @@
 
 import UIKit
 
-class PostDetailViewController: UIViewController {
+class PostDetailViewController: UIViewController, UIScrollViewDelegate {
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    var contentView: UIContentView!
+    var postImageView: UIImageView!
+    
+    var post: Post?
+    var captionLabel: UILabel!
+    var ratingLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
