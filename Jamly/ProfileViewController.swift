@@ -28,6 +28,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let user = Auth.auth().currentUser else {
+            print("User is presently not signed in.")
+            return
+        }
+        usernameLabel.text = user.displayName
 
         displayPostTable.dataSource = self
         displayPostTable.delegate = self
