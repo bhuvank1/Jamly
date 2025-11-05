@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Anw-eY-1Xs">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Anw-eY-1Xs">
     <device id="retina6_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -13,7 +13,7 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Home Screen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gP9-Cf-On0">
@@ -64,7 +64,7 @@
                     <tabBarItem key="tabBarItem" title="Home" image="Home" selectedImage="Home 2" id="NUw-L9-2oA"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GbU-UW-tmQ">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="44"/>
+                        <rect key="frame" x="0.0" y="62" width="440" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -187,7 +187,7 @@
             <objects>
                 <viewController title="createPostTemp" id="zPd-et-2q0" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vxy-he-i84">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="U1v-gJ-DjR"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -219,7 +219,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type here..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0IQ-y1-awL">
-                                <rect key="frame" x="16" y="670" width="408" height="70"/>
+                                <rect key="frame" x="16" y="636" width="408" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="5VE-a3-p8v"/>
                                     <constraint firstAttribute="height" constant="70" id="rJQ-jZ-viJ"/>
@@ -318,11 +318,11 @@
             <objects>
                 <viewController id="795-aZ-ngM" customClass="ProfileStatisticsViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EQ7-sY-kpU">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="zE5-vw-TTe">
-                                <rect key="frame" x="20" y="44" width="400" height="32"/>
+                                <rect key="frame" x="20" y="106" width="400" height="32"/>
                                 <segments>
                                     <segment title="Genres"/>
                                     <segment title="Artists"/>
@@ -333,7 +333,7 @@
                                 </connections>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Xoo-dk-ZiH">
-                                <rect key="frame" x="45" y="83" width="350" height="32"/>
+                                <rect key="frame" x="45" y="145" width="350" height="32"/>
                                 <segments>
                                     <segment title="Top 5"/>
                                     <segment title="Top 10"/>
@@ -344,7 +344,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Fjx-gT-vYY">
-                                <rect key="frame" x="0.0" y="129" width="440" height="729"/>
+                                <rect key="frame" x="0.0" y="191" width="440" height="633"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="StatCell" textLabel="OtA-QX-UTf" detailTextLabel="o93-lg-FLh" style="IBUITableViewCellStyleSubtitle" id="U2I-x9-fF0">
@@ -415,7 +415,7 @@
             <objects>
                 <viewController id="aNW-7F-iCi" customClass="FriendsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Pz0-Wc-mhO">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6QV-wM-2Iq">
@@ -441,7 +441,7 @@
             <objects>
                 <viewController id="xbV-Vh-Vjb" customClass="ProfileViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8pU-Zo-cwM">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="person.crop.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="OYP-Ze-8gC">
@@ -565,7 +565,6 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="displayPostTable" destination="cVY-pT-pGe" id="cDg-Nb-2g1"/>
-                        <outlet property="followersCountButton" destination="c9D-KA-qq0" id="jCy-LG-Ors"/>
                         <outlet property="userImage" destination="OYP-Ze-8gC" id="Szf-P3-JKL"/>
                         <outlet property="usernameLabel" destination="qMp-RT-aQI" id="Y0S-Aj-aXC"/>
                     </connections>
@@ -579,7 +578,7 @@
             <objects>
                 <viewController id="O33-Jy-8Dw" customClass="FollowingViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jTf-fd-w1R">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="1p1-Nr-1ET">
@@ -667,7 +666,7 @@
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="UDg-ID-ZTt">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="44"/>
+                        <rect key="frame" x="0.0" y="62" width="440" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -684,11 +683,11 @@
             <objects>
                 <viewController id="FRw-gh-dQp" customClass="SearchSongViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="H95-am-aHE">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="873"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Fe0-Mp-j3P">
-                                <rect key="frame" x="0.0" y="44" width="440" height="863"/>
+                                <rect key="frame" x="0.0" y="106" width="440" height="767"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TrackCell" textLabel="Nxe-ZZ-1TY" detailTextLabel="Pbs-6s-pnh" style="IBUITableViewCellStyleSubtitle" id="djv-Nv-iGd">
@@ -745,7 +744,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8jl-pE-acf">
-                                <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                                <rect key="frame" x="0.0" y="62" width="440" height="860"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TrackCell" textLabel="hND-nK-7BN" detailTextLabel="ZiC-Tx-BiV" style="IBUITableViewCellStyleSubtitle" id="LYl-sK-qHG">
@@ -802,7 +801,7 @@
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="fjV-nh-CSe">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="44"/>
+                        <rect key="frame" x="0.0" y="62" width="440" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
