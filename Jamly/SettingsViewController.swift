@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 let settingsOptions: [SettingOption] =
 [SettingOption(title: "Account", type: .navigation),
@@ -147,6 +148,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     return
                 }
                 
+                // delete any database info about this user
+                self.deleteDatabaseInfo()
                 user.delete() { error in
                     if let error = error {
                         print("Error deleting user: \(error.localizedDescription)")
@@ -159,6 +162,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                                 } catch let signOutError as NSError {
                                     print("Error signing out: \(signOutError.localizedDescription)")
                                 }
+                        
                         
                         // reroute back to login screen
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -178,6 +182,20 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         controller.addAction(cancelAction)
         controller.addAction(okAction)
         present(controller, animated: true)
+    }
+    
+    func deleteDatabaseInfo() {
+        guard let user = Auth.auth().currentUser else { return }
+        let uid = user.uid
+        
+        let db = Firestore.firestore()
+        db.collection("userInfo").document(uid).delete { error in
+            if let error = error {
+                print("Error deleting Firestore data: \(error.localizedDescription)")
+            } else {
+                print("User data deleted from Firestore.")
+            }
+        }
     }
     
     func makePopup(popupTitle:String, popupMessage:String) {
