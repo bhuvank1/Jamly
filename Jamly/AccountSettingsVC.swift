@@ -66,7 +66,7 @@ class AccountSettingsVC: UIViewController{
         // Check if at least one field is not empty
         if !name.isEmpty || !email.isEmpty || !mobileNumber.isEmpty {
             // get user id to associate a user to their user info
-            guard let user = Auth.auth().currentUser else { return
+            guard let user = Auth.auth().currentUser else {
                 print("No user is currently signed in.")
                 return
             }
