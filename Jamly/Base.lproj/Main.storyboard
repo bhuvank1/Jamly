@@ -505,7 +505,7 @@
                                             <outlet property="albumPic" destination="0zh-Tk-YqS" id="T50-KZ-9pz"/>
                                             <outlet property="songName" destination="DxI-Fd-b1J" id="9vk-iI-rmT"/>
                                             <outlet property="songRating" destination="ogH-5J-LrU" id="KxV-o5-j7n"/>
-                                            <segue destination="PY0-5G-VBd" kind="show" id="3bv-J2-5pg"/>
+                                            <segue destination="PY0-5G-VBd" kind="show" identifier="postDetailSegue" id="3bv-J2-5pg"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

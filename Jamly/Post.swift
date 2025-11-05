@@ -9,14 +9,14 @@ import UIKit
 
 class Post {
     var rating: Int
-    var likes: Int
+    var likes: [String]
     var caption: String
-    var comments: [String]
+    var comments: [Comment]
     var musicName: String
     var userID: String
     var postID: String
     
-    required init(userID: String, postID: String, rating: Int, likes: Int, caption: String, comments: [String], musicName: String) {
+    required init(userID: String, postID: String, rating: Int, likes: [String], caption: String, comments: [Comment], musicName: String) {
         self.userID = userID
         self.postID = postID
         self.rating = rating

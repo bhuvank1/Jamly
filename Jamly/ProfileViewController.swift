@@ -10,87 +10,109 @@ import FirebaseAuth
 import FirebaseFirestore
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
     // Other profile UI
     @IBOutlet weak var followersCountButton: UIButton!
     @IBOutlet weak var followingCountButton: UIButton!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var displayPostTable: UITableView!
     @IBOutlet weak var userImage: UIImageView!
-
-
-
-    private var postDocs: [QueryDocumentSnapshot] = []
+    
+    
+    
+    private var postDocs: [Post] = []
     private var listener: ListenerRegistration?
-
-
+    
+    
     private let showOnlyCurrentUser = true
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         displayPostTable.dataSource = self
         displayPostTable.delegate = self
         displayPostTable.isScrollEnabled = true
         displayPostTable.rowHeight = UITableView.automaticDimension
         displayPostTable.estimatedRowHeight = 72
-
+        
         startListeningForPosts()
     }
-
+    
     deinit { listener?.remove() }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
     }
-
+    
     private func startListeningForPosts() {
         let db = Firestore.firestore()
-        var query: Query = db.collection("posts")
-
-        if showOnlyCurrentUser, let uid = Auth.auth().currentUser?.uid {
-            query = query.whereField("userID", isEqualTo: uid)
-        }
-
-
-        listener = query.addSnapshotListener { [weak self] snapshot, error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Failed to fetch posts: \(error.localizedDescription)")
-                return
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        db.collection("posts").whereField("userID", isEqualTo: uid).getDocuments {
+            (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    if let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue,
+                       let caption = data["caption"] as? String,
+                       let likes = data["likes"] as? [String],
+                       let musicName = data["musicName"] as? String,
+                       let commentDicts = data["comments"] as? [[String: Any]] {
+                        
+                        var comments: [Comment] = []
+                        for dict in commentDicts {
+                           if let userID = dict["userID"] as? String,
+                               let commentText = dict["commentText"] as? String {
+                               let comment = Comment(userID: userID, commentText: commentText)
+                               comments.append(comment)
+                            }
+                        }
+                        
+                        let newPost = Post(userID: uid, postID: document.documentID, rating: rating, likes: likes, caption: caption,
+                                           comments: comments,musicName: musicName)
+                        
+                        self.postDocs.append(newPost)
+                    }
+                }
+                self.displayPostTable.reloadData()
             }
-            self.postDocs = snapshot?.documents ?? []
-            self.displayPostTable.reloadData()
         }
     }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        postDocs.count
-    }
-
-    func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = displayPostTable.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as? PostThumbnailTableViewCell else {
-            fatalError("Could not deque timer cell")
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            postDocs.count
         }
-
-        let data = postDocs[indexPath.row].data()
-
-        // Safely read fields from Firestore
-        let caption = data["caption"] as? String ?? ""
-        let rating = (data["rating"] as? Int) ?? (data["rating"] as? NSNumber)?.intValue ?? 0
-        let likes  = (data["likes"]  as? Int) ?? (data["likes"]  as? NSNumber)?.intValue  ?? 0
-        let music  = data["musicName"] as? String ?? ""
-          
-        cell.songName.text = music
-        cell.songRating.text = String(rating)
-
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        displayPostTable.deselectRow(at: indexPath, animated: true)
+        func tableView(_ tableView: UITableView,
+                       cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            
+            guard let cell = displayPostTable.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as? PostThumbnailTableViewCell else {
+                fatalError("Could not deque timer cell")
+            }
+            
+            let postData = postDocs[indexPath.row]
+            
+            cell.songName.text = postData.musicName
+            cell.songRating.text = String(postData.rating)
+            
+            return cell
+        }
+        
+        
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            
+            displayPostTable.deselectRow(at: indexPath, animated: true)
+        }
+    
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "postDetailSegue",
+               let postIndex = displayPostTable.indexPathForSelectedRow?.row,
+               let destVC = segue.destination as? PostDetailViewController {
+                destVC.post = postDocs[postIndex]
+            }
+        }
+    
     }
-}
+
