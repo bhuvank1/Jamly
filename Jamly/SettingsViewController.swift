@@ -8,18 +8,21 @@
 import UIKit
 import FirebaseAuth
 
-public let settingsOptions = ["Account", "Enable Push Notifications", "Night Mode", "About", "Log out", "Delete Account"]
+let settingsOptions: [SettingOption] =
+[SettingOption(title: "Account", type: .navigation),
+ SettingOption(title: "Enable Push Notifications", type: .toggle),
+ SettingOption(title: "Dark Mode", type: .toggle),
+ SettingOption(title: "About", type: .navigation),
+ SettingOption(title: "Log out", type: .action),
+ SettingOption(title: "Delete Account",type: .action)]
+
+let defaults = UserDefaults.standard
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var settingsTableView: UITableView!
     
     let textCellIdentifier = "SettingsTextCell"
-    let textCellIdentifier2 = "SettingsTextCell2"
-    let textCellIdentifier3 = "SettingsTextCell3"
-    let textCellIdentifier4 = "SettingsTextCell4"
-    let textCellIdentifier5 = "SettingsTextCell5"
-    let textCellIdentifier6 = "SettingsTextCell6"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,58 +30,91 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         settingsTableView.delegate = self
     }
     
+    @IBAction func darkModeToggled(_ sender: UISwitch) {
+        if (sender.isOn) {
+            overrideUserInterfaceStyle = .dark
+            defaults.set(true, forKey: "jamlyDarkMode")
+        } else {
+            overrideUserInterfaceStyle = .light
+            defaults.set(false, forKey: "jamlyDarkMode")
+        }
+        
+        // apply appearance to other screen
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.overrideUserInterfaceStyle = sender.isOn ? .dark : .light
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settingsOptions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Determine which cell identifier to use based on the row
-                let cell: UITableViewCell
-                
-                switch indexPath.row {
-                case 0:
-                    cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell", for: indexPath)
-                case 1:
-                    cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell2", for: indexPath)
-                case 2:
-                    cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell3", for: indexPath)
-                case 3:
-                    cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell4", for: indexPath)
-                case 4:
-                    cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell5", for: indexPath)
-                case 5:
-                    cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell6", for: indexPath)
-
-                default:
-                    cell = settingsTableView.dequeueReusableCell(withIdentifier: "SettingsTextCell", for: indexPath)
-                }
-
-                // Set the content dynamically based on the row
-                var content = cell.defaultContentConfiguration()
-                content.text = settingsOptions[indexPath.row]
-                cell.contentConfiguration = content
-
-                return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTextCell", for: indexPath) as! SettingsTableViewCell
+        let option = settingsOptions[indexPath.row]
+        
+        cell.cellLabel.text = option.title
+        cell.darkModeSwitch.isHidden = true
+        cell.notificationSwitch.isHidden = true
+        cell.accessoryType = .none
+        
+        switch option.type {
+        case .navigation:
+            cell.accessoryType = .disclosureIndicator
+            
+        case .toggle:
+            if (option.title == "Dark Mode") {
+                cell.darkModeSwitch.isHidden = false
+                cell.darkModeSwitch.isOn = defaults.bool(forKey: "jamlyDarkMode")
+                cell.darkModeSwitch.addTarget(self, action: #selector(darkModeToggled(_:)), for: .valueChanged)
+            }
+            if (option.title == "Enable Push Notifications" ) {
+                cell.notificationSwitch.isHidden = false
+            }
+            
+        case .action:
+            break
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        let option = settingsOptions[indexPath.row]
+        return option.type == .navigation || option.type == .action ? indexPath : nil
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (settingsOptions[indexPath.row] == "Log out") {
-            do {
-                try Auth.auth().signOut()
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC") // IF ERROR, REMEMBER TO SET LOGIN VIEW CONTROLLER IN STORYBOARD'S ID TO LoginVC
-                
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                   let sceneDelegate = windowScene.delegate as? SceneDelegate,
-                   let window = sceneDelegate.window {
-                    window.rootViewController = loginVC
-                    window.makeKeyAndVisible()
-                }
-            } catch {
-                print("Sign out error")
-            }
+        let option = settingsOptions[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        switch option.title {
+        case "Account":
+            performSegue(withIdentifier: "AccountSegue", sender: self)
+        case "Log out":
+            handleLogout()
+        default:
+            break
         }
+
         settingsTableView.deselectRow(at: indexPath, animated: false)
+    }
+    
+    func handleLogout() {
+        do {
+            try Auth.auth().signOut()
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC") // IF ERROR, REMEMBER TO SET LOGIN VIEW CONTROLLER IN STORYBOARD'S ID TO LoginVC
+            
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let sceneDelegate = windowScene.delegate as? SceneDelegate,
+               let window = sceneDelegate.window {
+                window.rootViewController = loginVC
+                window.makeKeyAndVisible()
+            }
+        } catch {
+            print("Sign out error")
+        }
     }
 
 }
