@@ -38,7 +38,6 @@ class User {
             "profilePictureURL": profilePictureURL ?? "",
             "posts": posts.map { $0.toDictionary() },  // Convert posts to a dictionary format
             "friends": friends,
-            "createdAt": Timestamp()
         ]
     }
    
@@ -51,8 +50,7 @@ class User {
               let profilePictureURL = data["profilePictureURL"] as? String?,
               let postsData = data["posts"] as? [[String: Any]],
               let friends = data["friends"] as? [String] else { return nil }
-       
-        let posts = [Post]()
+        let posts = postsData.compactMap {Post.fromFirestore(data: $0)}
        
         return User(uid: uid, email: email, name: name, username: username, profilePictureURL: profilePictureURL, posts: posts, friends: friends)
     }
