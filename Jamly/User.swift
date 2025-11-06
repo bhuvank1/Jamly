@@ -6,53 +6,47 @@
 //
 
 import FirebaseFirestore
-import FirebaseAuth
 
 class User {
-    var uid: String
+    var displayName: String
     var email: String
+    var mobileNumber: String
     var name: String
-    var username: String
-    var profilePictureURL: String?
-    var posts: [Post]  // Array of Post objects
-    var friends: [String]  // List of friend userIDs (not full User objects, only IDs)
-   
+    var friends: [String]  // Array of friend userIDs (strings)
+
     // Initializer for User class
-    init(uid: String, email: String, name: String, username: String, profilePictureURL: String? = nil, posts: [Post] = [], friends: [String] = []) {
-        self.uid = uid
+    init(displayName: String, email: String, mobileNumber: String, name: String, friends: [String] = []) {
+        self.displayName = displayName
         self.email = email
+        self.mobileNumber = mobileNumber
         self.name = name
-        self.username = username
-        self.profilePictureURL = profilePictureURL
-        self.posts = posts
         self.friends = friends
     }
-   
-    // Function to convert the User object to a Firestore document format
+
+    // Convert User object to Firestore-compatible dictionary
     func toFirestoreData() -> [String: Any] {
         return [
-            "uid": uid,
+            "displayName": displayName,
             "email": email,
+            "mobileNumber": mobileNumber,
             "name": name,
-            "username": username,
-            "profilePictureURL": profilePictureURL ?? "",
-            "posts": posts.map { $0.toDictionary() },  // Convert posts to a dictionary format
-            "friends": friends,
+            "friends": friends  // Add friends array
         ]
     }
-   
-    // Function to initialize User object from Firestore data
+
+    // Static method to initialize a User object from Firestore data (a dictionary)
     static func fromFirestore(data: [String: Any]) -> User? {
-        guard let uid = data["uid"] as? String,
+        guard let displayName = data["displayName"] as? String,
               let email = data["email"] as? String,
+              let mobileNumber = data["mobileNumber"] as? String,
               let name = data["name"] as? String,
-              let username = data["username"] as? String,
-              let profilePictureURL = data["profilePictureURL"] as? String?,
-              let postsData = data["posts"] as? [[String: Any]],
-              let friends = data["friends"] as? [String] else { return nil }
-        let posts = postsData.compactMap {Post.fromFirestore(data: $0)}
+              let friends = data["friends"] as? [String] else {
+            return nil  // Return nil if any required field is missing or incorrect
+        }
        
-        return User(uid: uid, email: email, name: name, username: username, profilePictureURL: profilePictureURL, posts: posts, friends: friends)
+        return User(displayName: displayName, email: email, mobileNumber: mobileNumber, name: name, friends: friends)
     }
-   
 }
+
+
+
