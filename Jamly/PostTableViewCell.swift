@@ -2,13 +2,19 @@
 //  PostTableViewCell.swift
 //  Jamly
 //
-//  Created by Mitra, Monita on 11/3/25.
+//  Created by Mitra, Monita on 11/6/25.
 //
 
 import UIKit
 
 class PostTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var commentsButton: UIButton!
+    @IBOutlet weak var likesButton: UIButton!
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var postImageView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
