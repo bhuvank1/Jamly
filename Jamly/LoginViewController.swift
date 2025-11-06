@@ -50,6 +50,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func segCtrlChanged(_ sender: Any) {
         switch segCtrl.selectedSegmentIndex {
         case 0:
+            usernameField.isHidden = true
             loginButton.isHidden = false
             registerButton.isHidden = true
             accountTitle.text = "Sign In"
