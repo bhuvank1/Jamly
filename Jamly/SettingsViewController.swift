@@ -8,10 +8,11 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import UserNotifications
 
 let settingsOptions: [SettingOption] =
 [SettingOption(title: "Account", type: .navigation),
- SettingOption(title: "Enable Push Notifications", type: .toggle),
+ SettingOption(title: "Enable Notifications", type: .toggle),
  SettingOption(title: "Dark Mode", type: .toggle),
  SettingOption(title: "About", type: .navigation),
  SettingOption(title: "Log out", type: .action),
@@ -47,6 +48,26 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    @IBAction func notificationSwitchToggled(_ sender: UISwitch) {
+        if (sender.isOn) {
+            UNUserNotificationCenter.current().requestAuthorization(options: .alert) { granted, error in
+                if granted { // got permission
+                    print("All set!")
+                    defaults.set(true, forKey: "jamlyNotifications")
+                } else if let error = error {
+                    print(error.localizedDescription)
+                    DispatchQueue.main.async {
+                        sender.isOn = false
+                        defaults.set(false, forKey: "jamlyNotifications")
+                    }
+                }
+            }
+        } else {
+            // turn off pending notfications
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settingsOptions.count
     }
@@ -70,8 +91,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.darkModeSwitch.isOn = defaults.bool(forKey: "jamlyDarkMode")
                 cell.darkModeSwitch.addTarget(self, action: #selector(darkModeToggled(_:)), for: .valueChanged)
             }
-            if (option.title == "Enable Push Notifications" ) {
+            if (option.title == "Enable Notifications" ) {
                 cell.notificationSwitch.isHidden = false
+                cell.notificationSwitch.isOn = defaults.bool(forKey: "jamlyNotifications")
+                cell.notificationSwitch.addTarget(self, action: #selector(notificationSwitchToggled(_:)), for: .valueChanged)
             }
             
         case .action:
