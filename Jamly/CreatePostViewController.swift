@@ -41,7 +41,7 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
         let postRef = db.collection("posts").document()
         let postID = postRef.documentID
         
-        let post = Post(userID: user.uid, postID: postID, rating: Int(ratingField.text!) ?? 1, likes: 0, caption: captionField.text!, comments: [], musicName: "Attack")
+        let post = Post(userID: user.uid, postID: postID, rating: Int(ratingField.text!) ?? 1, likes: [], caption: captionField.text!, comments: [], musicName: "Attack")
         
         postRef.setData(post.toDictionary()) { error in
             if let error = error {

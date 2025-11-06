@@ -51,6 +51,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func segCtrlChanged(_ sender: Any) {
         switch segCtrl.selectedSegmentIndex {
         case 0:
+            usernameField.isHidden = true
             loginButton.isHidden = false
             registerButton.isHidden = true
             accountTitle.text = "Sign In"
@@ -79,11 +80,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if let error = error as NSError? {
                 self.makePopup(popupTitle: "Error", popupMessage: error.localizedDescription)
             } else {
-                guard let user = Auth.auth().currentUser else { return }
-
-                // Set display name using Firebase Authentication
-                let changeRequest = user.createProfileChangeRequest()
-                changeRequest.displayName = self.usernameField.text
+                // retrive username
+                guard let user = Auth.auth().currentUser else {return}
+                // Use profile change request to update display name
+                            let changeRequest = user.createProfileChangeRequest()
+                            changeRequest.displayName = self.usernameField.text
                 changeRequest.commitChanges { error in
                     if let error = error {
                         print("Error setting display name: \(error.localizedDescription)")
@@ -91,9 +92,21 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         print("Display name successfully set to \(self.usernameField.text ?? "")")
                     }
                 }
-               
-                // Now create the user's profile document in Firestore
-                self.createUserProfileInFirestore(user: user)
+                
+                // create userinfo database and store display name
+                let uid = user.uid
+                let email = user.email
+                let displayName = self.usernameField.text
+                let userData: [String: Any] = ["name": "", "email": email, "mobileNumber": "", "displayName": displayName, "friends" :[]]
+                
+                let db = Firestore.firestore()
+                db.collection("userInfo").document(uid).setData(userData) { (error) in
+                    if let error = error {
+                        print("Error adding document: \(error)")
+                    } else {
+                        print("Document successfully added.")
+                    }
+                }
             }
         }
     }

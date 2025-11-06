@@ -1,0 +1,27 @@
+//
+//  PostThumbnailTableViewCell.swift
+//  Jamly
+//
+//  Created by Mitra, Monita on 11/3/25.
+//
+
+import UIKit
+
+class PostThumbnailTableViewCell: UITableViewCell {
+
+    @IBOutlet weak var songRating: UILabel!
+    @IBOutlet weak var songName: UILabel!
+    @IBOutlet weak var albumPic: UIImageView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
+}
