@@ -104,7 +104,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 let uid = user.uid
                 let email = user.email
                 let displayName = self.usernameField.text
-                let userData: [String: Any] = ["name": "", "email": email, "mobileNumber": "", "displayName": displayName]
+                let userData: [String: Any] = ["name": "", "email": email, "mobileNumber": "", "displayName": displayName, "friends" :[]]
                 
                 let db = Firestore.firestore()
                 db.collection("userInfo").document(uid).setData(userData) { (error) in
