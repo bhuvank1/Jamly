@@ -457,18 +457,56 @@
                                     <segue destination="aNW-7F-iCi" kind="show" identifier="showFollowersSegue" id="50c-r6-JMF"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cVY-pT-pGe">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="104" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cVY-pT-pGe">
                                 <rect key="frame" x="24" y="394" width="393" height="409"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="postCell" id="Qan-t6-J6u">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="postCell" id="Qan-t6-J6u" customClass="PostThumbnailTableViewCell" customModule="Jamly" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="104"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Qan-t6-J6u" id="6Q8-hY-62C">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="104"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="108" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-MC-vri">
+                                                    <rect key="frame" x="20" y="17" width="287" height="70"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beach_test_image" translatesAutoresizingMaskIntoConstraints="NO" id="0zh-Tk-YqS">
+                                                            <rect key="frame" x="0.0" y="0.0" width="137.66666666666666" height="70"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="70" id="PE2-vA-ck6"/>
+                                                                <constraint firstAttribute="height" constant="70" id="fLH-EU-2Nk"/>
+                                                                <constraint firstAttribute="width" secondItem="0zh-Tk-YqS" secondAttribute="height" multiplier="59:30" id="o1e-tG-9nr"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="EpQ-el-PA5">
+                                                            <rect key="frame" x="245.66666666666666" y="0.0" width="41.333333333333343" height="70"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxI-Fd-b1J">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="41.333333333333336" height="49.666666666666664"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogH-5J-LrU">
+                                                                    <rect key="frame" x="0.0" y="49.666666666666664" width="41.333333333333336" height="20.333333333333336"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="albumPic" destination="0zh-Tk-YqS" id="T50-KZ-9pz"/>
+                                            <outlet property="songName" destination="DxI-Fd-b1J" id="9vk-iI-rmT"/>
+                                            <outlet property="songRating" destination="ogH-5J-LrU" id="KxV-o5-j7n"/>
+                                            <segue destination="PY0-5G-VBd" kind="show" identifier="postDetailSegue" id="3bv-J2-5pg"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -768,12 +806,23 @@
             </objects>
             <point key="canvasLocation" x="3634.0909090909095" y="-766.31799163179915"/>
         </scene>
+        <!--PostDetailVC-->
+        <scene sceneID="TbL-5d-HPR">
+            <objects>
+                <viewControllerPlaceholder storyboardName="PostDetailStoryboard" referencedIdentifier="PostDetailVC" id="PY0-5G-VBd" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="BGY-Kf-pRL"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EU9-7h-BTv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1529" y="-469"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Create" width="24" height="24"/>
         <image name="Home" width="24" height="24"/>
         <image name="Home 2" width="24" height="24"/>
         <image name="Jamly_LogoPDF" width="159" height="160"/>
+        <image name="beach_test_image" width="2726" height="2047"/>
         <image name="bookmark.fill" catalog="system" width="110" height="128"/>
         <image name="bubble.fill" catalog="system" width="128" height="110"/>
         <image name="chart.bar.xaxis.ascending" catalog="system" width="128" height="97"/>
