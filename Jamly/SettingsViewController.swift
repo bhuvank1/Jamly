@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 let settingsOptions: [SettingOption] =
 [SettingOption(title: "Account", type: .navigation),
@@ -93,6 +94,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             performSegue(withIdentifier: "AccountSegue", sender: self)
         case "Log out":
             handleLogout()
+        case "Delete Account":
+            handleDeleteAccount()
         default:
             break
         }
@@ -116,5 +119,94 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             print("Sign out error")
         }
     }
+    
+    func handleDeleteAccount() {
+        guard let user = Auth.auth().currentUser else {return}
+        
+        // firebase requires reauthentication of user before deleting account so prompt user to re-enter password
+        let controller = UIAlertController (title: "Confirm Password", message: "Re-enter password to delete account.", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        controller.addTextField() {
+            (textField) in
+            textField.isSecureTextEntry = true
+            textField.placeholder = "Enter password"
+        }
+        
+        let okAction = UIAlertAction(title: "Delete", style: .destructive) {
+            (action) in
+            guard let password = controller.textFields![0].text,
+                  let email = user.email else {return}
+            
+            // now reauthentication
+            let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+            user.reauthenticate(with: credential) { authResult, error in
+                if let error = error {
+                    print("Reauthentication failed: \(error.localizedDescription)")
+                    self.makePopup(popupTitle: "Error", popupMessage: "Incorrect password")
+                    return
+                }
+                
+                // delete any database info about this user
+                self.deleteDatabaseInfo()
+                user.delete() { error in
+                    if let error = error {
+                        print("Error deleting user: \(error.localizedDescription)")
+                    } else {
+                        print("Account successfully deleted.")
+                        
+                        // Clear any user-related data if needed
+                                do {
+                                    try Auth.auth().signOut()
+                                } catch let signOutError as NSError {
+                                    print("Error signing out: \(signOutError.localizedDescription)")
+                                }
+                        
+                        
+                        // reroute back to login screen
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC")
+                        
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let sceneDelegate = windowScene.delegate as? SceneDelegate,
+                           let window = sceneDelegate.window {
+                            window.rootViewController = loginVC
+                            window.makeKeyAndVisible()
+                        }
+                    }
+                }
+            }
+        }
+        
+        controller.addAction(cancelAction)
+        controller.addAction(okAction)
+        present(controller, animated: true)
+    }
+    
+    func deleteDatabaseInfo() {
+        guard let user = Auth.auth().currentUser else { return }
+        let uid = user.uid
+        
+        let db = Firestore.firestore()
+        db.collection("userInfo").document(uid).delete { error in
+            if let error = error {
+                print("Error deleting Firestore data: \(error.localizedDescription)")
+            } else {
+                print("User data deleted from Firestore.")
+            }
+        }
+    }
+    
+    func makePopup(popupTitle:String, popupMessage:String) {
+            
+            let controller = UIAlertController(
+                title: popupTitle,
+                message: popupMessage,
+                preferredStyle: .alert)
+            
+            controller.addAction(UIAlertAction(title: "OK", style: .default))
+            present(controller,animated:true)
+        }
 
 }
