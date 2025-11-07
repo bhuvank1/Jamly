@@ -47,6 +47,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     private func startListeningForPosts() {
         let db = Firestore.firestore()
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        self.postDocs.removeAll()
         
         db.collection("posts").whereField("userID", isEqualTo: uid).getDocuments {
             (querySnapshot, err) in
@@ -55,13 +56,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 for document in querySnapshot!.documents {
                     let data = document.data()
-                    if let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue,
-                       let caption = data["caption"] as? String,
-                       let likes = data["likes"] as? [String],
-                       let musicName = data["musicName"] as? String,
-                       let commentDicts = data["comments"] as? [[String: Any]] {
-                        
-                        var comments: [Comment] = []
+                    let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue ?? 0
+                    let caption = data["caption"] as? String ?? ""
+                    let likes = data["likes"] as? [String] ?? []
+                    let musicName = data["musicName"] as? String ?? ""
+                    
+                    let commentDicts = data["comments"] as? [[String: Any]] ?? []
+                    var comments: [Comment] = []
                         for dict in commentDicts {
                            if let userID = dict["userID"] as? String,
                                let commentText = dict["commentText"] as? String {
@@ -70,19 +71,21 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                             }
                         }
                         
-                        let newPost = Post(userID: uid, postID: document.documentID, rating: rating, likes: likes, caption: caption,
+                    let newPost = Post(userID: uid, postID: document.documentID, rating: rating, likes: likes, caption: caption,
                                            comments: comments,musicName: musicName)
                         
                         self.postDocs.append(newPost)
-                    }
+                    
                 }
+                print(self.postDocs.count)
                 self.displayPostTable.reloadData()
             }
         }
     }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            postDocs.count
+            //print(postDocs.count)
+            return postDocs.count
         }
         
         func tableView(_ tableView: UITableView,
