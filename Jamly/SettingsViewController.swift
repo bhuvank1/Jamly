@@ -8,10 +8,11 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import UserNotifications
 
 let settingsOptions: [SettingOption] =
 [SettingOption(title: "Account", type: .navigation),
- SettingOption(title: "Enable Push Notifications", type: .toggle),
+ SettingOption(title: "Enable Reminder", type: .toggle),
  SettingOption(title: "Dark Mode", type: .toggle),
  SettingOption(title: "About", type: .navigation),
  SettingOption(title: "Log out", type: .action),
@@ -27,6 +28,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Settings"
         settingsTableView.dataSource = self
         settingsTableView.delegate = self
     }
@@ -45,6 +47,95 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
            let window = windowScene.windows.first {
             window.overrideUserInterfaceStyle = sender.isOn ? .dark : .light
         }
+    }
+    
+    @IBAction func notificationSwitchToggled(_ sender: UISwitch) {
+        if (sender.isOn) {
+            UNUserNotificationCenter.current().requestAuthorization(options: .alert) { granted, error in
+                if granted { // got permission
+                    print("All set!")
+                    DispatchQueue.main.async {
+                        self.getScheduledInterval(sender: sender)
+                    }
+                } else if let error = error {
+                    print(error.localizedDescription)
+                    DispatchQueue.main.async {
+                        sender.isOn = false
+                        defaults.set(false, forKey: "jamlyNotifications")
+                    }
+                }
+            }
+        } else {
+            // turn off pending notfications
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        }
+    }
+    
+    func getScheduledInterval(sender: UISwitch) {
+        let controller = UIAlertController (title: "Input Interval", message: "Enter the number of HOURS you would like to be reminded to open Jamly after inactivity.", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+        // if user cancels, revert switch
+            sender.isOn = false
+            defaults.set(false, forKey: "jamlyNotifications")
+        }
+        
+        controller.addTextField() {
+            (textField) in
+            textField.placeholder = "Enter a number"
+            textField.keyboardType = .decimalPad
+        }
+        
+        let okAction = UIAlertAction(title: "Ok", style: .default) {
+            (action) in
+            guard let timeInterval = controller.textFields![0].text, !timeInterval.isEmpty else {
+                self.makePopup(popupTitle: "Error", popupMessage: "Input cannot be empty")
+                DispatchQueue.main.async {
+                    sender.isOn = false
+                    defaults.set(false, forKey: "jamlyNotifications")
+                }
+                return
+            }
+            
+            guard let timeIntervalValue = Double(timeInterval) else {
+                self.makePopup(popupTitle: "Error", popupMessage: "Make sure to input a value")
+                sender.isOn = false
+                defaults.set(false, forKey: "jamlyNotifications")
+                return
+            }
+            
+            guard timeIntervalValue > 0 else {
+                self.makePopup(popupTitle: "Error", popupMessage: "Interval must be more than 0 hours.")
+                sender.isOn = false
+                defaults.set(false, forKey: "jamlyNotifications")
+                return
+            }
+            
+            self.scheduleNotification(timeIntervalValue: timeIntervalValue)
+            defaults.set(false, forKey: "jamlyNotifications")
+        }
+        
+        controller.addAction(cancelAction)
+        controller.addAction(okAction)
+        present(controller, animated: true)
+    }
+    
+    private func scheduleNotification(timeIntervalValue:Double) {
+        // create content
+        let content = UNMutableNotificationContent()
+        content.title = "Jamly misses you."
+        content.subtitle = "You have not visited us in " + String(timeIntervalValue) + " hours"
+        content.sound = UNNotificationSound.default
+        
+        // create trigger
+        // CHANGE TO MULTIPLY BY 3600
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeIntervalValue*60, repeats: true)
+        
+        // combine it all into a request
+        let request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+        
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -70,8 +161,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.darkModeSwitch.isOn = defaults.bool(forKey: "jamlyDarkMode")
                 cell.darkModeSwitch.addTarget(self, action: #selector(darkModeToggled(_:)), for: .valueChanged)
             }
-            if (option.title == "Enable Push Notifications" ) {
+            if (option.title == "Enable Reminder" ) {
                 cell.notificationSwitch.isHidden = false
+                cell.notificationSwitch.isOn = defaults.bool(forKey: "jamlyNotifications")
+                cell.notificationSwitch.addTarget(self, action: #selector(notificationSwitchToggled(_:)), for: .valueChanged)
             }
             
         case .action:
@@ -92,6 +185,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         switch option.title {
         case "Account":
             performSegue(withIdentifier: "AccountSegue", sender: self)
+        case "About":
+            performSegue(withIdentifier: "AboutSegue", sender: self)
         case "Log out":
             handleLogout()
         case "Delete Account":

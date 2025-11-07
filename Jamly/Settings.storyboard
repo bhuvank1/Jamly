@@ -43,6 +43,9 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LvK-bB-8EV">
                                                     <rect key="frame" x="320" y="7" width="61" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="notificationSwitchToggled:" destination="Jz2-t6-fsI" eventType="valueChanged" id="Ynv-Ni-CdX"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -69,6 +72,7 @@
                     <connections>
                         <outlet property="settingsTableView" destination="hBy-o9-y2I" id="7du-El-x6u"/>
                         <segue destination="Wst-yF-9t1" kind="show" identifier="AccountSegue" id="azu-fM-SwJ"/>
+                        <segue destination="j9F-YP-Gd6" kind="show" identifier="AboutSegue" id="um6-XE-kKo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qXR-W1-xrK" sceneMemberID="firstResponder"/>
@@ -155,6 +159,45 @@
             </objects>
             <point key="canvasLocation" x="3783.969465648855" y="130.98591549295776"/>
         </scene>
+        <!--About Page View Controller-->
+        <scene sceneID="hPI-cH-GBd">
+            <objects>
+                <viewController id="j9F-YP-Gd6" customClass="AboutPageViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="a0R-v9-KAA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FMz-uZ-Pax">
+                                <rect key="frame" x="12" y="190" width="382" height="284"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <mutableString key="text">Jamly is the ultimate social music app that lets you track your listening habits, discover trends, and connect with friends over the songs you love. Share posts, rate tracks, comment, and like your friends’ activity, all in one interactive feed.
+
+Create groups to uncover common music tastes. Save songs to your “Want to Listen” list and explore top artists, tracks, and genres with insightful statistics.
+
+Perfect for college students and young professionals (18–30), Jamly makes music fun, social, and personalized. Whether you’re discovering new favorites or connecting with friends, Jamly turns listening into an experience.</mutableString>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Version: Beta" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="EJi-nr-bVI">
+                                <rect key="frame" x="20" y="503" width="240" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="bzT-q0-VMV"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="JI8-Nn-1ko"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qzd-NG-nWt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3550.7246376811595" y="862.5"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="pZR-je-PAl">
             <objects>
@@ -175,6 +218,9 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
