@@ -45,8 +45,16 @@ class SelectSongViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else { return }
-        // Simple delay wait 250ms 
+        // Wait for 2 chars to search
+        let text = searchController.searchBar.text ?? ""
+        guard text.count >= 2 else {
+            pendingWorkItem?.cancel()
+            results = []
+            selectSongTable.reloadData()
+            return
+        }
+        
+        // Simple delay wait 250ms
         pendingWorkItem?.cancel()
         let work = DispatchWorkItem { [weak self] in
             guard let self = self else { return }

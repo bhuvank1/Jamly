@@ -54,9 +54,15 @@ final class SpotifySearchApi {
                 return
             }
 
-            // Handle HTTP errors / 401 retry
-            if let http = resp as? HTTPURLResponse, http.statusCode == 401, attempt == 0 {
-                // Ask for a fresh token and retry once
+            guard let http = resp as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "HTTP", code: -1, userInfo: [NSLocalizedDescriptionKey: "No HTTP response"])))
+                }
+                return
+            }
+
+            // Handle 401 with one refresh attempt
+            if http.statusCode == 401, attempt == 0 {
                 SpotifyAuthManager.shared.getValidAccessToken { newToken in
                     guard let newToken = newToken else {
                         DispatchQueue.main.async {
@@ -65,6 +71,31 @@ final class SpotifySearchApi {
                         return
                     }
                     self.performSearch(query: query, limit: limit, token: newToken, attempt: 1, completion: completion)
+                }
+                return
+            }
+
+            // Handle 429 rate limit
+            if http.statusCode == 429, attempt == 0 {
+                let retryAfter = http.value(forHTTPHeaderField: "Retry-After").flatMap(Int.init) ?? 1
+                DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(retryAfter)) {
+                    self.performSearch(query: query, limit: limit, token: token, attempt: 1, completion: completion)
+                }
+                return
+            }
+
+            // Any other non-200 just gives the error
+            if http.statusCode != 200 {
+                let message: String
+                if let data = data,
+                   let body = String(data: data, encoding: .utf8),
+                   !body.isEmpty {
+                    message = "HTTP \(http.statusCode): \(body)"
+                } else {
+                    message = "HTTP \(http.statusCode)"
+                }
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "HTTP", code: http.statusCode, userInfo: [NSLocalizedDescriptionKey: message])))
                 }
                 return
             }
