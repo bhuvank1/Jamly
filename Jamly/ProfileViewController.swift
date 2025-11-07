@@ -58,7 +58,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     if let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue,
                        let caption = data["caption"] as? String,
                        let likes = data["likes"] as? [String],
-                       let musicName = data["musicName"] as? String,
+                       let trackObject = data["trackObject"] as? Track,
                        let commentDicts = data["comments"] as? [[String: Any]] {
                         
                         var comments: [Comment] = []
@@ -71,7 +71,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                         
                         let newPost = Post(userID: uid, postID: document.documentID, rating: rating, likes: likes, caption: caption,
-                                           comments: comments,musicName: musicName)
+                                           comments: comments,trackObject: trackObject.toDictionary())
                         
                         self.postDocs.append(newPost)
                     }
@@ -94,7 +94,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             let postData = postDocs[indexPath.row]
             
-            cell.songName.text = postData.musicName
+            if let trackDict = postData.trackObject as? [String: Any],
+               let trackName = trackDict["name"] as? String {
+                cell.songName.text = trackName
+            } else {
+                cell.songName.text = "No song"
+            }
             cell.songRating.text = String(postData.rating)
             
             return cell

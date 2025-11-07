@@ -12,18 +12,18 @@ class Post {
     var likes: [String]
     var caption: String
     var comments: [Comment]
-    var musicName: String
     var userID: String
     var postID: String
+    var trackObject: [String: Any]
     
-    required init(userID: String, postID: String, rating: Int, likes: [String], caption: String, comments: [Comment], musicName: String) {
+    required init(userID: String, postID: String, rating: Int, likes: [String], caption: String, comments: [Comment], trackObject: [String: Any]) {
         self.userID = userID
         self.postID = postID
         self.rating = rating
         self.likes = likes
         self.caption = caption
         self.comments = comments
-        self.musicName = musicName
+        self.trackObject = trackObject
     }
     
     func toDictionary() -> [String: Any] {
@@ -34,7 +34,7 @@ class Post {
             "likes": likes,
             "caption": caption,
             "comments": comments,
-            "musicName": musicName
+            "trackObject": trackObject
             ]
     }
 }
