@@ -729,10 +729,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xm8-TA-9V2">
-                                <rect key="frame" x="144" y="487" width="127" height="35"/>
+                                <rect key="frame" x="167" y="487" width="81" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Show Friends"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Friends"/>
                                 <connections>
                                     <action selector="friendsButtonTapped:" destination="q19-BT-MaU" eventType="touchUpInside" id="UJb-We-Jtj"/>
                                     <segue destination="sEK-7F-QfM" kind="show" identifier="showFriendsSegue" id="ATB-Ce-DpB"/>
