@@ -4,151 +4,142 @@
 //
 //  Created by Rohan Pant on 11/5/25.
 //
-
 import UIKit
+import FirebaseAuth
 import FirebaseFirestore
 
-class SearchUsersViewController: UIViewController, UISearchBarDelegate {
+class SearchViewController: UIViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var displayNameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var mobileNumberLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var friendsButton: UIButton!  
-   
-    var user: User?  // Store the user data
-   
+
+    @IBOutlet weak var friendsButton: UIButton!   // “Friends (N)”
+    @IBOutlet weak var addFriendButton: UIButton! // “Add Friend”
+
+    private var foundUserID: String?   // Firestore docID (UID) of the searched user
+    var user: User?                    // parsed user fields from Firestore
+
     override func viewDidLoad() {
         super.viewDidLoad()
-       
         searchBar.delegate = self
-       
-        // Initially, hide the user info labels until a user is found
-        displayNameLabel.isHidden = true
-        emailLabel.isHidden = true
-        mobileNumberLabel.isHidden = true
-        nameLabel.isHidden = true
-        friendsButton.isHidden = true  // Hide the button until the user is found
+
+        // Hide UI until a user is found
+        [displayNameLabel, emailLabel, mobileNumberLabel, nameLabel].forEach { $0?.isHidden = true }
+        friendsButton.isHidden = true
+        addFriendButton.isHidden = true
+        addFriendButton.isEnabled = false
     }
-   
-    // This method will be called when the user taps the return key on the search bar
+
+    // MARK: - Search
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        // Get the search text (displayName)
-        guard let searchText = searchBar.text, !searchText.isEmpty else {
-            return
-        }
-       
-        // Call Firestore query method to search for a user by their displayName
-        searchUser(byDisplayName: searchText)
-       
-        // Dismiss the keyboard after search
+        guard let text = searchBar.text, !text.isEmpty else { return }
+        searchUser(byDisplayName: text)
         searchBar.resignFirstResponder()
     }
-   
-    // Function to search for a user by their displayName
-    func searchUser(byDisplayName displayName: String) {
+
+    private func searchUser(byDisplayName displayName: String) {
         let db = Firestore.firestore()
-       
-        // Query Firestore userInfo collection to find a user by exact displayName
         db.collection("userInfo")
             .whereField("displayName", isEqualTo: displayName)
-            .getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error searching user: \(error.localizedDescription)")
-                    self.showPopup(title: "Error", message: "User not found.")
+            .limit(to: 1)
+            .getDocuments { [weak self] snap, err in
+                guard let self = self else { return }
+                if let err = err { self.alert("Error", err.localizedDescription); return }
+                guard let doc = snap?.documents.first else {
+                    self.alert("Not found", "No user with that display name.")
+                    self.addFriendButton.isHidden = true
+                    self.friendsButton.isHidden = true
                     return
                 }
-               
-                // Check if any matching user is found
-                if let documents = querySnapshot?.documents, !documents.isEmpty {
-                    // Assuming one user with the exact displayName exists
-                    let userData = documents.first?.data()
-                    if let user = self.convertToUser(data: userData) {
-                        self.user = user
-                        self.displayUserInfo(user)
-                    } else {
-                        self.showPopup(title: "Error", message: "Error parsing user data.")
-                    }
-                } else {
-                    self.showPopup(title: "User Not Found", message: "No user with this display name.")
-                }
+
+                self.foundUserID = doc.documentID
+                let d = doc.data()
+                let friends = d["friends"] as? [String] ?? []
+                self.user = User(
+                    displayName: d["displayName"] as? String ?? "",
+                    email:       d["email"] as? String ?? "",
+                    mobileNumber:d["mobileNumber"] as? String ?? "",
+                    name:        d["name"] as? String ?? "",
+                    friends:     friends
+                )
+                self.updateProfileUI()
             }
     }
-   
-    // Convert Firestore data to User object (or just extract necessary data)
-    func convertToUser(data: [String: Any]?) -> User? {
-        guard let data = data else { return nil }
-       
-        // Extract the necessary user info
-        let displayName = data["displayName"] as? String ?? ""
-        let email = data["email"] as? String ?? ""
-        let mobileNumber = data["mobileNumber"] as? String ?? ""
-        let name = data["name"] as? String ?? ""
-        let friends = data["friends"] as? [String] ?? []  // Fetch friends array
-       
-        return User(displayName: displayName, email: email, mobileNumber: mobileNumber, name: name, friends: friends)
+
+    private func updateProfileUI() {
+        guard let u = user else { return }
+        displayNameLabel.text     = "Display Name: \(u.displayName)"
+        emailLabel.text           = "Email: \(u.email)"
+        mobileNumberLabel.text    = "Mobile: \(u.mobileNumber)"
+        nameLabel.text            = "Name: \(u.name)"
+        friendsButton.setTitle("Friends (\(u.friends.count))", for: .normal)
+
+        [displayNameLabel, emailLabel, mobileNumberLabel, nameLabel].forEach { $0?.isHidden = false }
+        friendsButton.isHidden = false
+        addFriendButton.isHidden = false
+        addFriendButton.isEnabled = true
     }
 
-    // Display user info in the UI (after finding a match)
-    func displayUserInfo(_ user: User) {
-        displayNameLabel.text = "Display Name: \(user.displayName)"
-        emailLabel.text = "Email: \(user.email)"
-        mobileNumberLabel.text = "Mobile Number: \(user.mobileNumber)"
-        nameLabel.text = "Name: \(user.name)"
-        friendsButton.setTitle("Friends (\(user.friends.count))", for: .normal)  // Set the friends button title
-       
-        // Show the labels and the button with the user information
-        displayNameLabel.isHidden = false
-        emailLabel.isHidden = false
-        mobileNumberLabel.isHidden = false
-        nameLabel.isHidden = false
-        friendsButton.isHidden = false  // Show the button with the count of friends
-    }
-   
-    // Helper function to show a popup with a title and message
-    func showPopup(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alertController, animated: true)
+    // MARK: - Add Friend
+    @IBAction func addFriendButtonTapped(_ sender: UIButton) {
+        guard let currentUID = Auth.auth().currentUser?.uid else {
+            alert("Not signed in", "Please sign in first.")
+            return
+        }
+        guard let friendUID = foundUserID else { return }
+        if currentUID == friendUID {
+            alert("Oops", "You can’t add yourself.")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let myDoc = db.collection("userInfo").document(currentUID)
+        let friendDoc = db.collection("userInfo").document(friendUID)
+
+        // Add friend to my list (arrayUnion prevents duplicates)
+        myDoc.updateData(["friends": FieldValue.arrayUnion([friendUID])]) { [weak self] err in
+            guard let self = self else { return }
+            if let err = err { self.alert("Error", err.localizedDescription); return }
+
+            // OPTIONAL: make it mutual (comment out if you want one-way requests)
+            friendDoc.updateData(["friends": FieldValue.arrayUnion([currentUID])]) { _ in }
+
+            self.addFriendButton.setTitle("Added", for: .normal)
+            self.addFriendButton.isEnabled = false
+
+            // Update local count
+            if var u = self.user, !u.friends.contains(friendUID) {
+                u.friends.append(friendUID)
+                self.user = u
+                self.friendsButton.setTitle("Friends (\(u.friends.count))", for: .normal)
+            }
+        }
     }
 
-    // Action when the "Friends" button is tapped
+    // MARK: - Friends list segue
     @IBAction func friendsButtonTapped(_ sender: UIButton) {
-        if let friends = user?.friends {
-            performSegue(withIdentifier: "showFriendsSegue", sender: friends)
+        guard let ids = user?.friends, !ids.isEmpty else {
+            alert("No friends", "This user has no friends yet.")
+            return
+        }
+        performSegue(withIdentifier: "showFriendsSegue", sender: ids)
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showFriendsSegue",
+           let dest = segue.destination as? UserFriendsViewController,
+           let friendIDs = sender as? [String] {
+            dest.friendIDs = friendIDs
         }
     }
-   
-    // Prepare the data to pass to FriendsViewController
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showFriendsSegue" {
-            if let friendsVC = segue.destination as? UserFriendsViewController,
-               let friends = sender as? [String] {
-                // Fetch the user info for each friend and pass it to the FriendsViewController
-                var friendsList: [User] = []
-               
-                // Query Firestore to get the details of each friend
-                let db = Firestore.firestore()
-                for friendID in friends {
-                    db.collection("userInfo").document(friendID).getDocument { (document, error) in
-                        if let error = error {
-                            print("Error fetching friend data: \(error.localizedDescription)")
-                            return
-                        }
-                       
-                        if let document = document, document.exists {
-                            let friendData = document.data()
-                            if let friend = self.convertToUser(data: friendData) {
-                                friendsList.append(friend)
-                            }
-                        }
-                    }
-                }
-               
-                // Pass the list of friends to the FriendsViewController
-                friendsVC.updateFriendsList(friends: friendsList)
-            }
-        }
+
+    // MARK: - Helpers
+    private func alert(_ title: String, _ msg: String) {
+        let ac = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 }

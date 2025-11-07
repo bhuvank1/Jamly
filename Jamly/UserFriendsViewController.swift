@@ -7,38 +7,70 @@
 
 import UIKit
 
-class UserFriendsViewController: UIViewController, UITableViewDataSource {
-   
+import UIKit
+import FirebaseFirestore
+
+class UserFriendsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
     @IBOutlet weak var tableView: UITableView!
-    var friends: [User] = []  // Array to hold the list of friend User objects
-   
+
+    // Injected from SearchViewController
+    var friendIDs: [String] = []
+
+    private var rows: [FriendRow] = []
+
+    struct FriendRow {
+        let uid: String
+        let displayName: String
+        let email: String
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-        // Set the data source for the table view
         tableView.dataSource = self
+        tableView.delegate = self
+        fetchFriends()
     }
-   
-    // UITableViewDataSource method: number of rows in the table view
+
+    private func fetchFriends() {
+        guard !friendIDs.isEmpty else { return }
+        let db = Firestore.firestore()
+        let group = DispatchGroup()
+        var tmp: [FriendRow] = []
+
+        friendIDs.forEach { uid in
+            group.enter()
+            db.collection("userInfo").document(uid).getDocument { doc, _ in
+                defer { group.leave() }
+                guard let data = doc?.data() else { return }
+                let dn = data["displayName"] as? String ?? "(unknown)"
+                let em = data["email"] as? String ?? ""
+                tmp.append(FriendRow(uid: uid, displayName: dn, email: em))
+            }
+        }
+
+        group.notify(queue: .main) {
+            self.rows = tmp.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+            self.tableView.reloadData()
+        }
+    }
+
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends.count  // The number of friends
+        rows.count
     }
-   
-    // UITableViewDataSource method: configure each cell in the table view
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // In storyboard: Prototype cell with Style=Subtitle, Reuse Identifier="FriendCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath)
-       
-        let friend = friends[indexPath.row]
-       
-        // Set the cell's text label to the friend's displayName
-        cell.textLabel?.text = friend.displayName
-       
+        let f = rows[indexPath.row]
+        cell.textLabel?.text = f.displayName
+        cell.detailTextLabel?.text = f.email
         return cell
     }
-   
-    // Method to update the list of friends
-    func updateFriendsList(friends: [User]) {
-        self.friends = friends
-        self.tableView.reloadData()  // Reload the table view to display friends
+
+    // (optional) push a profile later
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
