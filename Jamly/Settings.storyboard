@@ -72,7 +72,7 @@
                     <connections>
                         <outlet property="settingsTableView" destination="hBy-o9-y2I" id="7du-El-x6u"/>
                         <segue destination="Wst-yF-9t1" kind="show" identifier="AccountSegue" id="azu-fM-SwJ"/>
-                        <segue destination="j9F-YP-Gd6" kind="show" identifier="AboutSegue" id="um6-XE-kKo"/>
+                        <segue destination="0xS-WB-f12" kind="show" identifier="AboutSegue" id="LLP-j0-zJ7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qXR-W1-xrK" sceneMemberID="firstResponder"/>
@@ -159,6 +159,16 @@
             </objects>
             <point key="canvasLocation" x="3783.969465648855" y="130.98591549295776"/>
         </scene>
+        <!--GroupVC-->
+        <scene sceneID="RPr-yW-omd">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Groups" referencedIdentifier="GroupVC" id="0xS-WB-f12" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="8vc-wR-YS0"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rk4-ox-FpC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3637" y="592"/>
+        </scene>
         <!--About Page View Controller-->
         <scene sceneID="hPI-cH-GBd">
             <objects>
@@ -171,11 +181,11 @@
                                 <rect key="frame" x="12" y="190" width="382" height="284"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <mutableString key="text">Jamly is the ultimate social music app that lets you track your listening habits, discover trends, and connect with friends over the songs you love. Share posts, rate tracks, comment, and like your friends’ activity, all in one interactive feed.
+                                <string key="text">Jamly is the ultimate social music app that lets you track your listening habits, discover trends, and connect with friends over the songs you love. Share posts, rate tracks, comment, and like your friends’ activity, all in one interactive feed.
 
 Create groups to uncover common music tastes. Save songs to your “Want to Listen” list and explore top artists, tracks, and genres with insightful statistics.
 
-Perfect for college students and young professionals (18–30), Jamly makes music fun, social, and personalized. Whether you’re discovering new favorites or connecting with friends, Jamly turns listening into an experience.</mutableString>
+Perfect for college students and young professionals (18–30), Jamly makes music fun, social, and personalized. Whether you’re discovering new favorites or connecting with friends, Jamly turns listening into an experience.</string>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -196,7 +206,7 @@ Perfect for college students and young professionals (18–30), Jamly makes musi
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qzd-NG-nWt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3550.7246376811595" y="862.5"/>
+            <point key="canvasLocation" x="2597" y="840"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="pZR-je-PAl">

@@ -46,7 +46,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     private func startListeningForPosts() {
         let db = Firestore.firestore()
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let user = Auth.auth().currentUser else { return }
+        var uid = user.uid
         
         db.collection("posts").whereField("userID", isEqualTo: uid).getDocuments {
             (querySnapshot, err) in
@@ -70,7 +71,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                             }
                         }
                         
-                        let newPost = Post(userID: uid, postID: document.documentID, rating: rating, likes: likes, caption: caption,
+                        let newPost = Post(userID: uid, displayName: user.displayName ?? "Username", postID: document.documentID, rating: rating, likes: likes, caption: caption,
                                            comments: comments,trackObject: trackObject.toDictionary())
                         
                         self.postDocs.append(newPost)
