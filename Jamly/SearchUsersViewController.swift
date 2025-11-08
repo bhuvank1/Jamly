@@ -19,7 +19,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var friendsButton: UIButton!   // “Friends (N)”
     @IBOutlet weak var addFriendButton: UIButton! // “Add Friend”
 
-    private var foundUserID: String?   // Firestore docID (UID) of the searched user
+    private var foundUserID: String?
+    private var isAlreadyFriend = false// Firestore docID (UID) of the searched user
     var user: User?                    // parsed user fields from Firestore
 
     override func viewDidLoad() {
@@ -80,8 +81,36 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         [displayNameLabel, emailLabel, mobileNumberLabel, nameLabel].forEach { $0?.isHidden = false }
         friendsButton.isHidden = false
         addFriendButton.isHidden = false
-        addFriendButton.isEnabled = true
+
+        // Default until we know
+        addFriendButton.isEnabled = false
+        addFriendButton.setTitle("Add Friend", for: .normal)
+
+        // Check if the found user is already in my friends
+        guard let currentUID = Auth.auth().currentUser?.uid,
+              let friendUID = foundUserID else { return }
+
+        let db = Firestore.firestore()
+        db.collection("userInfo").document(currentUID).getDocument { [weak self] doc, _ in
+            guard let self = self else { return }
+            let mine = doc?.data()?["friends"] as? [String] ?? []
+            self.isAlreadyFriend = mine.contains(friendUID)
+
+            DispatchQueue.main.async {
+                if currentUID == friendUID {
+                    self.addFriendButton.isEnabled = false
+                    self.addFriendButton.setTitle("This is You", for: .normal)
+                } else if self.isAlreadyFriend {
+                    self.addFriendButton.isEnabled = false
+                    self.addFriendButton.setTitle("Already Added", for: .normal)
+                } else {
+                    self.addFriendButton.isEnabled = true
+                    self.addFriendButton.setTitle("Add Friend", for: .normal)
+                }
+            }
+        }
     }
+
 
     // MARK: - Add Friend
     @IBAction func addFriendButtonTapped(_ sender: UIButton) {
@@ -99,22 +128,38 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         let myDoc = db.collection("userInfo").document(currentUID)
         let friendDoc = db.collection("userInfo").document(friendUID)
 
-        // Add friend to my list (arrayUnion prevents duplicates)
-        myDoc.updateData(["friends": FieldValue.arrayUnion([friendUID])]) { [weak self] err in
+        // Re-check before writing (avoids duplicates on fast taps / multi-device)
+        myDoc.getDocument { [weak self] snapshot, err in
             guard let self = self else { return }
             if let err = err { self.alert("Error", err.localizedDescription); return }
 
-            // OPTIONAL: make it mutual (comment out if you want one-way requests)
-            friendDoc.updateData(["friends": FieldValue.arrayUnion([currentUID])]) { _ in }
+            let mine = snapshot?.data()?["friends"] as? [String] ?? []
+            if mine.contains(friendUID) {
+                self.isAlreadyFriend = true
+                self.addFriendButton.isEnabled = false
+                self.addFriendButton.setTitle("Already Added", for: .normal)
+                self.alert("Already Added", "You’ve already added this user.")
+                return
+            }
 
-            self.addFriendButton.setTitle("Added", for: .normal)
-            self.addFriendButton.isEnabled = false
+            // Add friend to my list (arrayUnion prevents duplicates)
+            myDoc.updateData(["friends": FieldValue.arrayUnion([friendUID])]) { [weak self] err in
+                guard let self = self else { return }
+                if let err = err { self.alert("Error", err.localizedDescription); return }
 
-            // Update local count
-            if var u = self.user, !u.friends.contains(friendUID) {
-                u.friends.append(friendUID)
-                self.user = u
-                self.friendsButton.setTitle("Friends (\(u.friends.count))", for: .normal)
+                // OPTIONAL mutual add (leave as-is per your original design)
+                friendDoc.updateData(["friends": FieldValue.arrayUnion([currentUID])]) { _ in }
+
+                self.isAlreadyFriend = true
+                self.addFriendButton.setTitle("Added", for: .normal)
+                self.addFriendButton.isEnabled = false
+
+                // Update local count on viewed profile
+                if var u = self.user, !u.friends.contains(friendUID) {
+                    u.friends.append(friendUID)
+                    self.user = u
+                    self.friendsButton.setTitle("Friends (\(u.friends.count))", for: .normal)
+                }
             }
         }
     }

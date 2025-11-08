@@ -656,8 +656,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="mDa-Gg-bDR" customClass="User" customModule="Jamly" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="102" width="440" height="788"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="mDa-Gg-bDR">
+                                <rect key="frame" x="0.0" y="164" width="440" height="723"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
@@ -677,7 +677,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="DR2-XZ-qJX"/>
                     <connections>
-                        <outlet property="tableView" destination="mDa-Gg-bDR" id="Kc1-Fk-GqB"/>
+                        <outlet property="tableView" destination="mDa-Gg-bDR" id="P9S-Tj-cNp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OuY-5b-KVt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -728,16 +728,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xm8-TA-9V2">
-                                <rect key="frame" x="167" y="487" width="81" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Friends"/>
-                                <connections>
-                                    <action selector="friendsButtonTapped:" destination="q19-BT-MaU" eventType="touchUpInside" id="UJb-We-Jtj"/>
-                                    <segue destination="sEK-7F-QfM" kind="show" identifier="showFriendsSegue" id="ATB-Ce-DpB"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="69i-H3-2Xz">
                                 <rect key="frame" x="304" y="169" width="107" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -745,6 +735,16 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Add Friend"/>
                                 <connections>
                                     <action selector="addFriendButtonTapped:" destination="q19-BT-MaU" eventType="touchUpInside" id="X5d-D9-TXn"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mNv-Ov-aEK">
+                                <rect key="frame" x="167" y="489" width="81" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Friends"/>
+                                <connections>
+                                    <action selector="friendsButtonTapped:" destination="q19-BT-MaU" eventType="touchUpInside" id="ehf-YF-aMo"/>
+                                    <segue destination="sEK-7F-QfM" kind="show" identifier="showFriendsSegue" id="QRB-EP-qgC"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -756,7 +756,7 @@
                         <outlet property="addFriendButton" destination="69i-H3-2Xz" id="zaI-Np-mrZ"/>
                         <outlet property="displayNameLabel" destination="LwB-EX-GfX" id="mfR-ST-Sg2"/>
                         <outlet property="emailLabel" destination="piI-m2-rht" id="6NC-MA-NXP"/>
-                        <outlet property="friendsButton" destination="Xm8-TA-9V2" id="U5e-oA-L07"/>
+                        <outlet property="friendsButton" destination="mNv-Ov-aEK" id="hqc-gy-Btz"/>
                         <outlet property="mobileNumberLabel" destination="9ef-Vu-cqB" id="Xy9-FQ-vbM"/>
                         <outlet property="nameLabel" destination="yd6-RE-pfq" id="giZ-OH-Bsz"/>
                         <outlet property="searchBar" destination="uiy-iA-oa6" id="iEI-Zb-ra4"/>

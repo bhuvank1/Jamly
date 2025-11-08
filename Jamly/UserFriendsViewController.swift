@@ -68,9 +68,4 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
         cell.detailTextLabel?.text = f.email
         return cell
     }
-
-    // (optional) push a profile later
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
 }
