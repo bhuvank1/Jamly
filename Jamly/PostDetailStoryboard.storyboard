@@ -104,7 +104,7 @@
         <!--Like View Controller-->
         <scene sceneID="9cn-3k-19y">
             <objects>
-                <viewController id="jy2-Yf-jBS" customClass="LikeViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="likesVC" id="jy2-Yf-jBS" customClass="LikeViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="j7N-6t-6de">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -144,13 +144,13 @@
         <!--Comments View Controller-->
         <scene sceneID="Nv4-dD-zSg">
             <objects>
-                <viewController id="35P-05-ZLV" customClass="CommentsViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="commentsVC" id="35P-05-ZLV" customClass="CommentsViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Iys-gl-SuT" customClass="Likes">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="say-ZA-mbM">
-                                <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
+                                <rect key="frame" x="0.0" y="0.0" width="402" height="719"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextCell" textLabel="XBJ-ZJ-sJk" detailTextLabel="R1u-gI-uNX" style="IBUITableViewCellStyleSubtitle" id="Lht-eV-Bkp">
@@ -179,26 +179,50 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dW6-0p-f1V">
+                                <rect key="frame" x="16" y="743" width="297" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="297" id="NO8-fs-Jo8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PJF-l4-sy0">
+                                <rect key="frame" x="340" y="743" width="46" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" image="arrow.up" catalog="system"/>
+                                <connections>
+                                    <action selector="addCommentButtonTapped:" destination="35P-05-ZLV" eventType="touchUpInside" id="3pn-kb-LpS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hcX-eQ-uvR"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="hcX-eQ-uvR" firstAttribute="bottom" secondItem="dW6-0p-f1V" secondAttribute="bottom" constant="87" id="35W-aC-094"/>
+                            <constraint firstItem="hcX-eQ-uvR" firstAttribute="bottom" secondItem="say-ZA-mbM" secondAttribute="bottom" constant="145" id="Dyx-6k-8Hz"/>
                             <constraint firstItem="say-ZA-mbM" firstAttribute="leading" secondItem="hcX-eQ-uvR" secondAttribute="leading" id="EDd-bC-din"/>
                             <constraint firstItem="hcX-eQ-uvR" firstAttribute="trailing" secondItem="say-ZA-mbM" secondAttribute="trailing" id="X5x-dL-vMG"/>
-                            <constraint firstItem="hcX-eQ-uvR" firstAttribute="bottom" secondItem="say-ZA-mbM" secondAttribute="bottom" id="lRt-lI-dEZ"/>
+                            <constraint firstItem="PJF-l4-sy0" firstAttribute="leading" secondItem="dW6-0p-f1V" secondAttribute="trailing" constant="27" id="d72-mo-zPi"/>
+                            <constraint firstItem="hcX-eQ-uvR" firstAttribute="trailing" secondItem="PJF-l4-sy0" secondAttribute="trailing" constant="16" id="dm8-77-bb1"/>
+                            <constraint firstItem="dW6-0p-f1V" firstAttribute="top" secondItem="say-ZA-mbM" secondAttribute="bottom" constant="24" id="gYh-x0-55a"/>
+                            <constraint firstItem="PJF-l4-sy0" firstAttribute="top" secondItem="say-ZA-mbM" secondAttribute="bottom" constant="24" id="k21-om-hiN"/>
+                            <constraint firstItem="hcX-eQ-uvR" firstAttribute="bottom" secondItem="PJF-l4-sy0" secondAttribute="bottom" constant="86" id="vyr-5F-hlf"/>
                             <constraint firstItem="say-ZA-mbM" firstAttribute="top" secondItem="hcX-eQ-uvR" secondAttribute="top" id="vyw-Zm-yMF"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addCommentTextField" destination="dW6-0p-f1V" id="Fhl-So-diV"/>
                         <outlet property="commentsTableView" destination="say-ZA-mbM" id="Cm3-ht-LPK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jqy-wW-ITr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="673" y="637"/>
+            <point key="canvasLocation" x="670.14925373134326" y="636.38443935926773"/>
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.up" catalog="system" width="118" height="128"/>
         <image name="beach_test_image" width="2726" height="2047"/>
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="message" catalog="system" width="128" height="116"/>

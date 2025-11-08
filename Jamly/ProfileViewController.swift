@@ -57,6 +57,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 for document in querySnapshot!.documents {
                     let data = document.data()
                     let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue ?? 0
+                    let displayName = data["displayName"] as? String ?? "Unknown"
                     let caption = data["caption"] as? String ?? ""
                     let likes = data["likes"] as? [String] ?? []
                     let musicName = data["musicName"] as? String ?? ""
@@ -72,7 +73,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                         
                     let newPost = Post(userID: uid, postID: document.documentID, rating: rating, likes: likes, caption: caption,
-                                           comments: comments,musicName: musicName)
+                                       comments: comments,musicName: musicName, displayName: displayName)
                         
                         self.postDocs.append(newPost)
                     
