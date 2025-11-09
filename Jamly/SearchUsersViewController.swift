@@ -1,9 +1,3 @@
-//
-//  SearchUsersViewController.swift
-//  Jamly
-//
-//  Created by Rohan Pant on 11/5/25.
-//
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
@@ -11,6 +5,7 @@ import FirebaseFirestore
 class SearchViewController: UIViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
+
     @IBOutlet weak var displayNameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var mobileNumberLabel: UILabel!
@@ -19,14 +14,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var friendsButton: UIButton!   // “Friends (N)”
     @IBOutlet weak var addFriendButton: UIButton! // “Add Friend”
 
-    private var foundUserID: String?
-    private var isAlreadyFriend = false// Firestore docID (UID) of the searched user
+    private var foundUserID: String?   // Firestore docID (UID) of the currently shown user
     var user: User?                    // parsed user fields from Firestore
+
+    private let db = Firestore.firestore()
+    private var isAlreadyFriend = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
-
         // Hide UI until a user is found
         [displayNameLabel, emailLabel, mobileNumberLabel, nameLabel].forEach { $0?.isHidden = true }
         friendsButton.isHidden = true
@@ -42,7 +38,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
 
     private func searchUser(byDisplayName displayName: String) {
-        let db = Firestore.firestore()
         db.collection("userInfo")
             .whereField("displayName", isEqualTo: displayName)
             .limit(to: 1)
@@ -70,6 +65,28 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             }
     }
 
+    // Load a specific user by UID (used when returning from Friends list)
+    private func loadUser(byUID uid: String) {
+        db.collection("userInfo").document(uid).getDocument { [weak self] doc, err in
+            guard let self = self else { return }
+            if let err = err { self.alert("Error", err.localizedDescription); return }
+            guard let doc = doc, let data = doc.data() else {
+                self.alert("Not found", "Could not load this user.")
+                return
+            }
+            let friends = data["friends"] as? [String] ?? []
+            self.foundUserID = doc.documentID
+            self.user = User(
+                displayName: data["displayName"] as? String ?? "",
+                email:       data["email"] as? String ?? "",
+                mobileNumber:data["mobileNumber"] as? String ?? "",
+                name:        data["name"] as? String ?? "",
+                friends:     friends
+            )
+            DispatchQueue.main.async { self.updateProfileUI() }
+        }
+    }
+
     private func updateProfileUI() {
         guard let u = user else { return }
         displayNameLabel.text     = "Display Name: \(u.displayName)"
@@ -82,27 +99,31 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         friendsButton.isHidden = false
         addFriendButton.isHidden = false
 
-        // Default until we know
+        // Default state until we check friendship
         addFriendButton.isEnabled = false
         addFriendButton.setTitle("Add Friend", for: .normal)
 
-        // Check if the found user is already in my friends
+        // Disable if this is me, or if already a friend
         guard let currentUID = Auth.auth().currentUser?.uid,
-              let friendUID = foundUserID else { return }
+              let targetUID = self.foundUserID else { return }
 
-        let db = Firestore.firestore()
+        if currentUID == targetUID {
+            self.isAlreadyFriend = true
+            self.addFriendButton.isEnabled = false
+            self.addFriendButton.setTitle("This is You", for: .normal)
+            return
+        }
+
+        // Check if targetUID is already in my friends list
         db.collection("userInfo").document(currentUID).getDocument { [weak self] doc, _ in
             guard let self = self else { return }
             let mine = doc?.data()?["friends"] as? [String] ?? []
-            self.isAlreadyFriend = mine.contains(friendUID)
-
+            let already = mine.contains(targetUID)
             DispatchQueue.main.async {
-                if currentUID == friendUID {
+                self.isAlreadyFriend = already
+                if already {
                     self.addFriendButton.isEnabled = false
-                    self.addFriendButton.setTitle("This is You", for: .normal)
-                } else if self.isAlreadyFriend {
-                    self.addFriendButton.isEnabled = false
-                    self.addFriendButton.setTitle("Already Added", for: .normal)
+                    self.addFriendButton.setTitle("Already Friends", for: .normal)
                 } else {
                     self.addFriendButton.isEnabled = true
                     self.addFriendButton.setTitle("Add Friend", for: .normal)
@@ -111,8 +132,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
     }
 
-
-    // MARK: - Add Friend
+    // MARK: - Add Friend (with race-safe re-check)
     @IBAction func addFriendButtonTapped(_ sender: UIButton) {
         guard let currentUID = Auth.auth().currentUser?.uid else {
             alert("Not signed in", "Please sign in first.")
@@ -124,11 +144,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             return
         }
 
-        let db = Firestore.firestore()
         let myDoc = db.collection("userInfo").document(currentUID)
         let friendDoc = db.collection("userInfo").document(friendUID)
 
-        // Re-check before writing (avoids duplicates on fast taps / multi-device)
+        // Re-check before writing to avoid duplicates/races
         myDoc.getDocument { [weak self] snapshot, err in
             guard let self = self else { return }
             if let err = err { self.alert("Error", err.localizedDescription); return }
@@ -137,24 +156,29 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             if mine.contains(friendUID) {
                 self.isAlreadyFriend = true
                 self.addFriendButton.isEnabled = false
-                self.addFriendButton.setTitle("Already Added", for: .normal)
-                self.alert("Already Added", "You’ve already added this user.")
+                self.addFriendButton.setTitle("Already Friends", for: .normal)
+                self.alert("Already Friends", "You’ve already added this user.")
                 return
             }
 
-            // Add friend to my list (arrayUnion prevents duplicates)
+            // Add friend to my list (arrayUnion prevents duplicates at server)
+            self.addFriendButton.isEnabled = false
             myDoc.updateData(["friends": FieldValue.arrayUnion([friendUID])]) { [weak self] err in
                 guard let self = self else { return }
-                if let err = err { self.alert("Error", err.localizedDescription); return }
+                if let err = err {
+                    self.alert("Error", err.localizedDescription)
+                    self.addFriendButton.isEnabled = true
+                    return
+                }
 
-                // OPTIONAL mutual add (leave as-is per your original design)
+                // OPTIONAL: mutual add (leave as-is or remove per your product)
                 friendDoc.updateData(["friends": FieldValue.arrayUnion([currentUID])]) { _ in }
 
                 self.isAlreadyFriend = true
-                self.addFriendButton.setTitle("Added", for: .normal)
+                self.addFriendButton.setTitle("Already Friends", for: .normal)
                 self.addFriendButton.isEnabled = false
 
-                // Update local count on viewed profile
+                // Update local count
                 if var u = self.user, !u.friends.contains(friendUID) {
                     u.friends.append(friendUID)
                     self.user = u
@@ -174,10 +198,24 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showFriendsSegue",
-           let dest = segue.destination as? UserFriendsViewController,
-           let friendIDs = sender as? [String] {
-            dest.friendIDs = friendIDs
+        guard segue.identifier == "showFriendsSegue" else { return }
+        let ids = (sender as? [String]) ?? []
+
+        if let dest = segue.destination as? UserFriendsViewController {
+            dest.friendIDs = ids
+            dest.onSelectFriend = { [weak self] uid in
+                guard let self = self else { return }
+                self.searchBar.text = ""          // Clear search bar when returning
+                self.loadUser(byUID: uid)
+            }
+        } else if let nav = segue.destination as? UINavigationController,
+                  let dest = nav.topViewController as? UserFriendsViewController {
+            dest.friendIDs = ids
+            dest.onSelectFriend = { [weak self] uid in
+                guard let self = self else { return }
+                self.searchBar.text = ""          // Clear search bar when returning
+                self.loadUser(byUID: uid)
+            }
         }
     }
 
