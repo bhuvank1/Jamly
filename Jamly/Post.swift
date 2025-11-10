@@ -12,32 +12,32 @@ class Post {
     var likes: [String]
     var caption: String
     var comments: [Comment]
-    var musicName: String
     var userID: String
-    var postID: String
     var displayName: String
+    var postID: String
+    var trackObject: [String: Any]
     
-    required init(userID: String, postID: String, rating: Int, likes: [String], caption: String, comments: [Comment], musicName: String, displayName: String) {
+    required init(userID: String, displayName: String, postID: String, rating: Int, likes: [String], caption: String, comments: [Comment], trackObject: [String: Any]) {
         self.userID = userID
+        self.displayName = displayName
         self.postID = postID
         self.rating = rating
         self.likes = likes
         self.caption = caption
         self.comments = comments
-        self.musicName = musicName
-        self.displayName = displayName
+        self.trackObject = trackObject
     }
     
     func toDictionary() -> [String: Any] {
         return [
             "userID": userID,
+            "displayName": displayName,
             "postID": postID,
             "rating": rating,
             "likes": likes,
             "caption": caption,
             "comments": comments,
-            "musicName": musicName,
-            "displayName": displayName
+            "trackObject": trackObject
             ]
     }
 }
