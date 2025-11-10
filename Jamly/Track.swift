@@ -15,6 +15,16 @@ struct Track {
     let duration_ms: Int
     let albumArt: String?
     var image: UIImage?
+    
+    func toDictionary() -> [String: Any] {
+        return [
+            "id": id,
+            "name": name,
+            "artists": artists,
+            "duration_ms": duration_ms,
+            "albumArt": albumArt ?? ""
+        ]
+    }
 }
 
 struct SearchResponse {
