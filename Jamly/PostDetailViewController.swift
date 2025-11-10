@@ -6,8 +6,14 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
-class PostDetailViewController: UIViewController, UIScrollViewDelegate {
+protocol ChangeCommentsPostDetail {
+    func changeComments(postID: String, newComment: Comment)
+}
+
+class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCommentsPostDetail, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     var contentView: UIContentView!
@@ -21,6 +27,7 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var commentCount: UIButton!
     @IBOutlet weak var ratingLabel: UILabel!
     var post: Post?
+    var delegate: UIViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +36,10 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate {
         let tempRating = String(post?.rating ?? 0)
         ratingLabel.text = String("\(tempRating)/5")
         commentCount.setTitle(String(post?.comments.count ?? 0), for: .normal)
-        likesCount.setTitle(String(post?.likes.count ?? 0), for: .normal)
+        
+        // likes button
+        updateLikesUI()
+        
         usernameLabel.text = post?.displayName
         songNameLabel.text = post?.trackObject.name
         artistNameLabel.text = post?.trackObject.artists
@@ -44,6 +54,60 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate {
             }.resume()
         }
         
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
+        doubleTap.numberOfTapsRequired = 2
+        doubleTap.cancelsTouchesInView = true
+        doubleTap.delegate = self
+        postImageView.addGestureRecognizer(doubleTap)
+        postImageView.isUserInteractionEnabled = true
+        scrollView.delaysContentTouches = false
+        scrollView.canCancelContentTouches = true
+
+        
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            return true
+        }
+    
+    func updateLikesUI() {
+        guard let post = post, let currentUID = Auth.auth().currentUser?.uid else { return }
+        
+        // Update likes count
+        likesCount.setTitle("\(post.likes.count)", for: .normal)
+        
+        // Update heart icon
+        let heartImage = post.likes.contains(currentUID) ? "heart.fill" : "heart"
+        likesCount.setImage(UIImage(systemName: heartImage), for: .normal)
+    }
+    
+    @IBAction func handleDoubleTap(recognizer: UITapGestureRecognizer) {
+        guard let post else {return}
+        guard let currentUID = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        let postRef = db.collection("posts").document(post.postID)
+        
+        if let index = post.likes.firstIndex(of: currentUID) {
+                post.likes.remove(at: index)
+            } else {
+                post.likes.append(currentUID)
+            }
+        
+        updateLikesUI()
+        
+        postRef.updateData(["likes": post.likes]) { error in
+                if let error = error {
+                    print("Error updating likes: \(error.localizedDescription)")
+                }
+        }
+    }
+    
+   
+    func changeComments(postID: String, newComment: Comment) {
+        guard let post = post else { return }
+            post.comments.append(newComment)
+            commentCount.setTitle(String(post.comments.count), for: .normal)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -53,6 +117,8 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate {
         } else if segue.identifier == "commentsSegue",
                   let destVC = segue.destination as? CommentsViewController {
             destVC.comments = post?.comments ?? []
+            destVC.delegate = self
+            destVC.postID = post?.postID ?? ""
         }
     }
     

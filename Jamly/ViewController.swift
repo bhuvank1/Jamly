@@ -14,15 +14,15 @@ protocol ShowLikesComments {
     func didTapCommentsButton(for post: Post)
 }
 
-protocol ChangeLikes {
+protocol ChangeLikesSocialFeed {
     func changeLikes(for post: Post, cell: PostTableViewCell)
 }
 
-protocol ChangeComments {
+protocol ChangeCommentsSocialFeed {
     func changeComments(postID: String, newComment: Comment)
 }
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ShowLikesComments, ChangeLikes, ChangeComments {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ShowLikesComments, ChangeLikesSocialFeed, ChangeCommentsSocialFeed {
     
     
     @IBOutlet weak var feedTableView: UITableView!
