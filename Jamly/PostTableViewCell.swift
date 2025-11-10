@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class PostTableViewCell: UITableViewCell {
 
@@ -78,5 +80,19 @@ class PostTableViewCell: UITableViewCell {
         guard let post = post else { return }
         let otherVC = delegate as! ChangeLikes
         otherVC.changeLikes(for: post, cell: self)
+    }
+    
+    
+    @IBAction func listenLaterBtnPressed(_ sender: Any) {
+        guard let user = Auth.auth().currentUser else {return}
+        let db = Firestore.firestore()
+        
+        var track = post?.trackObject
+        
+        db.collection("ListenLaters").document(user.uid).collection("tracks").addDocument(data: track?.toDictionary() ?? [:]) { error in
+            if let error = error {
+                print("Error adding track: \(error.localizedDescription)")
+            }
+        }
     }
 }

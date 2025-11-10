@@ -72,7 +72,7 @@
                     <connections>
                         <outlet property="settingsTableView" destination="hBy-o9-y2I" id="7du-El-x6u"/>
                         <segue destination="Wst-yF-9t1" kind="show" identifier="AccountSegue" id="azu-fM-SwJ"/>
-                        <segue destination="0xS-WB-f12" kind="show" identifier="AboutSegue" id="LLP-j0-zJ7"/>
+                        <segue destination="j9F-YP-Gd6" kind="show" identifier="AboutSegue" id="M6l-ed-BHF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qXR-W1-xrK" sceneMemberID="firstResponder"/>
@@ -158,16 +158,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qz-Ki-ufN" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3783.969465648855" y="130.98591549295776"/>
-        </scene>
-        <!--GroupVC-->
-        <scene sceneID="RPr-yW-omd">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Groups" referencedIdentifier="GroupVC" id="0xS-WB-f12" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="8vc-wR-YS0"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rk4-ox-FpC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3637" y="592"/>
         </scene>
         <!--About Page View Controller-->
         <scene sceneID="hPI-cH-GBd">

@@ -37,6 +37,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         displayPostTable.rowHeight = UITableView.automaticDimension
         displayPostTable.estimatedRowHeight = 72
         
+        guard let user = Auth.auth().currentUser else {return}
+        usernameLabel.text = user.displayName
+        
         startListeningForPosts()
     }
     

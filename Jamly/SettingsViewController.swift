@@ -200,7 +200,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func handleLogout() {
         do {
+            // erase spotify tokens
             try Auth.auth().signOut()
+            SpotifyAuthManager.shared.clearTokens()
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC") // IF ERROR, REMEMBER TO SET LOGIN VIEW CONTROLLER IN STORYBOARD'S ID TO LoginVC
             
