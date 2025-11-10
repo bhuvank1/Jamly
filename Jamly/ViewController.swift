@@ -22,7 +22,11 @@ protocol ChangeComments {
     func changeComments(postID: String, newComment: Comment)
 }
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ShowLikesComments, ChangeLikes, ChangeComments {
+protocol ShowPopup {
+    func makePopup(popupTitle:String, popupMessage:String)
+}
+
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ShowLikesComments, ChangeLikes, ChangeComments, ShowPopup {
     
     
     @IBOutlet weak var feedTableView: UITableView!
@@ -265,6 +269,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             destVC.delegate = self
         }
                     
+    }
+    
+    func makePopup(popupTitle:String, popupMessage:String) {
+        let controller = UIAlertController(
+            title: popupTitle,
+            message: popupMessage,
+            preferredStyle: .alert)
+        
+        controller.addAction(UIAlertAction(title: "OK", style: .default))
+        present(controller,animated:true)
     }
 }
 
