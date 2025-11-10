@@ -15,9 +15,9 @@ class Post {
     var userID: String
     var displayName: String
     var postID: String
-    var trackObject: [String: Any]
+    var trackObject: Track
     
-    required init(userID: String, displayName: String, postID: String, rating: Int, likes: [String], caption: String, comments: [Comment], trackObject: [String: Any]) {
+    required init(userID: String, displayName: String, postID: String, rating: Int, likes: [String], caption: String, comments: [Comment], trackObject: Track) {
         self.userID = userID
         self.displayName = displayName
         self.postID = postID
@@ -37,7 +37,7 @@ class Post {
             "likes": likes,
             "caption": caption,
             "comments": comments,
-            "trackObject": trackObject
+            "trackObject": trackObject.toDictionary()
             ]
     }
 }

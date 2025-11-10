@@ -115,27 +115,38 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             } else {
                 for document in querySnapshot!.documents {
                     let data = document.data()
-                    let userID = data["userID"] as? String ?? ""
-                    let displayName = data["displayName"] as? String ?? "Unknown"
-                    let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue ?? 0
-                    let caption = data["caption"] as? String ?? ""
-                    let likes = data["likes"] as? [String] ?? []
-                    let musicName = data["musicName"] as? String ?? ""
-                    
-                    let commentDicts = data["comments"] as? [[String: Any]] ?? []
-                    var comments: [Comment] = []
-                    for dict in commentDicts {
-                        if let userID = dict["userID"] as? String,
-                           let commentText = dict["commentText"] as? String {
-                            let comment = Comment(userID: userID, commentText: commentText)
-                            comments.append(comment)
+                    if let userID = data["userID"] as? String,
+                       let displayName = data["displayName"] as? String,
+                       let rating = data["rating"] as? Int ?? (data["rating"] as? Int),
+                       let caption = data["caption"] as? String {
+                        
+                        let likes = data["likes"] as? [String] ?? []
+                         
+                        
+                        let commentDicts = data["comments"] as? [[String: Any]] ?? []
+                        var comments: [Comment] = []
+                        for dict in commentDicts {
+                            if let userID = dict["userID"] as? String,
+                               let commentText = dict["commentText"] as? String {
+                                let comment = Comment(userID: userID, commentText: commentText)
+                                comments.append(comment)
+                            }
                         }
+                        
+                        let trackData = data["trackObject"] as? [String: Any]
+                                    let track = Track(
+                                        id: trackData?["id"] as? String ?? "",
+                                        name: trackData?["name"] as? String ?? "Unknown Song",
+                                        artists: trackData?["artists"] as? String ?? "Unknown Artist",
+                                        duration_ms: trackData?["duration_ms"] as? Int ?? 0,
+                                        albumArt: trackData?["albumArt"] as? String,
+                                        image: nil
+                                    )
+                        
+                        let newPost = Post(userID: userID, displayName: displayName, postID: document.documentID, rating: rating, likes: likes, caption: caption,
+                                           comments: comments, trackObject: track)
+                        self.posts.append(newPost)
                     }
-                    
-                    let newPost = Post(userID: userID, postID: document.documentID, rating: rating, likes: likes, caption: caption,
-                                       comments: comments,musicName: musicName, displayName: displayName)
-                    
-                    self.posts.append(newPost)
                     
                 }
                 self.feedTableView.reloadData()
@@ -195,6 +206,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(posts.count)
         return posts.count
     }
     
@@ -210,6 +222,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.likesButton.setTitle(String(post.likes.count), for: .normal)
         cell.ratingLabel.text = "\(post.rating)/5"
         cell.captionText.text = post.caption
+        cell.songNameLabel.text = post.trackObject.name
+        cell.artistNameLabel.text = post.trackObject.artists
+        
+        // image
+        if let urlStr = post.trackObject.albumArt, let url = URL(string: urlStr) {
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                guard let data = data, let img = UIImage(data: data) else { return }
+                DispatchQueue.main.async {
+                    // Only set the image if the cell is still displaying this row
+                    if let visibleCell = tableView.cellForRow(at: indexPath) as? PostTableViewCell {
+                        visibleCell.postImageView.image = img
+                    }
+                }
+            }.resume()
+        }
         
         // delegate
         cell.delegate = self

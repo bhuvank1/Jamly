@@ -10,6 +10,8 @@ import FirebaseAuth
 import FirebaseFirestore
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+   
+    
     
     // Other profile UI
     @IBOutlet weak var followersCountButton: UIButton!
@@ -46,10 +48,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     private func startListeningForPosts() {
         let db = Firestore.firestore()
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let user = Auth.auth().currentUser else { return }
         self.postDocs.removeAll()
         
-        db.collection("posts").whereField("userID", isEqualTo: uid).getDocuments {
+        db.collection("posts").whereField("userID", isEqualTo: user.uid).getDocuments {
             (querySnapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
@@ -58,39 +60,47 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     let data = document.data()
                     if let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue,
                        let caption = data["caption"] as? String,
-                       let likes = data["likes"] as? [String],
-                       let trackObject = data["trackObject"] as? Track,
-                       let commentDicts = data["comments"] as? [[String: Any]] {
+                       let trackObject = data["trackObject"] as? Track {
+                        let likes = data["likes"] as? [String] ?? []
                         
-                        var comments: [Comment] = []
-                        for dict in commentDicts {
-                           if let userID = dict["userID"] as? String,
-                               let commentText = dict["commentText"] as? String {
-                               let comment = Comment(userID: userID, commentText: commentText)
-                               comments.append(comment)
+                        let commentDicts = data["comments"] as? [[String: Any]] ?? []
+                            
+                            var comments: [Comment] = []
+                            for dict in commentDicts {
+                                if let userID = dict["userID"] as? String,
+                                   let commentText = dict["commentText"] as? String {
+                                    let comment = Comment(userID: userID, commentText: commentText)
+                                    comments.append(comment)
+                                }
                             }
-                        }
+                            
+                        let trackData = data["trackObject"] as? [String: Any]
+                                    let track = Track(
+                                        id: trackData?["id"] as? String ?? "",
+                                        name: trackData?["name"] as? String ?? "Unknown Song",
+                                        artists: trackData?["artists"] as? String ?? "Unknown Artist",
+                                        duration_ms: trackData?["duration_ms"] as? Int ?? 0,
+                                        albumArt: trackData?["albumArt"] as? String,
+                                        image: nil
+                                    )
                         
-                        let newPost = Post(userID: uid, displayName: user.displayName ?? "Username", postID: document.documentID, rating: rating, likes: likes, caption: caption,
-                                           comments: comments,trackObject: trackObject.toDictionary())
-                        
+                        let newPost = Post(userID: user.uid, displayName: user.displayName ?? "Username", postID: document.documentID, rating: rating, likes: likes, caption: caption,
+                                           comments: comments,trackObject: track)
                         self.postDocs.append(newPost)
-                    
+                    }
+                        
+                    }
+                    print(self.postDocs.count)
+                    self.displayPostTable.reloadData()
                 }
-                print(self.postDocs.count)
-                self.displayPostTable.reloadData()
             }
         }
-    }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            //print(postDocs.count)
             return postDocs.count
         }
         
-        func tableView(_ tableView: UITableView,
-                       cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             guard let cell = displayPostTable.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as? PostThumbnailTableViewCell else {
                 fatalError("Could not deque timer cell")
             }
@@ -113,7 +123,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             displayPostTable.deselectRow(at: indexPath, animated: true)
         }
-    
+        
         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             if segue.identifier == "postDetailSegue",
                let postIndex = displayPostTable.indexPathForSelectedRow?.row,
@@ -121,6 +131,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 destVC.post = postDocs[postIndex]
             }
         }
-    
+        
+        
     }
-

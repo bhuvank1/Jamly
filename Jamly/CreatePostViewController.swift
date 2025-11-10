@@ -57,7 +57,7 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
         // Safely unwrap caption or default to empty string
         let caption = captionField.text ?? ""
         
-        let post = Post(userID: user.uid, displayName: user.displayName ?? "", postID: postID, rating: rating, likes: [], caption: caption, comments: [], trackObject: selectedTrack.toDictionary())
+        let post = Post(userID: user.uid, displayName: user.displayName ?? "", postID: postID, rating: rating, likes: [], caption: caption, comments: [], trackObject: selectedTrack)
         
         postRef.setData(post.toDictionary()) { error in
             if let error = error {
