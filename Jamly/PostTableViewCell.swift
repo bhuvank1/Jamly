@@ -15,6 +15,8 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var postImageView: UIImageView!
     
+    @IBOutlet weak var artistNameLabel: UILabel!
+    @IBOutlet weak var songNameLabel: UILabel!
     @IBOutlet weak var captionText: UITextView!
     var delegate: UIViewController?
     
