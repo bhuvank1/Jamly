@@ -2,97 +2,92 @@
 //  GroupsViewController.swift
 //  Jamly
 //
-//  Created by Ajisegiri, Fareedah I on 11/7/25.
+//  Created by Bhuvan Kannaeganti on 11/09/25.
 //
 
 import UIKit
-import FirebaseFirestore
 import FirebaseAuth
+import FirebaseFirestore
 
 class GroupsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    @IBOutlet weak var GroupsTableView: UITableView!
+    @IBOutlet weak var groupsTableView: UITableView!
+    private let refresh = UIRefreshControl()
     
-    private var groupsCollection: [Group] = []
-    
-    let db = Firestore.firestore()
+    private let db = Firestore.firestore()
+    private var listener: ListenerRegistration?
+    private var groups: [Group] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Groups"
+        
+        title = "Groups"
 
-        GroupsTableView.dataSource = self
-        GroupsTableView.delegate = self
-      
-        retrieveUserGroups()
+        groupsTableView.dataSource = self
+        groupsTableView.delegate = self
 
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(groupsCollection.count)
-        return groupsCollection.count
+        groupsTableView.refreshControl = refresh
+        refresh.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        reloadGroups()
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = GroupsTableView.dequeueReusableCell(withIdentifier: "GroupsTextCell", for: indexPath) as? GroupTableViewCell else {
-            fatalError("Could not deque cell")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadGroups()
+    }
+    
+    @objc private func handleRefresh() {
+        reloadGroups()
+    }
+    
+    private func reloadGroups() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            groups = []
+            groupsTableView.reloadData()
+            refresh.endRefreshing()
+            return
         }
-        
-        let group = groupsCollection[indexPath.row]
-        cell.groupNameLabel.text = group.name
 
-        cell.groupDescrpText.text = group.description
-
-        print(group.description)
-        
-        // ADD ARTIST NAME AND TRACK TITLE OF SIMILAR SONG
-        
-        return cell
-    }
-    
-    func retrieveUserGroups() {
-        guard let user = Auth.auth().currentUser else { return }
-        print("Current UID:", user.uid)
-        
-        // find groups where current user is a member
         db.collection("groups")
-            .whereField("members", arrayContains: user.uid)
-            .getDocuments { querySnapshot, error in
-                
+            .whereField("members", arrayContains: uid)
+            .getDocuments { [weak self] snapshot, error in
+                guard let self = self else { return }
+                self.refresh.endRefreshing()
+
                 if let error = error {
-                    print("Error fetching groups: \(error.localizedDescription)")
+                    print("Fetch groups error:", error)
+                    self.groups = []
+                    self.groupsTableView.reloadData()
                     return
                 }
-                
-                self.groupsCollection.removeAll()
-                
-                guard let documents = querySnapshot?.documents else { return }
-                
-                for document in documents {
-                    let data = document.data()
-                    let name = data["name"] as? String ?? "Group Name"
-                    let description = data["description"] as? String ?? "Group description here"
-                    let creatorID = data["creatorID"] as? String ?? "Unknown ID"
-                    let creatorDisplayName = data["creatorDisplayName"] as? String ?? "Unknown Display Name"
-                    let members = data["members"] as? [String] ?? []
-                    let postsID = data["postsID"] as? [String] ?? []
-                    
-                    let newGroup = Group(
-                        name: name,
-                        description: description,
-                        creatorID: creatorID,
-                        creatorDisplayName: creatorDisplayName,
-                        members: members,
-                        postsID: postsID
-                    )
-                    
-                    self.groupsCollection.append(newGroup)
-                }
-                
-                self.GroupsTableView.reloadData()
 
+                self.groups = snapshot?.documents.compactMap(Group.init(doc:)) ?? []
+                self.groupsTableView.reloadData()
             }
     }
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        groups.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let group = groups[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GroupCell") ?? UITableViewCell(style: .subtitle, reuseIdentifier: "GroupCell")
+        
+        cell.textLabel?.text = group.name
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+
+        if !group.creatorDisplayName.isEmpty && group.creatorDisplayName != "Unknown" {
+            cell.detailTextLabel?.text = "\(group.creatorDisplayName) • \(group.description)"
+        } else {
+            cell.detailTextLabel?.text = group.description
+        }
+
+        cell.detailTextLabel?.textColor = .secondaryLabel
+        cell.detailTextLabel?.numberOfLines = 2
+        cell.accessoryType = .disclosureIndicator
+        
+        return cell
+    }
 
 }

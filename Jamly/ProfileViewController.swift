@@ -46,8 +46,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     private func startListeningForPosts() {
         let db = Firestore.firestore()
-        guard let user = Auth.auth().currentUser else { return }
-        var uid = user.uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        self.postDocs.removeAll()
         
         db.collection("posts").whereField("userID", isEqualTo: uid).getDocuments {
             (querySnapshot, err) in
@@ -75,15 +75,17 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                                            comments: comments,trackObject: trackObject.toDictionary())
                         
                         self.postDocs.append(newPost)
-                    }
+                    
                 }
+                print(self.postDocs.count)
                 self.displayPostTable.reloadData()
             }
         }
     }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            postDocs.count
+            //print(postDocs.count)
+            return postDocs.count
         }
         
         func tableView(_ tableView: UITableView,
