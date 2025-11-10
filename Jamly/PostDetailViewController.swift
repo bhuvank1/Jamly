@@ -15,7 +15,6 @@ protocol ChangeCommentsPostDetail {
 
 class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCommentsPostDetail, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var scrollView: UIScrollView!
     var contentView: UIContentView!
     @IBOutlet weak var captionTextView: UITextView!
     
@@ -56,20 +55,17 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
         
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
         doubleTap.numberOfTapsRequired = 2
-        doubleTap.cancelsTouchesInView = true
+        doubleTap.cancelsTouchesInView = false
         doubleTap.delegate = self
         postImageView.addGestureRecognizer(doubleTap)
         postImageView.isUserInteractionEnabled = true
-        scrollView.delaysContentTouches = false
-        scrollView.canCancelContentTouches = true
-
         
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-            return true
-        }
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+//                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//            return true
+//        }
     
     func updateLikesUI() {
         guard let post = post, let currentUID = Auth.auth().currentUser?.uid else { return }
