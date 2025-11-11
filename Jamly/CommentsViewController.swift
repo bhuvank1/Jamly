@@ -52,8 +52,12 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                         self.commentsTableView.reloadData()
                         self.addCommentTextField.text = ""
                         
-                        let otherVC = self.delegate as! ChangeComments
-                        otherVC.changeComments(postID: self.postID, newComment: newComment)
+                        if let otherVC = self.delegate as? ChangeCommentsSocialFeed {
+                            otherVC.changeComments(postID: self.postID, newComment: newComment)
+                        } else if let otherVC = self.delegate as? ChangeCommentsPostDetail {
+                            otherVC.changeComments(postID: self.postID, newComment: newComment)
+                        }
+                        
                     }
                 }
                 

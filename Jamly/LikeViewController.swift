@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class LikeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -42,7 +43,42 @@ class LikeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             }
         }
+    }
+    
+    // changing likes in social feed
+    func changeLikes(for post: Post, cell: PostTableViewCell) {
+        print("HERE IN CHANGE LIKES")
+        guard let currentUID = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
         
+        let postRef = db.collection("posts").document(post.postID)
+        var updatedLikes = post.likes
+        
+        if let index = updatedLikes.firstIndex(of: currentUID) {
+                updatedLikes.remove(at: index)
+            } else {
+                updatedLikes.append(currentUID)
+            }
+        
+        postRef.updateData(["likes": updatedLikes]) { error in
+            if let error = error {
+                print("Error updating likes: \(error.localizedDescription)")
+                return
+            }
+            post.likes = updatedLikes
+            
+            DispatchQueue.main.async {
+                self.likesTableView.reloadData()
+                 cell.likesButton.setTitle(String(post.likes.count), for: .normal)
+                
+                if post.likes.contains(currentUID) {
+                   cell.likesButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                   } else {
+                    cell.likesButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                   }
+            }
+            
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
