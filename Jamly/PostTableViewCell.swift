@@ -76,7 +76,7 @@ class PostTableViewCell: UITableViewCell {
     
     @IBAction func handleDoubleTap(recognizer: UITapGestureRecognizer) {
         guard let post = post else { return }
-        let otherVC = delegate as! ChangeLikes
+        let otherVC = delegate as! ChangeLikesSocialFeed
         otherVC.changeLikes(for: post, cell: self)
     }
 }
