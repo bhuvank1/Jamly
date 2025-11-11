@@ -251,6 +251,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 // delete all posts from this user
                 self.deleteUserPots()
                 
+                // delete comments from user
+                self.deleteUserComments()
+                
+                // delete likes from user
+                self.deleteUserLikes()
+                
                 user.delete() { error in
                     if let error = error {
                         print("Error deleting user: \(error.localizedDescription)")
@@ -338,5 +344,33 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             controller.addAction(UIAlertAction(title: "OK", style: .default))
             present(controller,animated:true)
         }
+    
+    func deleteUserComments() {
+        guard let user = Auth.auth().currentUser else { return }
+        let db = Firestore.firestore()
+        
+        db.collection("posts").getDocuments() { snapshot, error in
+            guard let docs = snapshot?.documents else { return }
+            for doc in docs {
+                var comments = doc["comments"] as? [[String:Any]] ?? []
+                comments.removeAll { $0["userID"] as? String == user.uid }
+                db.collection("posts").document(doc.documentID).updateData(["comments": comments])
+            }
+        }
+    }
+    
+    func deleteUserLikes() {
+        guard let user = Auth.auth().currentUser else { return }
+        let db = Firestore.firestore()
+        
+        db.collection("posts").getDocuments() { snapshot, error in
+            guard let docs = snapshot?.documents else { return }
+            for doc in docs {
+                var likes = doc["likes"] as? [String] ?? []
+                likes.removeAll { $0 == user.uid }
+                db.collection("posts").document(doc.documentID).updateData(["likes": likes])
+            }
+        }
+    }
 
 }
