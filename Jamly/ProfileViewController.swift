@@ -12,7 +12,6 @@ import FirebaseFirestore
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
    
     
-    
     // Other profile UI
     @IBOutlet weak var followersCountButton: UIButton!
     @IBOutlet weak var followingCountButton: UIButton!
