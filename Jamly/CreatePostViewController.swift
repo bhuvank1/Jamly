@@ -37,11 +37,27 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
     @IBAction func postButtonPressed(_ sender: Any) {
         guard let user = Auth.auth().currentUser else { return }
         
+        // Ensure track is selected
+            guard let selectedTrack = track else {
+                print("No track selected. Cannot create post.")
+                // Optionally show an alert to the user
+                let alert = UIAlertController(title: "Error", message: "Please select a track before posting.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+                return
+            }
+        
         // generating postID
         let postRef = db.collection("posts").document()
         let postID = postRef.documentID
         
-        let post = Post(userID: user.uid, postID: postID, rating: Int(ratingField.text!) ?? 1, likes: [], caption: captionField.text!, comments: [], musicName: "Attack")
+        // Safely unwrap rating or default to 1
+        let rating = Int(ratingField.text ?? "") ?? 1
+            
+        // Safely unwrap caption or default to empty string
+        let caption = captionField.text ?? ""
+        
+        let post = Post(userID: user.uid, displayName: user.displayName ?? "", postID: postID, rating: rating, likes: [], caption: caption, comments: [], trackObject: selectedTrack)
         
         postRef.setData(post.toDictionary()) { error in
             if let error = error {
