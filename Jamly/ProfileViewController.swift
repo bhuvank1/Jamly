@@ -43,6 +43,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         startListeningForPosts()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        startListeningForPosts()
+    }
+    
     deinit { listener?.remove() }
     
     override func viewDidLayoutSubviews() {
