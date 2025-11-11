@@ -22,7 +22,12 @@ protocol ChangeCommentsSocialFeed {
     func changeComments(postID: String, newComment: Comment)
 }
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ShowLikesComments, ChangeLikesSocialFeed, ChangeCommentsSocialFeed {
+protocol ShowPopup {
+    func makePopup(popupTitle:String, popupMessage:String)
+}
+
+
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ShowLikesComments, ChangeLikesSocialFeed, ChangeCommentsSocialFeed, ShowPopup {
     
     
     @IBOutlet weak var feedTableView: UITableView!
