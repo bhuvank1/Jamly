@@ -14,8 +14,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     @IBOutlet weak var searchBar: UISearchBar!
     
     @IBOutlet weak var displayNameLabel: UILabel!
-    @IBOutlet weak var emailLabel: UILabel!
-    @IBOutlet weak var mobileNumberLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var friendsButton: UIButton!
@@ -39,7 +37,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
         displayPostTable.estimatedRowHeight = 72
         
         // Hide UI until user found
-        [displayNameLabel, emailLabel, mobileNumberLabel, nameLabel, displayPostTable].forEach { $0?.isHidden = true }
+        [displayNameLabel, nameLabel, displayPostTable].forEach { $0?.isHidden = true }
         friendsButton.isHidden = true
         addFriendButton.isHidden = true
         addFriendButton.isEnabled = false
@@ -90,16 +88,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     private func updateProfileUI() {
         guard let u = user else { return }
         
-        displayNameLabel.text     = "Display Name: \(u.displayName)"
-        emailLabel.text           = "Email: \(u.email)"
-        mobileNumberLabel.text    = "Mobile: \(u.mobileNumber)"
-        nameLabel.text            = "Name: \(u.name)"
+        displayNameLabel.text = "Display Name: \(u.displayName)"
+        nameLabel.text        = "Name: \(u.name)"
         friendsButton.setTitle("Friends (\(u.friends.count))", for: .normal)
         
-        [displayNameLabel, emailLabel, mobileNumberLabel, nameLabel].forEach { $0?.isHidden = false }
+        [displayNameLabel, nameLabel].forEach { $0?.isHidden = false }
         friendsButton.isHidden = false
         addFriendButton.isHidden = false
-        displayPostTable.isHidden = false   // ✅ FIXED: was never unhidden
+        displayPostTable.isHidden = false
         
         // Default state
         addFriendButton.isEnabled = false
@@ -152,29 +148,33 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
                         let likes = data["likes"] as? [String] ?? []
                         
                         let commentDicts = data["comments"] as? [[String: Any]] ?? []
-                            
-                            var comments: [Comment] = []
-                            for dict in commentDicts {
-                                if let userID = dict["userID"] as? String,
-                                   let commentText = dict["commentText"] as? String {
-                                    let comment = Comment(userID: userID, commentText: commentText)
-                                    comments.append(comment)
-                                }
+                        var comments: [Comment] = []
+                        for dict in commentDicts {
+                            if let userID = dict["userID"] as? String,
+                               let commentText = dict["commentText"] as? String {
+                                let comment = Comment(userID: userID, commentText: commentText)
+                                comments.append(comment)
                             }
-                            
-                        let trackData = data["trackObject"] as? [String: Any]
-                                    let track = Track(
-                                        id: trackData?["id"] as? String ?? "",
-                                        name: trackData?["name"] as? String ?? "Unknown Song",
-                                        artists: trackData?["artists"] as? String ?? "Unknown Artist",
-                                        duration_ms: trackData?["duration_ms"] as? Int ?? 0,
-                                        albumArt: trackData?["albumArt"] as? String,
-                                        image: nil
-                                    )
+                        }
                         
-                        let newPost = Post(userID: uid, displayName: self.user?.displayName ?? "Unknown User",
-                                           postID: document.documentID, rating: rating, likes: likes, caption: caption,
-                                           comments: comments, trackObject: track)
+                        let trackData = data["trackObject"] as? [String: Any]
+                        let track = Track(
+                            id: trackData?["id"] as? String ?? "",
+                            name: trackData?["name"] as? String ?? "Unknown Song",
+                            artists: trackData?["artists"] as? String ?? "Unknown Artist",
+                            duration_ms: trackData?["duration_ms"] as? Int ?? 0,
+                            albumArt: trackData?["albumArt"] as? String,
+                            image: nil
+                        )
+                        
+                        let newPost = Post(userID: uid,
+                                           displayName: self.user?.displayName ?? "Unknown User",
+                                           postID: document.documentID,
+                                           rating: rating,
+                                           likes: likes,
+                                           caption: caption,
+                                           comments: comments,
+                                           trackObject: track)
                         self.postDocs.append(newPost)
                     }
                 }
@@ -213,7 +213,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
         }
         return cell
     }
-    
     
     // MARK: - Add Friend
     @IBAction func addFriendButtonTapped(_ sender: UIButton) {
@@ -317,7 +316,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
             )
             DispatchQueue.main.async {
                 self.updateProfileUI()
-                self.fetchPostsForUser()   // ✅ ensure posts update when navigating friends
+                self.fetchPostsForUser()
             }
         }
     }
