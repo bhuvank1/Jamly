@@ -1,17 +1,28 @@
+//
+//  ProfileViewController.swift
+//  Jamly
+//
+//  Created by Rohan Pant on 10/17/25.
+//
+
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    // MARK: - Outlets
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var displayPostTable: UITableView!
     @IBOutlet weak var friendsButton: UIButton!
+    @IBOutlet weak var addFriendsButton: UIButton!
 
+    // MARK: - Properties
     private var postDocs: [Post] = []
     private var listener: ListenerRegistration?
     private var myFriendIDs: [String] = []
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,13 +38,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+        super.viewDidAppear(animated)
         startListeningForPosts()
     }
     
     deinit { listener?.remove() }
 
-    // MARK: - Load User Profile (NEW)
+    // MARK: - Load User Profile
     private func loadUserProfile() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
 
@@ -53,12 +64,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
             let displayName = data["displayName"] as? String ?? "Unknown User"
             DispatchQueue.main.async {
-                self.usernameLabel.text = displayName   
+                self.usernameLabel.text = displayName
             }
         }
     }
 
-    // MARK: - Load current user's friends
+    // MARK: - Load Current User's Friends
     private func loadFriendList() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Firestore.firestore().collection("userInfo").document(uid).getDocument { [weak self] snap, err in
@@ -69,8 +80,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             let data = snap?.data()
             self.myFriendIDs = data?["friends"] as? [String] ?? []
-            DispatchQueue.main.async {
-            }
         }
     }
 
@@ -79,7 +88,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         performSegue(withIdentifier: "showFriendsSegue", sender: myFriendIDs)
     }
 
-    // MARK: - Prepare for segue
+    // MARK: - Add Friends Button Action (NEW)
+    @IBAction func addFriendsButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "showAddFriendsSegue", sender: nil)
+    }
+
+    // MARK: - Prepare for Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showFriendsSegue",
            let dest = segue.destination as? UserFriendsViewController,
@@ -92,9 +106,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
            let destVC = segue.destination as? PostDetailViewController {
             destVC.post = postDocs[postIndex]
         }
+
+        // ✅ Handle Add Friends segue to navigation controller
+        if segue.identifier == "showAddFriendsSegue" {
+            if let nav = segue.destination as? UINavigationController,
+               let searchVC = nav.topViewController as? SearchViewController {
+                // Optionally pass data if needed
+                print("Navigating to Add Friends screen")
+            }
+        }
     }
 
-    // MARK: - Fetch posts for current user
+    // MARK: - Fetch Posts for Current User
     private func startListeningForPosts() {
         let db = Firestore.firestore()
         guard let user = Auth.auth().currentUser else { return }
@@ -166,11 +189,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
 
+    // MARK: - Alert Helper
     private func alert(_ title: String, _ msg: String) {
         let ac = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
     }
 }
-
 

@@ -90,6 +90,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
         
         displayNameLabel.text = "Display Name: \(u.displayName)"
         nameLabel.text        = "Name: \(u.name)"
+
         
         [displayNameLabel, nameLabel].forEach { $0?.isHidden = false }
         friendsButton.isHidden = false
