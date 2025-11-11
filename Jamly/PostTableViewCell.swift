@@ -6,9 +6,14 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class PostTableViewCell: UITableViewCell {
+    
+    var listenLaterTrackIDs: Set<String> = [] // holds ID of track
 
+    @IBOutlet weak var listenLaterButton: UIButton!
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var commentsButton: UIButton!
     @IBOutlet weak var likesButton: UIButton!
@@ -31,6 +36,8 @@ class PostTableViewCell: UITableViewCell {
                     postImageView.addGestureRecognizer(doubleTap)
                     postImageView.isUserInteractionEnabled = true
                 }
+            
+            setButtonState()
             }
     }
     
@@ -51,6 +58,7 @@ class PostTableViewCell: UITableViewCell {
         }
         
         selectionStyle = .none
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -78,5 +86,63 @@ class PostTableViewCell: UITableViewCell {
         guard let post = post else { return }
         let otherVC = delegate as! ChangeLikesSocialFeed
         otherVC.changeLikes(for: post, cell: self)
+    }
+    
+    // function that adds track in post to database and removes it if already exists
+    @IBAction func listenLaterBtnPressed(_ sender: Any) {
+        guard let user = Auth.auth().currentUser else {return}
+        let db = Firestore.firestore()
+        
+        guard let track = post?.trackObject else {return}
+        
+        let trackID = track.id
+        
+        let trackRef = db.collection("ListenLaters").document(user.uid).collection("tracks").document(trackID)
+        
+        let otherVC = delegate as! ShowPopup
+        
+        trackRef.getDocument { document, error  in
+            if let document = document, document.exists {
+                DispatchQueue.main.async {
+                    self.listenLaterButton.setTitle("+ 🎵", for: .normal)
+                }
+                trackRef.delete { _ in
+                    otherVC.makePopup(popupTitle: "Deleted a track from Listen Later", popupMessage: "Successfully removed \(track.name) from your playlist!")
+                    print("Deleting existing track from Listen Later.")}
+            } else {
+                trackRef.setData(track.toDictionary()) { error in
+                    if let error = error {
+                        print("Error adding track: \(error.localizedDescription)")
+                    } else {
+                        DispatchQueue.main.async {
+                            self.listenLaterButton.setTitle("Added ✓", for: .normal)
+                        }
+                        otherVC.makePopup(popupTitle: "Added a track to your Listen Later", popupMessage: "Successfully added \(track.name) to your playlist!")
+                    }
+                }
+            }
+        }
+    }
+    
+    // function to set the button state correctly as soon as screen loads
+    private func setButtonState() {
+        guard let user = Auth.auth().currentUser else {return}
+        let db = Firestore.firestore()
+        
+        guard let track = post?.trackObject else {return}
+        
+        let trackID = track.id
+        
+        let trackRef = db.collection("ListenLaters").document(user.uid).collection("tracks").document(trackID)
+       
+        trackRef.getDocument { document, error  in
+            DispatchQueue.main.async {
+                if let document = document, document.exists {
+                    self.listenLaterButton.setTitle("Added ✓", for: .normal)
+                } else {
+                    self.listenLaterButton.setTitle("+ 🎵", for: .normal)
+                }
+            }
+        }
     }
 }

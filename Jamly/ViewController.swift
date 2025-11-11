@@ -267,5 +267,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     
     }
     
+    func makePopup(popupTitle:String, popupMessage:String) {
+        let controller = UIAlertController(
+            title: popupTitle,
+            message: popupMessage,
+            preferredStyle: .alert)
+        
+        controller.addAction(UIAlertAction(title: "OK", style: .default))
+        present(controller,animated:true)
+    }
 }
 

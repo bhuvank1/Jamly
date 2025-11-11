@@ -142,6 +142,12 @@ final class SpotifyAuthManager : NSObject { //NSObject needed for ASWebAuth
         }.resume()
     }
     
+    func clearTokens() {
+        accessToken = nil
+        refreshToken = nil
+        expiry = nil
+    }
+    
 }
 
 //code snip from online for ASWeb protocol
