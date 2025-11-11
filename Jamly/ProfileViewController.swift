@@ -12,6 +12,7 @@ import FirebaseFirestore
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
    
     
+    
     // Other profile UI
     @IBOutlet weak var followersCountButton: UIButton!
     @IBOutlet weak var followingCountButton: UIButton!
@@ -58,8 +59,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 for document in querySnapshot!.documents {
                     let data = document.data()
                     if let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue,
-                       let caption = data["caption"] as? String,
-                       let trackObject = data["trackObject"] as? Track {
+                       let caption = data["caption"] as? String {
                         let likes = data["likes"] as? [String] ?? []
                         
                         let commentDicts = data["comments"] as? [[String: Any]] ?? []
@@ -105,14 +105,22 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             
             let postData = postDocs[indexPath.row]
+
+            cell.songName.text = postData.trackObject.name
+            cell.songRating.text = "\(String(postData.rating))/5"
             
-            if let trackDict = postData.trackObject as? [String: Any],
-               let trackName = trackDict["name"] as? String {
-                cell.songName.text = trackName
-            } else {
-                cell.songName.text = "No song"
+            // image
+            if let albumArtURL = postData.trackObject.albumArt, let url = URL(string: albumArtURL) {
+                URLSession.shared.dataTask(with: url) { data, _, _ in
+                    guard let data = data, let img = UIImage(data: data) else { return }
+                    DispatchQueue.main.async {
+                        // Check the cell is still visible to avoid wrong image
+                        if let visibleCell = tableView.cellForRow(at: indexPath) as? PostThumbnailTableViewCell {
+                            visibleCell.albumPic.image = img
+                        }
+                    }
+                }.resume()
             }
-            cell.songRating.text = String(postData.rating)
             
             return cell
         }
@@ -133,3 +141,4 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
     }
+
