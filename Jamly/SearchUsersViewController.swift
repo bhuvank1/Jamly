@@ -214,10 +214,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        displayPostTable.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: "postDetailSegue", sender: indexPath)
-    }
     
     // MARK: - Add Friend
     @IBAction func addFriendButtonTapped(_ sender: UIButton) {
@@ -284,9 +280,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     // MARK: - Prepare Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "postDetailSegue",
-           let indexPath = sender as? IndexPath,
+           let postIndex = displayPostTable.indexPathForSelectedRow?.row,
            let destVC = segue.destination as? PostDetailViewController {
-            destVC.post = postDocs[indexPath.row]
+            destVC.post = postDocs[postIndex]
         }
         
         if segue.identifier == "showFriendsSegue" {
