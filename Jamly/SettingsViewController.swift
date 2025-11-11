@@ -247,6 +247,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 
                 // delete any database info about this user
                 self.deleteDatabaseInfo()
+                
+                // delete all posts from this user
+                self.deleteUserPots()
+                
                 user.delete() { error in
                     if let error = error {
                         print("Error deleting user: \(error.localizedDescription)")
@@ -293,6 +297,35 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 print("User data deleted from Firestore.")
             }
         }
+    }
+    
+    func deleteUserPots() {
+        guard let user = Auth.auth().currentUser else { return }
+        let db = Firestore.firestore()
+        
+        db.collection("posts").whereField("userID", isEqualTo: user.uid).getDocuments() { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching user posts: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents, !documents.isEmpty else {
+                print("No posts found for user.")
+                return
+            }
+            
+            // Delete each post
+            for document in documents {
+                document.reference.delete { error in
+                    if let error = error {
+                        print("Error deleting post \(document.documentID): \(error.localizedDescription)")
+                    } else {
+                        print("Successfully deleted post \(document.documentID)")
+                    }
+                }
+            }
+        }
+        
     }
     
     func makePopup(popupTitle:String, popupMessage:String) {

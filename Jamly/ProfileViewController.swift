@@ -25,7 +25,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         startListeningForPosts()
         loadFriendList()
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        startListeningForPosts()
+    }
+    
     deinit { listener?.remove() }
 
     // MARK: - Load User Profile (NEW)
