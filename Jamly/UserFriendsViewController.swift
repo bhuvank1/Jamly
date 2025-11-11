@@ -35,6 +35,11 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
         tableView.delegate = self
         fetchFriends()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        fetchFriends()
+    }
 
     private func fetchFriends() {
         guard !friendIDs.isEmpty else { return }

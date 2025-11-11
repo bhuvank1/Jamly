@@ -21,7 +21,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         displayPostTable.estimatedRowHeight = 72
 
         // Load all necessary profile data
-        loadUserProfile()      // 👈 NEW
+        loadUserProfile()
         startListeningForPosts()
         loadFriendList()
     }
@@ -53,7 +53,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
             let displayName = data["displayName"] as? String ?? "Unknown User"
             DispatchQueue.main.async {
-                self.usernameLabel.text = displayName   // ✅ Set the username label
+                self.usernameLabel.text = displayName   
             }
         }
     }
