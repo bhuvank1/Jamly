@@ -53,7 +53,7 @@
                                                                 </button>
                                                             </subviews>
                                                         </stackView>
-                                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Jamly_LogoPDF" translatesAutoresizingMaskIntoConstraints="NO" id="hT2-Kv-u0y">
+                                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hT2-Kv-u0y">
                                                             <rect key="frame" x="0.0" y="48.333333333333314" width="440" height="440"/>
                                                             <gestureRecognizers/>
                                                             <constraints>
@@ -866,7 +866,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="108" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-MC-vri">
-                                                    <rect key="frame" x="20" y="17" width="231.33333333333331" height="80"/>
+                                                    <rect key="frame" x="20" y="17" width="231.33333333333334" height="80"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beach_test_image" translatesAutoresizingMaskIntoConstraints="NO" id="0zh-Tk-YqS">
                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
@@ -917,31 +917,19 @@
                                 <items>
                                     <navigationItem id="FYn-1k-LRm">
                                         <nil key="title"/>
-                                        <leftBarButtonItems>
-                                            <barButtonItem style="plain" id="g7h-tQ-jfH">
-                                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="MQS-se-HY8">
-                                                    <rect key="frame" x="0.0" y="5" width="69.666666666666671" height="34.333333333333336"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="person.3.fill" catalog="system" title="">
-                                                        <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </buttonConfiguration>
-                                                </button>
-                                            </barButtonItem>
-                                            <barButtonItem style="plain" id="bZm-PR-g92">
-                                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="WwK-qP-M0n">
-                                                    <rect key="frame" x="77.666666666666671" y="5" width="42.333333333333329" height="34.333333333333336"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="music.note" catalog="system" title="">
-                                                        <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </buttonConfiguration>
-                                                    <connections>
-                                                        <segue destination="hdZ-lM-9L2" kind="show" id="qCU-YX-GCc"/>
-                                                    </connections>
-                                                </button>
-                                            </barButtonItem>
-                                        </leftBarButtonItems>
+                                        <barButtonItem key="leftBarButtonItem" style="plain" id="bZm-PR-g92">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="WwK-qP-M0n">
+                                                <rect key="frame" x="0.0" y="5" width="42.333333333333336" height="34.333333333333336"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="music.note" catalog="system" title="">
+                                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <segue destination="hdZ-lM-9L2" kind="show" id="qCU-YX-GCc"/>
+                                                </connections>
+                                            </button>
+                                        </barButtonItem>
                                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="42b-Ae-jhe">
                                             <rect key="frame" x="193.33333333333334" y="5" width="53.333333333333343" height="34.333333333333336"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1430,7 +1418,6 @@
         <image name="message" catalog="system" width="128" height="116"/>
         <image name="music.note" catalog="system" width="96" height="128"/>
         <image name="person.3" catalog="system" width="128" height="66"/>
-        <image name="person.3.fill" catalog="system" width="128" height="66"/>
         <image name="person.badge.plus" catalog="system" width="128" height="124"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="questionmark.app.fill" catalog="system" width="128" height="114"/>

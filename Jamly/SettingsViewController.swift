@@ -129,7 +129,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         // create trigger
         // CHANGE TO MULTIPLY BY 3600
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeIntervalValue*60, repeats: true)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeIntervalValue*3600, repeats: true)
         
         // combine it all into a request
         let request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: trigger)

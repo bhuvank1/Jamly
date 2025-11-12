@@ -33,7 +33,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
         // Load all necessary profile data
         loadUserProfile()
-        startListeningForPosts()
         loadFriendList()
     }
     
