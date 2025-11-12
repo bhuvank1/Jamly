@@ -37,7 +37,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         feedTableView.dataSource = self
         feedTableView.delegate = self
-        fetchSocialFeed()
+        //fetchSocialFeed()
     }
     
     override func viewDidAppear(_ animated: Bool) {

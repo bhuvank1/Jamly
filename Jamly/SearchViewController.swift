@@ -46,7 +46,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
     // MARK: - Search
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.isEmpty else { return }
-        searchUser(byDisplayName: text)
+        searchUser(byDisplayName: text.lowercased())
         searchBar.resignFirstResponder()
     }
     

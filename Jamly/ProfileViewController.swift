@@ -83,11 +83,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
 
-    // MARK: - Friends Button Action
-    @IBAction func friendsButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "showFriendsSegue", sender: myFriendIDs)
-    }
-
     // MARK: - Add Friends Button Action (NEW)
     @IBAction func addFriendsButtonTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showAddFriendsSegue", sender: nil)
@@ -98,6 +93,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if segue.identifier == "showFriendsSegue",
            let dest = segue.destination as? UserFriendsViewController,
            let ids  = sender as? [String] {
+            print(ids)
             dest.friendIDs = ids
         }
 
