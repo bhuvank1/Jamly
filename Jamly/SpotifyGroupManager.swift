@@ -3,19 +3,18 @@
 //  Jamly
 //
 //  Created by Bhuvan Kannaeganti on 11/11/25.
+//  Personally Created reccomendation system that doesnt use /reccomendation endpoint (not available to free apps)
 //
 
 import Foundation
 import FirebaseFirestore
 
-//  Stats models
+// Stats models
 
 struct SpotifyTrack: Hashable {
     let id: String
     let name: String
     let artists: [String]
-    let tempo: Double?
-    let energy: Double?
 }
 
 struct SpotifyArtist: Hashable {
@@ -33,8 +32,6 @@ struct SpotifyStats {
     let topTracks: [SpotifyTrack]
     let topArtists: [SpotifyArtist]
     let genres: [SpotifyGenreWeight]
-    let tempoAvg: Double?
-    let energyAvg: Double?
 }
 
 final class SpotifyGroupManager {
@@ -42,50 +39,66 @@ final class SpotifyGroupManager {
     private init() {}
     
     private let db = Firestore.firestore()
-
-    // Logic flow: Build seeds from cached group stats, then make ONE final Spotify recommendations call.
-    func generateLiveRecommendationsViaSpotify(for group: Group,
-                                               limit: Int = 20,
-                                               market: String? = nil, // e.g., "US"
-                                               completion: @escaping ([Track]) -> Void) {
+    
+    // PUBLIC: generate recs client-side with allowed endpoints only
+    // Uses cached user-top-read (from Firestore), /artists/{id}/top-tracks, /tracks, and /search (type=track).
+    func generateLiveRecommendationsViaSpotify(
+        for group: Group,
+        limit: Int = 20,
+        market: String = "US",
+        completion: @escaping ([Track]) -> Void
+    ) {
         let uids = group.members
+        print("generateGroupRecs(client-side): \(group.name) members=\(uids.count)")
         guard !uids.isEmpty else { completion([]); return }
-
-        // 1) Read cached stats for all members
+        
         fetchStats(for: uids) { [weak self] uidToStats in
             guard let self = self, !uidToStats.isEmpty else { completion([]); return }
-
-            // 2) Build seeds + target params from the aggregate of cached stats
-            let seeds   = self.buildGroupSeeds(uidToStats: uidToStats, maxTotalSeeds: 5)
-            let targets = self.buildTargetParams(uidToStats: uidToStats)
-
-            // 3) Create the /v1/recommendations URL
-            guard let url = self.buildRecommendationsURL(limit: limit, market: market, seeds: seeds, targets: targets) else {
-                completion([])
-                return
-            }
-
-            // 4) Use the CURRENT USER'S token for one Spotify call
+            print("Fetched stats for \(uidToStats.count) members")
+            
+            // 1) build seeds + weights from group cache
+            let (seeds, weights) = self.buildGroupSeedsAndWeights(
+                uidToStats: uidToStats,
+                maxArtistSeeds: 5,
+                maxTrackSeeds: 5,
+                maxGenreSeeds: 5
+            )
+            print("Seeds: artists=\(seeds.artistIDs.count) tracks=\(seeds.trackIDs.count) genres=\(seeds.genres.count)")
+            
+            // 2) use CURRENT USER token
             SpotifyAuthManager.shared.getValidAccessToken { token in
-                guard let token = token else {
-                    print("Spotify token unavailable; returning empty recs.")
-                    completion([])
-                    return
-                }
-                self.performSpotifyGET(url: url, token: token) { json in
-                    let tracks = self.parseRecommendations(json: json)
-                    completion(tracks)
+                guard let token = token else { print("No Spotify token"); completion([]); return }
+                
+                // 3) fetch candidates from artist top-tracks + genre search (+ include seed tracks)
+                self.fetchCandidates(
+                    token: token,
+                    artistSeeds: seeds.artistIDs,
+                    trackSeeds: seeds.trackIDs,
+                    genreSeeds: seeds.genres,
+                    market: market
+                ) { candidates in
+                    // 4) rank + diversify
+                    let ranked = self.rankCandidates(
+                        candidates,
+                        weights: weights,
+                        maxPerArtist: 2
+                    )
+                    let out = Array(self.toAppTracks(ranked).prefix(limit))
+                    completion(out)
                 }
             }
         }
     }
+}
 
-    // Fetch userInfo docs
+// Firestore helpers
+
+extension SpotifyGroupManager {
     private func fetchStats(for uids: [String], completion: @escaping ([String: SpotifyStats]) -> Void) {
         var results: [String: SpotifyStats] = [:]
-        let chunks = stride(from: 0, to: uids.count, by: 10).map { Array(uids[$0..<min($0+10, uids.count)]) } //chunks code to go 10 at a time
+        let chunks = stride(from: 0, to: uids.count, by: 10).map { Array(uids[$0..<min($0+10, uids.count)]) }
         let g = DispatchGroup()
-
+        
         for chunk in chunks {
             g.enter()
             db.collection("userInfo")
@@ -100,30 +113,25 @@ final class SpotifyGroupManager {
                     }
                 }
         }
-
-        g.notify(queue: .main) {
-            completion(results)
-        }
+        g.notify(queue: .main) { completion(results) }
     }
-
+    
     private func parseSpotifyStats(from userDoc: DocumentSnapshot) -> SpotifyStats? {
         guard
             let data = userDoc.data(),
             let spotify = data["spotify"] as? [String: Any],
             let stats = spotify["stats"] as? [String: Any]
         else { return nil }
-
+        
         // topTracks
         let topTracksRaw = stats["topTracks"] as? [[String: Any]] ?? []
         let topTracks: [SpotifyTrack] = topTracksRaw.compactMap { t in
             guard let id = t["id"] as? String else { return nil }
             let name = (t["name"] as? String) ?? "(unknown)"
             let artists = (t["artists"] as? [String]) ?? []
-            let tempo = t["tempo"] as? Double
-            let energy = t["energy"] as? Double
-            return SpotifyTrack(id: id, name: name, artists: artists, tempo: tempo, energy: energy)
+            return SpotifyTrack(id: id, name: name, artists: artists)
         }
-
+        
         // topArtists
         let topArtistsRaw = stats["topArtists"] as? [[String: Any]] ?? []
         let topArtists: [SpotifyArtist] = topArtistsRaw.compactMap { a in
@@ -132,7 +140,11 @@ final class SpotifyGroupManager {
             let genres = (a["genres"] as? [String]) ?? []
             return SpotifyArtist(id: id, name: name, genres: genres)
         }
-
+        
+        if topTracksRaw.isEmpty && topArtistsRaw.isEmpty {
+            print("\(userDoc.documentID) stats empty: no topTracks/topArtists")
+        }
+        
         // genres
         let genresRaw = stats["genres"] as? [[String: Any]] ?? []
         let genres: [SpotifyGenreWeight] = genresRaw.compactMap { g in
@@ -140,121 +152,181 @@ final class SpotifyGroupManager {
             let weight = g["weight"] as? Double ?? 0.0
             return SpotifyGenreWeight(name: name.lowercased(), weight: max(0, weight))
         }
-
-        // user-level averages
-        let tempoAvg = stats["tempoAvg"] as? Double
-        let energyAvg = stats["energyAvg"] as? Double
-
-        return SpotifyStats(topTracks: topTracks, topArtists: topArtists, genres: genres, tempoAvg: tempoAvg, energyAvg: energyAvg)
+        
+        return SpotifyStats(topTracks: topTracks, topArtists: topArtists, genres: genres)
     }
+}
 
-    // Important helper structs and functions for creating combined seeds
+// Seeding helpers
 
+extension SpotifyGroupManager {
     private struct Seeds {
-        var artistIDs: [String] = []   // Spotify artist IDs
-        var trackIDs:  [String] = []   // Spotify track IDs
-        var genres:    [String] = []   // (Optional) Spotify-allowed genre seeds
+        var artistIDs: [String] = []
+        var trackIDs:  [String] = []
+        var genres:    [String] = [] // plain names (lowercased); used in search
     }
-
-    private struct Targets {
-        var tempoAvg:  Double?
-        var energyAvg: Double?
+    
+    private struct Weights {
+        var artistCentrality: [String: Double] // artistId -> [0,1]
+        var trackFrequency:   [String: Double] // trackId  -> [0,1]
+        var genreWeight:      [String: Double] // genre    -> [0,1]
     }
-
-    // Combine members' cached stats into at most 5 seeds total
-    // Strategy: prefer 3 artists + 2 tracks (fall back if fewer available). We skip genre seeds by default to avoid invalid-genre errors.
-    private func buildGroupSeeds(uidToStats: [String: SpotifyStats], maxTotalSeeds: Int) -> Seeds {
-        var artistCounts: [String: Int] = [:]     // artistId -> #members with that artist in topArtists
-        var trackCounts:  [String: Int] = [:]     // trackId  -> #members with that track in topTracks
-
+    
+    private func buildGroupSeedsAndWeights(
+        uidToStats: [String: SpotifyStats],
+        maxArtistSeeds: Int,
+        maxTrackSeeds: Int,
+        maxGenreSeeds: Int
+    ) -> (Seeds, Weights) {
+        var artistCounts: [String: Int] = [:]
+        var trackCounts:  [String: Int] = [:]
+        var genreAgg:     [String: Double] = [:]
+        
         for (_, s) in uidToStats {
-            // artists
-            let artistIDs = s.topArtists.map { $0.id }
-            for a in Set(artistIDs) { artistCounts[a, default: 0] += 1 }
-            // tracks
-            let trackIDs = s.topTracks.map { $0.id }
-            for t in Set(trackIDs) { trackCounts[t, default: 0] += 1 }
+            for a in Set(s.topArtists.map { $0.id }) { artistCounts[a, default: 0] += 1 }
+            for t in Set(s.topTracks.map { $0.id }) { trackCounts[t,  default: 0] += 1 }
+            for gw in s.genres { genreAgg[gw.name, default: 0.0] += gw.weight }
         }
-
+        
+        let maxA = max(1, artistCounts.values.max() ?? 1)
+        let artistCentrality = artistCounts.mapValues { Double($0) / Double(maxA) }
+        
+        let maxT = max(1, trackCounts.values.max() ?? 1)
+        let trackFrequency = trackCounts.mapValues { Double($0) / Double(maxT) }
+        
+        let totalG = max(1e-9, genreAgg.values.reduce(0.0, +))
+        let genreWeight = genreAgg.mapValues { $0 / totalG }
+        
         let topArtistIDs = artistCounts.sorted { (a, b) in
             a.value == b.value ? a.key < b.key : a.value > b.value
         }.map { $0.key }
-
         let topTrackIDs = trackCounts.sorted { (a, b) in
             a.value == b.value ? a.key < b.key : a.value > b.value
         }.map { $0.key }
-
+        let topGenres = genreWeight.sorted { $0.value > $1.value }.map { $0.key }
+        
         var seeds = Seeds()
-        let desiredArtists = min(3, maxTotalSeeds)
-        let desiredTracks  = min(2, maxTotalSeeds - desiredArtists)
-
-        seeds.artistIDs = Array(topArtistIDs.prefix(desiredArtists))
-        seeds.trackIDs  = Array(topTrackIDs.prefix(desiredTracks))
-
-        return seeds
+        seeds.artistIDs = Array(topArtistIDs.prefix(maxArtistSeeds))
+        seeds.trackIDs  = Array(topTrackIDs.prefix(maxTrackSeeds))
+        seeds.genres    = Array(topGenres.prefix(maxGenreSeeds))
+        
+        return (seeds, Weights(artistCentrality: artistCentrality,
+                               trackFrequency: trackFrequency,
+                               genreWeight: genreWeight))
     }
+}
 
-    private func buildTargetParams(uidToStats: [String: SpotifyStats]) -> Targets {
-        var tempos: [Double] = []
-        var energies: [Double] = []
-        for (_, s) in uidToStats {
-            if let t = s.tempoAvg { tempos.append(t) }
-            if let e = s.energyAvg { energies.append(e) }
-        }
-        let tAvg = tempos.isEmpty ? nil : (tempos.reduce(0, +) / Double(tempos.count))
-        let eAvg = energies.isEmpty ? nil : (energies.reduce(0, +) / Double(energies.count))
-        return Targets(tempoAvg: tAvg, energyAvg: eAvg)
+// Actual fetching helper
+
+extension SpotifyGroupManager {
+    private struct RawTrack {
+        let id: String
+        let name: String
+        let artistIDs: [String]
+        let artistNames: [String]
+        let popularity: Int // 0..100
+        let albumImageURL: String?
+        let durationMs: Int
     }
-
-
-    // Helper to build URL
-    private func buildRecommendationsURL(limit: Int, market: String?, seeds: Seeds, targets: Targets) -> URL? {
-        var comps = URLComponents(string: "https://api.spotify.com/v1/recommendations")
-        var q: [URLQueryItem] = [ .init(name: "limit", value: String(limit)) ]
-        if let market = market { q.append(.init(name: "market", value: market)) }
-
-        if !seeds.artistIDs.isEmpty {
-            q.append(.init(name: "seed_artists", value: seeds.artistIDs.joined(separator: ",")))
+    
+    private func fetchCandidates(
+        token: String,
+        artistSeeds: [String],
+        trackSeeds: [String],
+        genreSeeds: [String],
+        market: String,
+        completion: @escaping ([RawTrack]) -> Void
+    ) {
+        let g = DispatchGroup()
+        var tracksSet: [String: RawTrack] = [:] // de-dup
+        
+        // A) artist top-tracks (allowed)
+        for artistID in artistSeeds {
+            if let url = URL(string: "https://api.spotify.com/v1/artists/\(artistID)/top-tracks?market=\(market)") {
+                g.enter()
+                performGET(url: url, token: token) { json in
+                    for t in self.parseTracksArray(json["tracks"] as? [[String: Any]] ?? []) {
+                        tracksSet[t.id] = t
+                    }
+                    g.leave()
+                }
+            }
         }
-        if !seeds.trackIDs.isEmpty {
-            q.append(.init(name: "seed_tracks", value: seeds.trackIDs.joined(separator: ",")))
+        
+        // B) include seed tracks themselves (bias to member overlap)
+        if !trackSeeds.isEmpty {
+            let chunks = stride(from: 0, to: trackSeeds.count, by: 50).map { Array(trackSeeds[$0..<min($0+50, trackSeeds.count)]) }
+            for chunk in chunks {
+                var comps = URLComponents(string: "https://api.spotify.com/v1/tracks")!
+                comps.queryItems = [URLQueryItem(name: "ids", value: chunk.joined(separator: ","))]
+                if let url = comps.url {
+                    g.enter()
+                    performGET(url: url, token: token) { json in
+                        for t in self.parseTracksArray(json["tracks"] as? [[String: Any]] ?? []) {
+                            tracksSet[t.id] = t
+                        }
+                        g.leave()
+                    }
+                }
+            }
         }
-        if !seeds.genres.isEmpty {
-            q.append(.init(name: "seed_genres", value: seeds.genres.joined(separator: ",")))
+        
+        // C) genre-driven search (allowed): /search?type=track&q=genre:"xxx"
+        // Limit results per genre to keep variety and avoid rate limits
+        let perGenreLimit = 10
+        for genre in genreSeeds {
+            var comps = URLComponents(string: "https://api.spotify.com/v1/search")!
+            // quote the genre if it has spaces
+            let encodedGenre = genre.contains(" ") ? "\"\(genre)\"" : genre
+            comps.queryItems = [
+                URLQueryItem(name: "q", value: "genre:\(encodedGenre)"),
+                URLQueryItem(name: "type", value: "track"),
+                URLQueryItem(name: "market", value: market),
+                URLQueryItem(name: "limit", value: String(perGenreLimit))
+            ]
+            if let url = comps.url {
+                g.enter()
+                performGET(url: url, token: token) { json in
+                    let items = ((json["tracks"] as? [String: Any])?["items"] as? [[String: Any]]) ?? []
+                    for t in self.parseTracksArray(items) {
+                        tracksSet[t.id] = t
+                    }
+                    g.leave()
+                }
+            }
         }
-
-        if let tempo = targets.tempoAvg {
-            q.append(.init(name: "target_tempo", value: String(format: "%.1f", tempo)))
+        
+        g.notify(queue: .global()) {
+            completion(Array(tracksSet.values))
         }
-        if let energy = targets.energyAvg {
-            let clamped = max(0.0, min(1.0, energy))
-            q.append(.init(name: "target_energy", value: String(format: "%.2f", clamped)))
-        }
-
-        comps?.queryItems = q
-        return comps?.url
     }
-
-    private func performSpotifyGET(url: URL, token: String, completion: @escaping ([String: Any]) -> Void) {
+    
+    private func performGET(url: URL, token: String, completion: @escaping ([String: Any]) -> Void) {
         var req = URLRequest(url: url)
         req.httpMethod = "GET"
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        URLSession.shared.dataTask(with: req) { data, _, _ in
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        URLSession.shared.dataTask(with: req) { data, resp, err in
+            if let err = err { print("GET error: \(err.localizedDescription)") }
+            let code = (resp as? HTTPURLResponse)?.statusCode ?? -1
+            if code >= 400 { print("HTTP \(code) for \(url.absoluteString)") }
             let json = (data.flatMap { try? JSONSerialization.jsonObject(with: $0) } as? [String: Any]) ?? [:]
-            DispatchQueue.main.async { completion(json) }
+            completion(json)
         }.resume()
     }
-
-    private func parseRecommendations(json: [String: Any]) -> [Track] {
-        guard let items = json["tracks"] as? [[String: Any]] else { return [] }
-        return items.compactMap { t -> Track? in
+    
+    private func parseTracksArray(_ arr: [[String: Any]]) -> [RawTrack] {
+        return arr.compactMap { t in
             guard let id = t["id"] as? String else { return nil }
             let name = (t["name"] as? String) ?? "(unknown)"
+            let popularity = (t["popularity"] as? Int) ?? 0
             let duration = (t["duration_ms"] as? Int) ?? 0
-
-            let artistNames = (t["artists"] as? [[String: Any]] ?? []).compactMap { $0["name"] as? String }
-            let artistsString = artistNames.joined(separator: ", ")
-
+            
+            let aObjs = (t["artists"] as? [[String: Any]] ?? [])
+            let artistNames = aObjs.compactMap { $0["name"] as? String }
+            let artistIDs   = aObjs.compactMap { $0["id"] as? String }
+            
             var imageURL: String? = nil
             if
                 let album = t["album"] as? [String: Any],
@@ -264,13 +336,78 @@ final class SpotifyGroupManager {
             {
                 imageURL = url
             }
-
-            return Track(
+            
+            return RawTrack(
                 id: id,
                 name: name,
-                artists: artistsString,
-                duration_ms: duration,
-                albumArt: imageURL,
+                artistIDs: artistIDs,
+                artistNames: artistNames,
+                popularity: popularity,
+                albumImageURL: imageURL,
+                durationMs: duration
+            )
+        }
+    }
+}
+
+// MARK: - Scoring & Diversification
+
+extension SpotifyGroupManager {
+    private struct ScoredTrack {
+        let track: RawTrack
+        let score: Double
+    }
+    
+    // Rank candidates using group-centric signals only
+    private func rankCandidates(_ candidates: [RawTrack],
+                                weights: Weights,
+                                maxPerArtist: Int) -> [ScoredTrack] {
+        // Mix weights (tweak to taste)
+        let W_artist: Double = 0.55  // group centrality
+        let W_track:  Double = 0.20  // group familiarity with the exact track
+        let W_pop:    Double = 0.25  // general quality / avoid too-obscure
+        
+        func pop01(_ p: Int) -> Double { max(0.0, min(1.0, Double(p) / 100.0)) }
+        
+        var scored: [ScoredTrack] = []
+        scored.reserveCapacity(candidates.count)
+        
+        for c in candidates {
+            let artistCent = (c.artistIDs.map { weights.artistCentrality[$0] ?? 0.0 }.max() ?? 0.0)
+            let trackFreq  = weights.trackFrequency[c.id] ?? 0.0
+            let pop        = pop01(c.popularity)
+            let score      = (W_artist * artistCent) + (W_track * trackFreq) + (W_pop * pop)
+            scored.append(ScoredTrack(track: c, score: score))
+        }
+        
+        // sort high -> low
+        scored.sort { $0.score > $1.score }
+        
+        // diversity: cap per leading artist
+        var perArtistCount: [String: Int] = [:]
+        var kept: [ScoredTrack] = []
+        kept.reserveCapacity(scored.count)
+        
+        for s in scored {
+            guard let mainArtist = s.track.artistIDs.first else { continue }
+            if (perArtistCount[mainArtist] ?? 0) >= maxPerArtist { continue }
+            perArtistCount[mainArtist, default: 0] += 1
+            kept.append(s)
+        }
+        
+        return kept
+    }
+    
+    // Map RawTrack -> app Track model used elsewhere in your app
+    private func toAppTracks(_ scored: [ScoredTrack]) -> [Track] {
+        return scored.map { s in
+            let t = s.track
+            return Track(
+                id: t.id,
+                name: t.name,
+                artists: t.artistNames.joined(separator: ", "),
+                duration_ms: t.durationMs,
+                albumArt: t.albumImageURL,
                 image: nil
             )
         }

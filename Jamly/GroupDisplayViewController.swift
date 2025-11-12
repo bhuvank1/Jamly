@@ -30,18 +30,19 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         groupDescription.text = group?.description
-//        loadRecommendations()
-    }
-
-    @IBAction func tempButton(_ sender: Any) {
         loadRecommendations()
     }
-    
+
     private func loadRecommendations() {
+        print("🎧 loadRecommendations(): group=\(group?.name ?? "(nil)"), id=\(group?.id ?? "(nil)")")
         SpotifyGroupManager.shared.generateLiveRecommendationsViaSpotify(for: group, limit: 20) { [weak self] tracks in
             guard let self = self else { return }
-            self.recommendations = tracks
-            self.reccomendationTableView.reloadData()
+            print("recommendations received: \(tracks.count) tracks")
+            
+            DispatchQueue.main.async {
+                self.recommendations = tracks
+                self.reccomendationTableView.reloadData()
+            }
         }
     }
 
@@ -111,4 +112,96 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
             dest.group = group
         }
     }
+    
+    func runSpotifyDebugProbes() {
+        SpotifyAuthManager.shared.getValidAccessToken { token in
+            guard let token = token else {
+                print("🛑 No valid Spotify token available.")
+                return
+            }
+
+            print("🎧 Starting Spotify debug probes...")
+            print("Token preview: \(token)...")
+
+            // 1️⃣ Test /me
+            let meURL = URL(string: "https://api.spotify.com/v1/me")!
+            var meReq = URLRequest(url: meURL)
+            meReq.httpMethod = "GET"
+            meReq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            meReq.setValue("application/json", forHTTPHeaderField: "Accept")
+            meReq.setValue("Jamly/1.0 (iOS)", forHTTPHeaderField: "User-Agent")
+
+            URLSession.shared.dataTask(with: meReq) { data, resp, _ in
+                let status = (resp as? HTTPURLResponse)?.statusCode ?? -1
+                print("👤 /me -> HTTP \(status)")
+                if let data = data, let body = String(data: data, encoding: .utf8) {
+                    print("👤 /me body preview:", body.prefix(300))
+                }
+
+                // 2️⃣ Test known-good recommendations
+                let goodURL = URL(string: "https://api.spotify.com/v1/recommendations?limit=5&seed_tracks=4NHQUGzhtTLFvgF5SZesLK&market=US")!
+                var goodReq = URLRequest(url: goodURL)
+                goodReq.httpMethod = "GET"
+                goodReq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                goodReq.setValue("application/json", forHTTPHeaderField: "Accept")
+                goodReq.setValue("Jamly/1.0 (iOS)", forHTTPHeaderField: "User-Agent")
+
+                URLSession.shared.dataTask(with: goodReq) { data, resp, _ in
+                    let status = (resp as? HTTPURLResponse)?.statusCode ?? -1
+                    print("🧪 known-good /recommendations -> HTTP \(status)")
+                    if let data = data, let body = String(data: data, encoding: .utf8) {
+                        print("🧪 known-good body preview:", body.prefix(300))
+                    }
+
+                    // 3️⃣ Test single-artist (Drake) recommendations
+                    let oneArtistURL = URL(string: "https://api.spotify.com/v1/recommendations?limit=5&seed_artists=3TVXtAsR1Inumwj472S9r4&market=US")!
+                    var artistReq = URLRequest(url: oneArtistURL)
+                    artistReq.httpMethod = "GET"
+                    artistReq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                    artistReq.setValue("application/json", forHTTPHeaderField: "Accept")
+                    artistReq.setValue("Jamly/1.0 (iOS)", forHTTPHeaderField: "User-Agent")
+
+                    URLSession.shared.dataTask(with: artistReq) { data, resp, _ in
+                        let status = (resp as? HTTPURLResponse)?.statusCode ?? -1
+                        print("🎤 1-artist /recommendations -> HTTP \(status)")
+                        if let data = data, let body = String(data: data, encoding: .utf8) {
+                            print("🎤 1-artist body preview:", body.prefix(300))
+                        }
+                        print("✅ All debug probes complete.")
+                    }.resume()
+                }.resume()
+            }.resume()
+        }
+        probeGenreSeeds()
+        probeSingleGenre()
+    }
+    
+    func probeGenreSeeds() {
+        SpotifyAuthManager.shared.getValidAccessToken { token in
+            guard let token = token else { print("No token"); return }
+            let url = URL(string: "https://api.spotify.com/v1/recommendations/available-genre-seeds")!
+            var req = URLRequest(url: url)
+            req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.shared.dataTask(with: req) { data, resp, _ in
+                let code = (resp as? HTTPURLResponse)?.statusCode ?? -1
+                print("🎯 /available-genre-seeds -> HTTP \(code)")
+                if let d = data { print(String(data: d, encoding: .utf8) ?? "") }
+            }.resume()
+        }
+    }
+
+    func probeSingleGenre() {
+        SpotifyAuthManager.shared.getValidAccessToken { token in
+            guard let token = token else { print("No token"); return }
+            let url = URL(string: "https://api.spotify.com/v1/recommendations?limit=5&seed_genres=pop&market=US")!
+            var req = URLRequest(url: url)
+            req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.shared.dataTask(with: req) { data, resp, _ in
+                let code = (resp as? HTTPURLResponse)?.statusCode ?? -1
+                print("🎯 /recommendations (genre=pop) -> HTTP \(code)")
+                if let d = data { print(String(data: d, encoding: .utf8) ?? "") }
+            }.resume()
+        }
+    }
+
 }
