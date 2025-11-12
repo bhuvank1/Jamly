@@ -89,5 +89,19 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedGroup = groups[indexPath.row]
+        performSegue(withIdentifier: "showGroup", sender: selectedGroup)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showGroup",
+           let dest = segue.destination as? GroupDisplayViewController,
+           let selectedGroup = sender as? Group {
+            dest.group = selectedGroup
+        }
+    }
 
 }

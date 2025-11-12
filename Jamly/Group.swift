@@ -14,6 +14,7 @@ struct Group {
     let description: String
     let creatorID: String
     let creatorDisplayName: String
+    let members: [String]
 
     init?(doc: DocumentSnapshot) {
         let data = doc.data() ?? [:]
@@ -28,5 +29,6 @@ struct Group {
         self.description = description
         self.creatorID = creatorID
         self.creatorDisplayName = "Unknown"
+        self.members = data["members"] as? [String] ?? []
     }
 }

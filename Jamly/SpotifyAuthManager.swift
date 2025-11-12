@@ -8,6 +8,8 @@
 import Foundation
 import CryptoKit
 import AuthenticationServices
+import FirebaseAuth
+import FirebaseFirestore
 
 final class SpotifyAuthManager : NSObject { //NSObject needed for ASWebAuth
     
@@ -60,6 +62,9 @@ final class SpotifyAuthManager : NSObject { //NSObject needed for ASWebAuth
 
             // 5) Exchange code for tokens
             self.exchangeCodeforTokens(code: code, verifier: verifier) { ok in
+                guard ok else { return }
+                // If token exchange was successfull update cache
+                self.cacheSpotifyStatsForCurrentUser() { _ in }
                 completion(ok)
             }
         }
@@ -146,6 +151,159 @@ final class SpotifyAuthManager : NSObject { //NSObject needed for ASWebAuth
         accessToken = nil
         refreshToken = nil
         expiry = nil
+    }
+    
+    // MARK: Helper to cache spotify statistics
+    
+    //Helper to run the entire caching process
+    func cacheSpotifyStatsForCurrentUser(completion: @escaping (Bool) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else { completion(false); return }
+        getValidAccessToken { token in
+            guard let token = token else { completion(false); return }
+
+            // 1) Fetch top tracks + top artists (short_term)
+            let limit = 10 //limit variable for the request
+            let topTracksURL = URL(string: "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=\(limit)")!
+            let topArtistsURL = URL(string: "https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=\(limit)")!
+
+            self.fetchJSON(token: token, url: topTracksURL) { tracksJSON in
+                self.fetchJSON(token: token, url: topArtistsURL) { artistsJSON in
+
+                    // Collect track IDs for audio-features
+                    let trackIDs: [String] = (tracksJSON["items"] as? [[String: Any]] ?? [])
+                        .compactMap { $0["id"] as? String }
+
+                    self.fetchAudioFeatures(token: token, trackIDs: trackIDs) { featuresMap in
+                        // Build payload
+                        let payload = self.buildStatsPayload(
+                            tracksJSON: tracksJSON,
+                            artistsJSON: artistsJSON,
+                            featuresByTrackId: featuresMap
+                        )
+
+                        // 3) Write to Firestore
+                        Firestore.firestore().collection("userInfo").document(uid).setData([
+                            "spotify": [
+                                "connected": true,
+                                "lastUpdatedAt": Int(Date().timeIntervalSince1970),
+                                "stats": payload
+                            ]
+                        ], merge: true) { err in
+                            completion(err == nil)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private func fetchJSON(token: String, url: URL, completion: @escaping ([String: Any]) -> Void) {
+        var req = URLRequest(url: url)
+        req.httpMethod = "GET"
+        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: req) { data, _, _ in
+            let json = (data.flatMap { try? JSONSerialization.jsonObject(with: $0) } as? [String: Any]) ?? [:]
+            completion(json)
+        }.resume()
+    }
+
+    // Collect Audio features for up to 100 tracks (spotify limit)
+    private func fetchAudioFeatures(token: String,
+                                    trackIDs: [String],
+                                    completion: @escaping ([String: (tempo: Double?, energy: Double?)]) -> Void) {
+        guard !trackIDs.isEmpty else { completion([:]); return }
+
+        // Up to 100 ids per call
+        let chunks = stride(from: 0, to: trackIDs.count, by: 100).map { Array(trackIDs[$0..<min($0+100, trackIDs.count)]) }
+        let g = DispatchGroup()
+        var out: [String: (Double?, Double?)] = [:]
+
+        for chunk in chunks {
+            g.enter()
+            let ids = chunk.joined(separator: ",")
+            let url = URL(string: "https://api.spotify.com/v1/audio-features?ids=\(ids)")!
+            fetchJSON(token: token, url: url) { json in
+                if let arr = json["audio_features"] as? [[String: Any]] {
+                    for feat in arr {
+                        if let id = feat["id"] as? String {
+                            let tempo = feat["tempo"] as? Double
+                            let energy = feat["energy"] as? Double
+                            out[id] = (tempo, energy)
+                        }
+                    }
+                }
+                g.leave()
+            }
+        }
+
+        g.notify(queue: .global()) { completion(out) }
+    }
+
+
+    // Builds the actual data structure to be stored
+    private func buildStatsPayload(tracksJSON: [String: Any],
+                                   artistsJSON: [String: Any],
+                                   featuresByTrackId: [String: (tempo: Double?, energy: Double?)]) -> [String: Any] {
+
+        // Map Top Tracks -> [{id,name,artists[],tempo?,energy?}]
+        let trackItems = (tracksJSON["items"] as? [[String: Any]] ?? [])
+        var tempoVals: [Double] = []
+        var energyVals: [Double] = []
+
+        let topTracks: [[String: Any]] = trackItems.compactMap { t in
+            guard let id = t["id"] as? String else { return nil }
+            let name = (t["name"] as? String) ?? "(unknown)"
+            let artistNames: [String] = (t["artists"] as? [[String: Any]] ?? []).compactMap { $0["name"] as? String }
+
+            let feats = featuresByTrackId[id]
+            if let tempo = feats?.tempo { tempoVals.append(tempo) }
+            if let energy = feats?.energy { energyVals.append(energy) }
+
+            var dict: [String: Any] = [
+                "id": id,
+                "name": name,
+                "artists": artistNames
+            ]
+            if let tempo = feats?.tempo { dict["tempo"] = tempo }
+            if let energy = feats?.energy { dict["energy"] = energy }
+            return dict
+        }
+
+        // Map Top Artists -> [{id,name,genres[]}]
+        let artistItems = (artistsJSON["items"] as? [[String: Any]] ?? [])
+        let topArtists: [[String: Any]] = artistItems.compactMap { a in
+            guard let id = a["id"] as? String else { return nil }
+            let name = (a["name"] as? String) ?? "(unknown)"
+            let genres = (a["genres"] as? [String]) ?? []
+            return ["id": id, "name": name, "genres": genres]
+        }
+
+        // Build genre weights from artist genres (simple normalized frequency)
+        var genreCount: [String: Int] = [:]
+        for a in artistItems {
+            let genres = (a["genres"] as? [String]) ?? []
+            for g in genres {
+                genreCount[g.lowercased(), default: 0] += 1
+            }
+        }
+        let total = max(1, genreCount.values.reduce(0, +))
+        let genresWeighted: [[String: Any]] = genreCount
+            .map { ["name": $0.key, "weight": Double($0.value) / Double(total)] }
+            .sorted { ($0["weight"] as? Double ?? 0) > ($1["weight"] as? Double ?? 0) }
+
+        // Calculated Averages to generate user tempo and energy
+        let tempoAvg = tempoVals.isEmpty ? nil : (tempoVals.reduce(0,+) / Double(tempoVals.count))
+        let energyAvg = energyVals.isEmpty ? nil : (energyVals.reduce(0,+) / Double(energyVals.count))
+
+        return [
+            "topTracks": topTracks,
+            "topArtists": topArtists,
+            "genres": genresWeighted,
+            "tempoAvg": tempoAvg as Any,
+            "energyAvg": energyAvg as Any
+        ]
     }
     
 }
