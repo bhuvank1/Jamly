@@ -1,3 +1,4 @@
+Group 8 Jamly - Monita Mitra, Fareedah Ajisegiri, Rohan Pant, Bhuvan Kannaeganti
 Contributions
 
 Alpha
