@@ -55,6 +55,26 @@ class ListenLaterViewController: UIViewController, UITableViewDataSource, UITabl
         return cell
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
+    {
+        if editingStyle == .delete {
+            guard let user = Auth.auth().currentUser else {return}
+            let track = playlist[indexPath.row]
+            let trackID = track.id
+            let trackRef = db.collection("ListenLaters").document(user.uid).collection("tracks").document(trackID)
+            
+            trackRef.delete { error in
+                if let error = error {
+                    print("Error deleting track: \(error)")
+                } else {
+                    print("Track deleted successfully")
+                    self.playlist.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                }
+            }
+        }
+    }
+    
     private func reloadView() {
         guard let user = Auth.auth().currentUser else { return }
         
