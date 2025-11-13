@@ -131,7 +131,11 @@ class SelectSongViewController: UIViewController, UITableViewDataSource, UITable
         delegate?.didSelectSong(track)    //set the delegate and then get rid of VC
         
         
-        self.dismiss(animated: true)
+        if let nav = navigationController {
+            nav.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true)
+        }
     }
     
     private func mmss(from milliseconds: Int) -> String {

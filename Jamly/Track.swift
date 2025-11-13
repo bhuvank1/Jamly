@@ -25,6 +25,18 @@ struct Track {
             "albumArt": albumArt ?? ""
         ]
     }
+
+    static func fromDictionary(_ dict: [String: Any]) -> Track? {
+        guard
+            let id = dict["id"] as? String,
+            let name = dict["name"] as? String,
+            let artists = dict["artists"] as? String,
+            let duration_ms = dict["duration_ms"] as? Int
+        else { return nil }
+
+        let albumArt = (dict["albumArt"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+        return Track(id: id, name: name, artists: artists, duration_ms: duration_ms, albumArt: albumArt, image: nil)
+    }
 }
 
 struct SearchResponse {
