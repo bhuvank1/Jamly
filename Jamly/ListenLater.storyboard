@@ -58,6 +58,7 @@
                                                         </stackView>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstAttribute="height" constant="137" id="MZl-ur-Pbz"/>
                                                         <constraint firstItem="W9t-UQ-axh" firstAttribute="leading" secondItem="TZx-iv-YVR" secondAttribute="trailing" constant="10" id="Myk-ep-ozH"/>
                                                         <constraint firstItem="W9t-UQ-axh" firstAttribute="leading" secondItem="TZx-iv-YVR" secondAttribute="trailing" constant="10" id="SUg-Lb-7fE"/>
                                                     </constraints>
