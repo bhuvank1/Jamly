@@ -101,6 +101,7 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
            let dest = segue.destination as? GroupDisplayViewController,
            let selectedGroup = sender as? Group {
             dest.group = selectedGroup
+            dest.showTitleLabel = false
         }
     }
 

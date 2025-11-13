@@ -20,6 +20,7 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var postImageView: UIImageView!
     
+    @IBOutlet weak var mutualGroupsButton: UIButton!
     @IBOutlet weak var artistNameLabel: UILabel!
     @IBOutlet weak var songNameLabel: UILabel!
     @IBOutlet weak var captionText: UITextView!
@@ -143,6 +144,13 @@ class PostTableViewCell: UITableViewCell {
                     self.listenLaterButton.setTitle("+ 🎵", for: .normal)
                 }
             }
+        }
+    }
+    
+    @IBAction func mutualGroupsButtonTapped(_ sender: Any) {
+        if let post = post {
+            let otherVC = delegate as! ShowMutualGroups
+            otherVC.didTapMutualGroups(for: post)
         }
     }
 }
