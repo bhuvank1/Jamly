@@ -15,8 +15,11 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var groupDescription: UILabel!
     @IBOutlet weak var playlistTableView: UITableView!
     
+    var showTitleLabel: Bool = false
     private var playlist: [Track] = []
     private let db = Firestore.firestore()
+    
+    @IBOutlet weak var titleLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +29,13 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
         playlistTableView.dataSource = self
         playlistTableView.delegate = self
         playlistTableView.tableFooterView = UIView()
+        
+        if (showTitleLabel) {
+            titleLabel.isHidden = false
+            titleLabel.text = group.name
+        } else {
+            titleLabel.isHidden = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,6 +44,7 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
         loadGroupPlaylist()
     }
     
+
     func didSelectSong(_ track: Track) {
         let docRef = db.collection("groups").document(group.id)
         docRef.getDocument { [weak self] snap, err in
