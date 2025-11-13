@@ -30,21 +30,32 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="CQU-jq-aL0">
                                                     <rect key="frame" x="0.0" y="0.0" width="440" height="775"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ymg-yH-IIC">
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="Ymg-yH-IIC">
                                                             <rect key="frame" x="0.0" y="0.0" width="440" height="34.333333333333336"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0f5-Bt-gVF">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="34.333333333333336"/>
-                                                                    <gestureRecognizers/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="width" constant="300" id="0fj-dL-vX7"/>
-                                                                    </constraints>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="bmP-my-EM7">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="159.33333333333334" height="34.333333333333336"/>
+                                                                    <subviews>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0f5-Bt-gVF">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="81.666666666666671" height="34.333333333333336"/>
+                                                                            <gestureRecognizers/>
+                                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                                            <nil key="textColor"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TtS-9N-fRN">
+                                                                            <rect key="frame" x="87.666666666666657" y="0.0" width="71.666666666666657" height="34.333333333333336"/>
+                                                                            <state key="normal" title="Button"/>
+                                                                            <buttonConfiguration key="configuration" style="plain" image="person.3.sequence.fill" catalog="system"/>
+                                                                            <connections>
+                                                                                <action selector="mutualGroupsButtonTapped:" destination="oaj-46-ovO" eventType="touchUpInside" id="OKN-w8-IcX"/>
+                                                                                <segue destination="tEI-GD-rEE" kind="presentation" identifier="showMutualGroupsSegue" id="VoI-q8-HDq"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                    </subviews>
+                                                                </stackView>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c1V-iN-pbN">
-                                                                    <rect key="frame" x="300" y="0.0" width="140" height="34.333333333333336"/>
+                                                                    <rect key="frame" x="378.33333333333331" y="0.0" width="61.666666666666686" height="34.333333333333336"/>
                                                                     <state key="normal" title="Button"/>
                                                                     <buttonConfiguration key="configuration" style="filled" title="+ 🎵"/>
                                                                     <connections>
@@ -124,7 +135,6 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="bottom" secondItem="RQm-aS-MKv" secondAttribute="bottom" id="FEO-dO-oom"/>
-                                                        <constraint firstAttribute="trailing" secondItem="Ymg-yH-IIC" secondAttribute="trailing" constant="5" id="I4r-IB-QDD"/>
                                                         <constraint firstAttribute="bottom" secondItem="RQm-aS-MKv" secondAttribute="bottom" constant="5" id="Jck-DC-QbB"/>
                                                         <constraint firstItem="Ymg-yH-IIC" firstAttribute="top" secondItem="CQU-jq-aL0" secondAttribute="top" constant="5" id="K2g-5Y-HTe"/>
                                                         <constraint firstItem="RQm-aS-MKv" firstAttribute="top" secondItem="OjE-Te-qMz" secondAttribute="bottom" constant="14" id="g8d-HK-zkb"/>
@@ -147,6 +157,7 @@
                                             <outlet property="commentsButton" destination="WfB-rW-yKH" id="6eb-zo-s7q"/>
                                             <outlet property="likesButton" destination="dZa-CR-hu5" id="B4B-Z9-1Du"/>
                                             <outlet property="listenLaterButton" destination="c1V-iN-pbN" id="449-aB-naZ"/>
+                                            <outlet property="mutualGroupsButton" destination="TtS-9N-fRN" id="PiO-1Z-vcV"/>
                                             <outlet property="postImageView" destination="hT2-Kv-u0y" id="h40-CP-fJ7"/>
                                             <outlet property="ratingLabel" destination="17X-17-bcf" id="DUg-5j-eed"/>
                                             <outlet property="songNameLabel" destination="NI0-aK-2Na" id="vSL-Rt-DvO"/>
@@ -174,13 +185,21 @@
             </objects>
             <point key="canvasLocation" x="3747.2727272727275" y="-80.3347280334728"/>
         </scene>
+        <!--mutualGroupsVC-->
+        <scene sceneID="np0-Is-aQH">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MutualGroups" referencedIdentifier="mutualGroupsVC" id="tEI-GD-rEE" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lLr-ul-Mh6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4365" y="-213"/>
+        </scene>
         <!--likesVC-->
         <scene sceneID="zOa-Cm-prv">
             <objects>
                 <viewControllerPlaceholder storyboardIdentifier="likesVC" storyboardName="PostDetailStoryboard" referencedIdentifier="likesVC" id="a9A-kb-LCZ" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qPu-f1-f3X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3383" y="-229"/>
+            <point key="canvasLocation" x="3342" y="-305"/>
         </scene>
         <!--commentsVC-->
         <scene sceneID="LyF-fU-1AN">
@@ -529,7 +548,7 @@
         <!--Group Display View Controller-->
         <scene sceneID="jWg-7d-083">
             <objects>
-                <viewController id="lAT-vb-Io0" customClass="GroupDisplayViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="groupDisplayVC" id="lAT-vb-Io0" customClass="GroupDisplayViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1SC-zB-Uhm">
                         <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -590,6 +609,13 @@
                                     <segue destination="uXT-Vf-o53" kind="show" identifier="groupRecommendSong" id="UaN-eQ-LwD"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kdh-oj-wZz">
+                                <rect key="frame" x="96" y="85" width="249" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="iY7-9e-kc8"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -604,6 +630,7 @@
                     <connections>
                         <outlet property="groupDescription" destination="NlZ-TW-lik" id="pQO-Lu-pAV"/>
                         <outlet property="playlistTableView" destination="nmY-et-ckx" id="nRq-r9-KAb"/>
+                        <outlet property="titleLabel" destination="kdh-oj-wZz" id="zpZ-cJ-Ls6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ewy-Av-Pf7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1502,6 +1529,7 @@
         <image name="message" catalog="system" width="128" height="116"/>
         <image name="music.note" catalog="system" width="96" height="128"/>
         <image name="person.3" catalog="system" width="128" height="66"/>
+        <image name="person.3.sequence.fill" catalog="system" width="128" height="63"/>
         <image name="person.badge.plus" catalog="system" width="128" height="124"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="questionmark.app.fill" catalog="system" width="128" height="114"/>

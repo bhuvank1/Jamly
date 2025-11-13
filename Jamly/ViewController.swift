@@ -26,12 +26,18 @@ protocol ShowPopup {
     func makePopup(popupTitle:String, popupMessage:String)
 }
 
+protocol ShowMutualGroups {
+    func didTapMutualGroups(for post: Post)
+}
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ShowLikesComments, ChangeLikesSocialFeed, ChangeCommentsSocialFeed, ShowPopup {
-    
+
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ShowLikesComments, ChangeLikesSocialFeed, ChangeCommentsSocialFeed, ShowPopup,
+                      ShowMutualGroups {
     
     @IBOutlet weak var feedTableView: UITableView!
     private var posts: [Post] = []
+    var mutualGroups: [Group] = []
+    var mutualGroupCache: [String: Bool] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,6 +120,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func fetchPostsForUserID(for userIDs: [String]) {
         let db = Firestore.firestore()
         self.posts.removeAll()
+        // clearing cache
+        self.mutualGroupCache.removeAll()
         
         db.collection("posts").whereField("userID", in: userIDs).getDocuments { querySnapshot, error in
             if let error = error {
@@ -167,6 +175,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func didTapCommentsButton(for post: Post) {
         performSegue(withIdentifier: "commentsMainSegue", sender: post)
     }
+    
+    func didTapMutualGroups(for post: Post) {
+    self.performSegue(withIdentifier: "showMutualGroupsSegue", sender: post)
+    }
+    
 
     func displayPopup() {
         let controller = UIAlertController(
@@ -222,7 +235,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         let post = posts[indexPath.row]
-        cell.postImageView.image = UIImage(named: "Jamly_LogoPDF")
         cell.usernameLabel.text = post.displayName
         cell.commentsButton.setTitle(String(post.comments.count), for: .normal)
         cell.likesButton.setTitle(String(post.likes.count), for: .normal)
@@ -248,6 +260,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.delegate = self
         cell.post = post
         
+        // render mututal groups button on each cell
+        if let hasMutual = mutualGroupCache[post.userID] {
+            cell.mutualGroupsButton.isHidden = !hasMutual
+        } else {
+            cell.mutualGroupsButton.isHidden = true
+            checkMutualGroups(for: post) { hasMutual in
+                self.mutualGroupCache[post.userID] = hasMutual
+                DispatchQueue.main.async {
+                    if let currentIndex = tableView.indexPath(for: cell),
+                       self.posts[currentIndex.row].userID == post.userID {
+                        cell.mutualGroupsButton.isHidden = !hasMutual
+                    }
+                }
+            }
+        }
+        
         // likes button image
         guard let currentUID = Auth.auth().currentUser?.uid else { return cell }
         if post.likes.contains(currentUID) {
@@ -256,6 +284,38 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell.likesButton.setImage(UIImage(systemName: "heart"), for: .normal)
         }
         return cell
+    }
+    
+    func checkMutualGroups(for post: Post, completion: @escaping (Bool) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(false)
+            return
+        }
+        
+        let db = Firestore.firestore()
+        self.mutualGroups.removeAll()
+        
+        // fetch mututal groups
+        db.collection("groups").whereField("members", arrayContains: currentUserID).getDocuments() { querySnapshot, err in
+            if let err = err {
+                print("Error in fetching documents: \(err.localizedDescription)")
+                completion(false)
+                return
+            }
+            
+            guard let docs = querySnapshot?.documents else {
+                completion(false)
+                return
+            }
+            
+            let hasMutual = docs.contains { doc in
+                guard let group = Group(doc: doc) else { return false }
+                return group.members.contains(post.userID)
+            }
+            
+            completion(hasMutual)
+            
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -269,8 +329,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             destVC.comments = post.comments
             destVC.postID = post.postID
             destVC.delegate = self
+        } else if segue.identifier == "showMutualGroupsSegue",
+                  let destVC = segue.destination as? MutualGroupsViewController {
+            destVC.post = post
         }
-                    
     }
     
     func makePopup(popupTitle:String, popupMessage:String) {
