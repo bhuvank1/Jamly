@@ -46,6 +46,8 @@ class PostTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.backgroundColor = .clear
+        captionText.backgroundColor = .clear
         // Initialization code
         postImageView.isUserInteractionEnabled = true
         
@@ -58,7 +60,33 @@ class PostTableViewCell: UITableViewCell {
             doubleTap.cancelsTouchesInView = true
         }
         
+        postImageView.layer.cornerRadius = 10
+        postImageView.clipsToBounds = true
+        postImageView.layer.shadowColor = UIColor.black.cgColor
+        postImageView.layer.shadowOpacity = 0.05
+        postImageView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        postImageView.layer.shadowRadius = 4
+        mutualGroupsButton.tintColor = UIColor(red: 0.9137254901960784, green: 0.5137254901960784, blue: 0.8470588235294118, alpha: 1.0)
+        
         selectionStyle = .none
+        
+        // setting fonts
+        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+            ratingLabel.font = font
+            likesButton.titleLabel?.font = font
+            commentsButton.titleLabel?.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 17) {
+            usernameLabel.font = font
+            artistNameLabel.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-Regular", size: 14) {
+            artistNameLabel.font = font
+            captionText.font = font
+        }
+        
         
     }
 
@@ -105,7 +133,7 @@ class PostTableViewCell: UITableViewCell {
         trackRef.getDocument { document, error  in
             if let document = document, document.exists {
                 DispatchQueue.main.async {
-                    self.listenLaterButton.setTitle("+ 🎵", for: .normal)
+                    self.listenLaterButton.setTitle("🍓 ✓", for: .normal)
                 }
                 trackRef.delete { _ in
                     otherVC.makePopup(popupTitle: "Deleted a track from Listen Later", popupMessage: "Successfully removed \(track.name) from your playlist!")
@@ -116,7 +144,7 @@ class PostTableViewCell: UITableViewCell {
                         print("Error adding track: \(error.localizedDescription)")
                     } else {
                         DispatchQueue.main.async {
-                            self.listenLaterButton.setTitle("Added ✓", for: .normal)
+                            self.listenLaterButton.setTitle("🍓 ✓", for: .normal)
                         }
                         otherVC.makePopup(popupTitle: "Added a track to your Listen Later", popupMessage: "Successfully added \(track.name) to your playlist!")
                     }
@@ -139,9 +167,9 @@ class PostTableViewCell: UITableViewCell {
         trackRef.getDocument { document, error  in
             DispatchQueue.main.async {
                 if let document = document, document.exists {
-                    self.listenLaterButton.setTitle("Added ✓", for: .normal)
+                    self.listenLaterButton.setTitle("🍓 ✓", for: .normal)
                 } else {
-                    self.listenLaterButton.setTitle("+ 🎵", for: .normal)
+                    self.listenLaterButton.setTitle("+ 🍓", for: .normal)
                 }
             }
         }

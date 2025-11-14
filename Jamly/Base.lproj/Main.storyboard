@@ -34,17 +34,17 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="440" height="34.333333333333336"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="bmP-my-EM7">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="159.33333333333334" height="34.333333333333336"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="156" height="34.333333333333336"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0f5-Bt-gVF">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="81.666666666666671" height="34.333333333333336"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="78.333333333333329" height="34.333333333333336"/>
                                                                             <gestureRecognizers/>
-                                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                             <nil key="textColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TtS-9N-fRN">
-                                                                            <rect key="frame" x="87.666666666666657" y="0.0" width="71.666666666666657" height="34.333333333333336"/>
+                                                                            <rect key="frame" x="84.333333333333314" y="0.0" width="71.666666666666686" height="34.333333333333336"/>
                                                                             <state key="normal" title="Button"/>
                                                                             <buttonConfiguration key="configuration" style="plain" image="person.3.sequence.fill" catalog="system"/>
                                                                             <connections>
@@ -54,17 +54,23 @@
                                                                         </button>
                                                                     </subviews>
                                                                 </stackView>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c1V-iN-pbN">
-                                                                    <rect key="frame" x="378.33333333333331" y="0.0" width="61.666666666666686" height="34.333333333333336"/>
-                                                                    <state key="normal" title="Button"/>
-                                                                    <buttonConfiguration key="configuration" style="filled" title="+ 🎵"/>
-                                                                    <connections>
-                                                                        <action selector="listenLaterBtnPressed:" destination="oaj-46-ovO" eventType="touchUpInside" id="lhQ-9w-8fz"/>
-                                                                    </connections>
-                                                                </button>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XXP-b4-j8z">
+                                                                    <rect key="frame" x="382.66666666666669" y="0.0" width="57.333333333333314" height="34.333333333333336"/>
+                                                                    <subviews>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c1V-iN-pbN">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="57.333333333333336" height="34.333333333333336"/>
+                                                                            <color key="tintColor" systemColor="labelColor"/>
+                                                                            <state key="normal" title="Button"/>
+                                                                            <buttonConfiguration key="configuration" style="plain" title="+🍓"/>
+                                                                            <connections>
+                                                                                <action selector="listenLaterBtnPressed:" destination="oaj-46-ovO" eventType="touchUpInside" id="lhQ-9w-8fz"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                    </subviews>
+                                                                </stackView>
                                                             </subviews>
                                                             <constraints>
-                                                                <constraint firstItem="bmP-my-EM7" firstAttribute="leading" secondItem="Ymg-yH-IIC" secondAttribute="leading" constant="20" id="SLw-hl-fDA"/>
+                                                                <constraint firstItem="bmP-my-EM7" firstAttribute="leading" secondItem="Ymg-yH-IIC" secondAttribute="leading" constant="10" id="L1Y-bu-tCq"/>
                                                             </constraints>
                                                         </stackView>
                                                         <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hT2-Kv-u0y">
@@ -99,10 +105,10 @@
                                                             <constraints>
                                                                 <constraint firstItem="s3C-pd-PrH" firstAttribute="top" secondItem="ehF-S2-kz7" secondAttribute="top" id="6fH-mA-OWQ"/>
                                                                 <constraint firstAttribute="bottom" secondItem="s3C-pd-PrH" secondAttribute="bottom" id="Ldg-Kf-fSY"/>
-                                                                <constraint firstItem="s3C-pd-PrH" firstAttribute="leading" secondItem="ehF-S2-kz7" secondAttribute="leading" constant="20" id="qKC-fZ-7mS"/>
+                                                                <constraint firstItem="s3C-pd-PrH" firstAttribute="leading" secondItem="ehF-S2-kz7" secondAttribute="leading" constant="10" id="tBB-DC-esQ"/>
                                                             </constraints>
                                                         </stackView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="OjE-Te-qMz">
+                                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="OjE-Te-qMz">
                                                             <rect key="frame" x="0.0" y="553.66666666666663" width="440" height="34.666666666666629"/>
                                                             <subviews>
                                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dZa-CR-hu5">
@@ -111,7 +117,6 @@
                                                                     <state key="normal" title="Button"/>
                                                                     <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system" title="Button">
                                                                         <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="15"/>
-                                                                        <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </buttonConfiguration>
                                                                     <connections>
                                                                         <action selector="likesButtonTapped:" destination="oaj-46-ovO" eventType="touchUpInside" id="7va-S1-PF6"/>
@@ -119,7 +124,7 @@
                                                                     </connections>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WfB-rW-yKH">
-                                                                    <rect key="frame" x="106" y="0.33333333333337123" width="100.66666666666669" height="34.333333333333336"/>
+                                                                    <rect key="frame" x="103" y="0.33333333333337123" width="100.66666666666669" height="34.333333333333336"/>
                                                                     <color key="tintColor" systemColor="labelColor"/>
                                                                     <state key="normal" title="Button"/>
                                                                     <buttonConfiguration key="configuration" style="plain" image="message" catalog="system" title="Button">
@@ -131,7 +136,7 @@
                                                                     </connections>
                                                                 </button>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="4/5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="17X-17-bcf">
-                                                                    <rect key="frame" x="213.66666666666663" y="8.3333333333333712" width="226.33333333333337" height="18"/>
+                                                                    <rect key="frame" x="207.66666666666663" y="8.3333333333333712" width="232.33333333333337" height="18"/>
                                                                     <color key="tintColor" systemColor="labelColor"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                                                     <nil key="textColor"/>
@@ -149,11 +154,12 @@
                                                         </textView>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstItem="RQm-aS-MKv" firstAttribute="top" secondItem="OjE-Te-qMz" secondAttribute="bottom" constant="8" id="Fy6-kW-9Ws"/>
                                                         <constraint firstAttribute="bottom" secondItem="RQm-aS-MKv" secondAttribute="bottom" constant="5" id="Jck-DC-QbB"/>
                                                         <constraint firstItem="Ymg-yH-IIC" firstAttribute="top" secondItem="CQU-jq-aL0" secondAttribute="top" constant="5" id="K2g-5Y-HTe"/>
+                                                        <constraint firstItem="ehF-S2-kz7" firstAttribute="top" secondItem="hT2-Kv-u0y" secondAttribute="bottom" constant="10" id="OPX-Ss-COe"/>
                                                         <constraint firstItem="OjE-Te-qMz" firstAttribute="leading" secondItem="CQU-jq-aL0" secondAttribute="leading" id="QvG-me-VMa"/>
-                                                        <constraint firstItem="RQm-aS-MKv" firstAttribute="top" secondItem="OjE-Te-qMz" secondAttribute="bottom" constant="14" id="g8d-HK-zkb"/>
-                                                        <constraint firstItem="ehF-S2-kz7" firstAttribute="top" secondItem="hT2-Kv-u0y" secondAttribute="bottom" constant="14" id="o4b-Q9-eGC"/>
+                                                        <constraint firstItem="RQm-aS-MKv" firstAttribute="leading" secondItem="CQU-jq-aL0" secondAttribute="leading" constant="10" id="T2q-8h-Jkq"/>
                                                         <constraint firstItem="OjE-Te-qMz" firstAttribute="leading" secondItem="CQU-jq-aL0" secondAttribute="leading" constant="20" id="qJu-7k-TQW"/>
                                                         <constraint firstItem="OjE-Te-qMz" firstAttribute="top" secondItem="ehF-S2-kz7" secondAttribute="bottom" constant="14" id="wAQ-T4-x4U"/>
                                                     </constraints>
@@ -976,7 +982,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="108" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-MC-vri">
-                                                    <rect key="frame" x="20.000000000000014" y="17" width="231.33333333333337" height="80"/>
+                                                    <rect key="frame" x="20" y="17" width="231.33333333333331" height="80"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beach_test_image" translatesAutoresizingMaskIntoConstraints="NO" id="0zh-Tk-YqS">
                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
@@ -1561,7 +1567,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

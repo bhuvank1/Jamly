@@ -18,8 +18,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         applyAppearancePreference()
+        applyGlobalTextColor()
     }
     
+    private func applyGlobalTextColor() {
+        let appTextColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        
+        UILabel.appearance().textColor = appTextColor
+        UITextView.appearance().textColor = appTextColor
+        UITextField.appearance().textColor = appTextColor
+        
+        UIButton.appearance().setTitleColor(appTextColor, for: .normal)
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: appTextColor]
+        UIBarButtonItem.appearance().tintColor = appTextColor
+    }
+    
+
     private func applyAppearancePreference() {
         let isDarkMode = defaults.bool(forKey: "jamlyDarkMode")
         
