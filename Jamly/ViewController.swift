@@ -43,6 +43,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         feedTableView.dataSource = self
         feedTableView.delegate = self
+        
+        feedTableView.backgroundColor = .clear
+        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745,
+                                       alpha: 1.0)
+        self.title = "Jamly 🍓"
         //fetchSocialFeed()
     }
     
