@@ -22,14 +22,37 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        
+//        // setting fonts
+//        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+//            ratingLabel.font = font
+//            likesButton.titleLabel?.font = font
+//            commentsButton.titleLabel?.font = font
+//        }
+//        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 24) {
+            accountTitle.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-Regular", size: 15) {
+            accountSubtitle.font = font
+            usernameField.font = font
+            passwordField.font = font
+            emailField.font = font
+        }
+        
         emailField.delegate = self
         passwordField.delegate = self
 
         emailField.placeholder = "Enter your email"
         passwordField.placeholder = "Enter your password"
+        usernameField.placeholder = "Enter your unique username"
         passwordField.isSecureTextEntry = true
         
+        styleButton(loginButton, title: "Sign In", bgColor: "#FFC1CC")
         loginButton.isHidden = false
+        usernameField.isHidden = true
         registerButton.isHidden = true
         accountTitle.text = "Sign In"
         accountSubtitle.text = "Enter your email and password"
@@ -47,18 +70,41 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    private func styleButton(_ button: UIButton, title: String, bgColor: String) {
+        var config = UIButton.Configuration.filled()
+        config.title = title
+        config.baseBackgroundColor = UIColor(hex: bgColor)
+        config.baseForegroundColor = UIColor(hex: "#3D1F28")
+        config.cornerStyle = .medium
+        config.titleAlignment = .center
+        button.configuration = config
+        
+        // Set font
+        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+            button.titleLabel?.font = font
+        }
+        
+        // Optional subtle shadow
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.1
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+    }
+    
     @IBAction func segCtrlChanged(_ sender: Any) {
         switch segCtrl.selectedSegmentIndex {
         case 0:
             usernameField.isHidden = true
             loginButton.isHidden = false
             registerButton.isHidden = true
+            styleButton(loginButton, title: "Sign In", bgColor: "#FFC1CC")
             accountTitle.text = "Sign In"
             accountSubtitle.text = "Enter your email and password"
         case 1:
             usernameField.isHidden = false
             loginButton.isHidden = true
             registerButton.isHidden = false
+            styleButton(registerButton, title: "Create Account", bgColor: "#FFC1CC")
             accountTitle.text = "Create Account"
             accountSubtitle.text = "Enter your credentials to sign up for Jamly"
         default:

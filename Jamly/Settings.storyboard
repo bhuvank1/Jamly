@@ -26,13 +26,6 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bf7-sd-ieR">
-                                                    <rect key="frame" x="320" y="7" width="61" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <connections>
-                                                        <action selector="darkModeToggled:" destination="Jz2-t6-fsI" eventType="valueChanged" id="hiO-8P-sJU"/>
-                                                    </connections>
-                                                </switch>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w3G-7a-hde">
                                                     <rect key="frame" x="20" y="11" width="196" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -41,10 +34,17 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LvK-bB-8EV">
-                                                    <rect key="frame" x="320" y="7" width="61" height="28"/>
+                                                    <rect key="frame" x="355" y="7" width="61" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <connections>
                                                         <action selector="notificationSwitchToggled:" destination="Jz2-t6-fsI" eventType="valueChanged" id="Ynv-Ni-CdX"/>
+                                                    </connections>
+                                                </switch>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bf7-sd-ieR">
+                                                    <rect key="frame" x="355" y="7" width="61" height="28"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="darkModeToggled:" destination="Jz2-t6-fsI" eventType="valueChanged" id="hiO-8P-sJU"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -108,14 +108,14 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4W-XX-aNw">
-                                <rect key="frame" x="27" y="327" width="45" height="21"/>
+                                <rect key="frame" x="27" y="327" width="166" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mobile Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4KD-3b-ftN">
-                                <rect key="frame" x="27" y="387" width="117" height="21"/>
+                                <rect key="frame" x="27" y="387" width="213" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -129,7 +129,7 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmz-aV-YVD">
-                                <rect key="frame" x="131" y="508" width="130" height="34.333333333333314"/>
+                                <rect key="frame" x="110" y="509" width="194" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Save changes"/>
@@ -138,7 +138,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add name" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Bx2-po-lfi">
-                                <rect key="frame" x="216" y="327" width="157" height="18.666666666666686"/>
+                                <rect key="frame" x="202" y="328" width="157" height="18.666666666666686"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -150,14 +150,17 @@
                     <navigationItem key="navigationItem" id="Egh-Us-xZy"/>
                     <connections>
                         <outlet property="emailText" destination="OiB-Ir-Nme" id="KsC-dy-Mu0"/>
-                        <outlet property="mobileNumberField" destination="8TH-gp-LgO" id="yOc-x7-vlr"/>
+                        <outlet property="mobileLabel" destination="4KD-3b-ftN" id="Ac2-VT-ouK"/>
+                        <outlet property="mobileNumberField" destination="8TH-gp-LgO" id="5SN-K1-zN3"/>
                         <outlet property="nameField" destination="Bx2-po-lfi" id="bgV-bx-sdb"/>
+                        <outlet property="nameLabel" destination="g4W-XX-aNw" id="SmQ-ge-Lva"/>
                         <outlet property="nameText" destination="DMV-iR-qp9" id="sHS-C4-2F5"/>
+                        <outlet property="saveChangesButton" destination="cmz-aV-YVD" id="E7r-Oz-7I8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qz-Ki-ufN" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3783.969465648855" y="130.98591549295776"/>
+            <point key="canvasLocation" x="3782.608695652174" y="130.58035714285714"/>
         </scene>
         <!--About Page View Controller-->
         <scene sceneID="hPI-cH-GBd">
@@ -171,11 +174,11 @@
                                 <rect key="frame" x="12" y="190" width="382" height="284"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <string key="text">Jamly is the ultimate social music app that lets you track your listening habits, discover trends, and connect with friends over the songs you love. Share posts, rate tracks, comment, and like your friends’ activity, all in one interactive feed.
+                                <mutableString key="text">Jamly is the ultimate social music app that lets you track your listening habits, discover trends, and connect with friends over the songs you love. Share posts, rate tracks, comment, and like your friends’ activity, all in one interactive feed.
 
-Create groups to uncover common music tastes. Save songs to your “Want to Listen” list and explore top artists, tracks, and genres with insightful statistics.
+Create groups to uncover common music tastes. Save songs to your “Listen Later” list and explore top artists, tracks, and genres with insightful statistics.
 
-Perfect for college students and young professionals (18–30), Jamly makes music fun, social, and personalized. Whether you’re discovering new favorites or connecting with friends, Jamly turns listening into an experience.</string>
+Perfect for college students and young professionals (18–30), Jamly makes music fun, social, and personalized. Whether you’re discovering new favorites or connecting with friends, Jamly turns listening into an experience.</mutableString>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -193,6 +196,10 @@ Perfect for college students and young professionals (18–30), Jamly makes musi
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="JI8-Nn-1ko"/>
+                    <connections>
+                        <outlet property="aboutTextView" destination="FMz-uZ-Pax" id="q5V-zX-qG8"/>
+                        <outlet property="versionTextView" destination="EJi-nr-bVI" id="cy9-tE-hJl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qzd-NG-nWt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

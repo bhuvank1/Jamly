@@ -21,6 +21,9 @@ class ListenLaterViewController: UIViewController, UITableViewDataSource, UITabl
         self.title = "Listen Later"
         playlistTableView.dataSource = self
         playlistTableView.delegate = self
+        playlistTableView.backgroundColor = .clear
+        
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
         
         reloadView()
     }
@@ -34,6 +37,8 @@ class ListenLaterViewController: UIViewController, UITableViewDataSource, UITabl
         guard let cell = playlistTableView.dequeueReusableCell(withIdentifier: "PlaylistTextCell", for: indexPath) as? ListenLaterTableViewCell else {
             fatalError("Could not deqeue cell")
         }
+        
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
         
         let track = playlist[indexPath.row]
         cell.artistNameLabel.text = track.artists

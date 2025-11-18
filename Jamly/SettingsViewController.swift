@@ -31,6 +31,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.title = "Settings"
         settingsTableView.dataSource = self
         settingsTableView.delegate = self
+        settingsTableView.backgroundColor = .clear
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
     }
     
     @IBAction func darkModeToggled(_ sender: UISwitch) {
@@ -146,6 +148,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTextCell", for: indexPath) as! SettingsTableViewCell
         let option = settingsOptions[indexPath.row]
         
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
         cell.cellLabel.text = option.title
         cell.darkModeSwitch.isHidden = true
         cell.notificationSwitch.isHidden = true

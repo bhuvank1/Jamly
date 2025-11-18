@@ -16,6 +16,15 @@ class ListenLaterTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 17) {
+            trackNameLabel.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-Regular", size: 14) {
+            artistNameLabel.font = font
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
