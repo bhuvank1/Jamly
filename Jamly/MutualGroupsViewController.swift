@@ -19,6 +19,10 @@ class MutualGroupsViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         groupsTableView.dataSource = self
         groupsTableView.delegate = self
+        
+        groupsTableView.backgroundColor = .clear
+        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        navigationItem.title = "Mututal Groups"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -65,7 +69,6 @@ class MutualGroupsViewController: UIViewController, UITableViewDataSource, UITab
         let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell") ?? UITableViewCell(style: .subtitle, reuseIdentifier: "groupCell")
         
         cell.textLabel?.text = group.name
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
 
         if !group.creatorDisplayName.isEmpty && group.creatorDisplayName != "Unknown" {
             cell.detailTextLabel?.text = "\(group.creatorDisplayName) • \(group.description)"
@@ -73,9 +76,22 @@ class MutualGroupsViewController: UIViewController, UITableViewDataSource, UITab
             cell.detailTextLabel?.text = group.description
         }
 
-        cell.detailTextLabel?.textColor = .secondaryLabel
         cell.detailTextLabel?.numberOfLines = 2
         cell.accessoryType = .disclosureIndicator
+        
+        cell.backgroundColor = .clear
+        
+        // font
+        if let font = UIFont(name: "Poppins-Regular", size: 15) {
+            cell.detailTextLabel?.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 18) {
+            cell.textLabel?.font = font
+        }
+        
+        cell.textLabel?.textColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        cell.detailTextLabel?.textColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
         
         return cell
     }

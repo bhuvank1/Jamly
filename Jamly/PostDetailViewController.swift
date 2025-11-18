@@ -60,12 +60,39 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
         postImageView.addGestureRecognizer(doubleTap)
         postImageView.isUserInteractionEnabled = true
         
+        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        
+        likesCount.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        commentCount.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+            ratingLabel.font = font
+            likesCount.titleLabel?.font = font
+            commentCount.titleLabel?.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 18) {
+            usernameLabel.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 16) {
+            songNameLabel.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-Regular", size: 14) {
+            artistNameLabel.font = font
+            captionTextView.font = font
+        }
+        
+        postImageView.layer.cornerRadius = 10
+        postImageView.clipsToBounds = true
+        postImageView.layer.shadowColor = UIColor.black.cgColor
+        postImageView.layer.shadowOpacity = 0.05
+        postImageView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        postImageView.layer.shadowRadius = 4
+        
     }
     
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-//                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//            return true
-//        }
     
     func updateLikesUI() {
         guard let post = post, let currentUID = Auth.auth().currentUser?.uid else { return }

@@ -26,6 +26,17 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         commentsTableView.dataSource = self
         commentsTableView.delegate = self
         fetchDisplayNamesForComments()
+        
+        commentsTableView.backgroundColor = .clear
+        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        addCommentButton.tintColor = UIColor(red: 0.9137254901960784, green: 0.5137254901960784, blue: 0.8470588235294118, alpha: 1.0)
+        
+        addCommentTextField.layer.borderWidth = 1.0
+        addCommentTextField.layer.borderColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0).cgColor
+        addCommentTextField.layer.cornerRadius = 8
+        addCommentTextField.clipsToBounds = true
+        navigationItem.title = "Comments"
+
     }
     
     @IBAction func addCommentButtonTapped(_ sender: Any) {
@@ -105,6 +116,17 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             cell.textLabel?.text = parts[0].trimmingCharacters(in: .whitespaces)
             cell.detailTextLabel?.text = parts[1].trimmingCharacters(in: .whitespaces)
         }
+        
+        // font
+        if let font = UIFont(name: "Poppins-Regular", size: 14) {
+            cell.detailTextLabel?.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 16) {
+            cell.textLabel?.font = font
+        }
+        
+        cell.backgroundColor = .clear
         
         //cell.contentConfiguration = content
         return cell

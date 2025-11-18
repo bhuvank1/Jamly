@@ -45,9 +45,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         feedTableView.delegate = self
         
         feedTableView.backgroundColor = .clear
-        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745,
-                                       alpha: 1.0)
+        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
         self.title = "Jamly 🍓"
+        
         //fetchSocialFeed()
     }
     
@@ -55,6 +55,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidAppear(true)
         fetchSocialFeed()
         checkSpotifyConnection()
+        
+        // fixing white top nav bar issue
+        guard let navBar = navigationController?.navigationBar else { return }
+        navBar.barTintColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        navBar.titleTextAttributes = [.font: UIFont(name: "Poppins-SemiBold", size: 20)!]
     }
     
     func changeLikes(for post: Post, cell: PostTableViewCell) {

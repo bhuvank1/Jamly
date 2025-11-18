@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UIBarButtonItem.appearance().tintColor = appTextColor
     }
     
-
+   
     private func applyAppearancePreference() {
         let isDarkMode = defaults.bool(forKey: "jamlyDarkMode")
         
