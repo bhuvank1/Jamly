@@ -41,12 +41,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
         friendsButton.isHidden = true
         addFriendButton.isHidden = true
         addFriendButton.isEnabled = false
+        if let textField = searchBar.searchTextField as UITextField? {
+            textField.autocapitalizationType = .none
+        }
     }
     
     // MARK: - Search
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.isEmpty else { return }
-        searchUser(byDisplayName: text.lowercased())
+        searchUser(byDisplayName: text)
         searchBar.resignFirstResponder()
     }
     
@@ -180,7 +183,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
                 }
                 
                 DispatchQueue.main.async {
-                    print("✅ Loaded \(self.postDocs.count) posts for \(uid)")
                     self.displayPostTable.reloadData()
                 }
             }
@@ -297,7 +299,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
         }
     }
     
-    private func loadUser(byUID uid: String) {
+    public func loadUser(byUID uid: String) {
         db.collection("userInfo").document(uid).getDocument { [weak self] doc, err in
             guard let self = self else { return }
             if let err = err { self.alert("Error", err.localizedDescription); return }

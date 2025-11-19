@@ -92,7 +92,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if segue.identifier == "showFriendsSegue",
            let dest = segue.destination as? UserFriendsViewController,
            let ids  = sender as? [String] {
-            print(ids)
             dest.friendIDs = ids
         }
 
