@@ -9,6 +9,7 @@ enum SettingType {
     case navigation
     case toggle
     case action
+    case button
 }
 
 struct SettingOption {

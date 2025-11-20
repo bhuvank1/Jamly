@@ -84,6 +84,27 @@ final class SpotifyAuthManager: NSObject { // NSObject needed for ASWebAuth
         _ = session?.start()
     }
     
+    func disconnect() {
+        // clear in-memory tokens
+        clearTokens()
+
+        // clear cached Firestore "connected" state
+        if let uid = Auth.auth().currentUser?.uid {
+            Firestore.firestore().collection("userInfo").document(uid).setData([
+                "spotify": [
+                    "connected": false,
+                    "lastUpdatedAt": Int(Date().timeIntervalSince1970),
+                    "stats": [:]
+                ]
+            ], merge: true)
+        }
+
+        // end the current sign-in session (cleanup)
+        session?.cancel()
+        session = nil
+        codeVerifier = nil
+    }
+    
     // Returns a valid short-lived token (refreshes if needed)
     func getValidAccessToken(completion: @escaping (String?) -> Void) {
         if let token = accessToken, let e = expiry, Date() < e.addingTimeInterval(-60) {
