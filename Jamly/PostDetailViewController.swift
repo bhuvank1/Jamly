@@ -42,6 +42,7 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
         usernameLabel.text = post?.displayName
         songNameLabel.text = post?.trackObject.name
         artistNameLabel.text = post?.trackObject.artists
+        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
         
         // image
         if let albumArtURL = post?.trackObject.albumArt, let url = URL(string: albumArtURL) {
