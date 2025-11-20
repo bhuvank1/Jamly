@@ -9,10 +9,20 @@ import UIKit
 
 class AboutPageViewController: UIViewController {
 
+    @IBOutlet weak var versionTextView: UITextView!
+    @IBOutlet weak var aboutTextView: UITextView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.title = "About Jamly"
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        aboutTextView.backgroundColor = UIColor(hex: "#FFEFE5")
+        versionTextView.backgroundColor = UIColor(hex: "#FFEFE5")
+        
+        if let font = UIFont(name: "Poppins-Regular", size: 14) {
+            aboutTextView.font = font
+            versionTextView.font = font
+        }
     }
     
 

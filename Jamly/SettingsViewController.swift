@@ -14,6 +14,7 @@ let settingsOptions: [SettingOption] =
 [SettingOption(title: "Account", type: .navigation),
  SettingOption(title: "Enable Reminder", type: .toggle),
  SettingOption(title: "Dark Mode", type: .toggle),
+ SettingOption(title: "Spotify", type: .button),
  SettingOption(title: "About", type: .navigation),
  SettingOption(title: "Log out", type: .action),
  SettingOption(title: "Delete Account",type: .action)]
@@ -31,6 +32,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.title = "Settings"
         settingsTableView.dataSource = self
         settingsTableView.delegate = self
+        settingsTableView.backgroundColor = .clear
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
     }
     
     @IBAction func darkModeToggled(_ sender: UISwitch) {
@@ -47,6 +50,89 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
            let window = windowScene.windows.first {
             window.overrideUserInterfaceStyle = sender.isOn ? .dark : .light
         }
+    }
+    
+    @IBAction func connectButtonPressed(_ sender: UIButton) {
+        let buttonTitle = sender.configuration?.title
+        if (buttonTitle == "Connect") {
+            let controller = UIAlertController(
+                title: "Spotify",
+                message: "Connect to your Spotify account to continue",
+                preferredStyle: .alert)
+            
+            let connectAction = UIAlertAction(title: "Connect to Spotify", style: .default){ _ in
+                self.alertHander(for: sender)
+            }
+
+            controller.addAction(connectAction)
+            controller.preferredAction = connectAction
+            
+            present(controller, animated: true)
+        } else if (buttonTitle == "Disconnect") {
+            let controller = UIAlertController(
+                title: "Disconnect from Spotify",
+                message: "Are you sure you want to disconnect from your spotify account?",
+                preferredStyle: .alert)
+            
+            let connectAction = UIAlertAction(title: "Disconnect", style: .destructive){ _ in
+                self.spotifyLogOut(sender)
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+            controller.addAction(connectAction)
+            controller.addAction(cancelAction)
+            controller.preferredAction = cancelAction
+            
+            present(controller, animated: true)
+        }
+    }
+    
+    func alertHander(for button: UIButton) {
+        SpotifyAuthManager.shared.signIn { success in
+            DispatchQueue.main.async {
+                if success {
+                    // Update button title
+                    var config = button.configuration
+                    config?.title = "Disconnect"
+                    button.configuration = config
+
+                    let alert = UIAlertController(
+                        title: "Connected!",
+                        message: "You can now use Spotify features.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alert, animated: true)
+
+                } else {
+                    let alert = UIAlertController(
+                        title: "Login Failed",
+                        message: "Please try again.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alert, animated: true)
+                }
+            }
+        }
+    }
+    
+    func spotifyLogOut(_ button: UIButton) {
+        SpotifyAuthManager.shared.disconnect()
+        DispatchQueue.main.async {
+                // update button title
+                var config = button.configuration
+                config?.title = "Connect"
+                button.configuration = config
+
+                // show confirmation alert
+                let alert = UIAlertController(
+                    title: "Disconnected",
+                    message: "You have successfully logged out of Spotify.",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
+            }
     }
     
     @IBAction func notificationSwitchToggled(_ sender: UISwitch) {
@@ -70,6 +156,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         }
     }
+    
+    
     
     func getScheduledInterval(sender: UISwitch) {
         let controller = UIAlertController (title: "Input Interval", message: "Enter the number of HOURS you would like to be reminded to open Jamly after inactivity.", preferredStyle: .alert)
@@ -146,9 +234,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTextCell", for: indexPath) as! SettingsTableViewCell
         let option = settingsOptions[indexPath.row]
         
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
         cell.cellLabel.text = option.title
+        if let font = UIFont(name: "Poppins-Regular", size: 16) {
+            cell.cellLabel.font = font
+        }
         cell.darkModeSwitch.isHidden = true
         cell.notificationSwitch.isHidden = true
+        cell.connectbutton.isHidden = true
         cell.accessoryType = .none
         
         switch option.type {
@@ -165,6 +258,32 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.notificationSwitch.isHidden = false
                 cell.notificationSwitch.isOn = defaults.bool(forKey: "jamlyNotifications")
                 cell.notificationSwitch.addTarget(self, action: #selector(notificationSwitchToggled(_:)), for: .valueChanged)
+            }
+            
+        case .button:
+            if (option.title == "Spotify") {
+                cell.connectbutton.isHidden = false
+                var config = UIButton.Configuration.filled()
+                config.baseBackgroundColor = UIColor(hex: "#FFC1CC")
+                config.baseForegroundColor = UIColor(hex: "#3D1F28")
+                config.cornerStyle = .medium
+                config.titleAlignment = .center
+                
+                //Helper function to check if there is already a valid connection
+                    SpotifyAuthManager.shared.getValidAccessToken { token in
+                        DispatchQueue.main.async {
+                            let connected = token != nil
+                            if (connected == false) {
+                                config.title = "Connect"
+                                cell.connectbutton.configuration = config
+                            } else {
+                                config.title = "Disconnect"
+                                cell.connectbutton.configuration = config
+                            }
+                        }
+                    }
+                
+                cell.connectbutton.addTarget(self, action: #selector(connectButtonPressed(_:)), for: .touchUpInside)
             }
             
         case .action:

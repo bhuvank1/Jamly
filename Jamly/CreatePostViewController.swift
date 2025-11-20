@@ -39,6 +39,10 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
         
         // Track info
         trackTitle.textColor = UIColor(hex: "#3D1F28")
+        if let font = UIFont(name: "Poppins-SemiBold", size: 17) {
+            trackTitle.font = font
+        }
+        
         trackImage.layer.cornerRadius = 10
         trackImage.clipsToBounds = true
         trackImage.layer.borderWidth = 2
@@ -62,7 +66,9 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
         button.configuration = config
         
         // Set font
-        button.titleLabel?.font = UIFont(name: "Artifakt Element", size: 16)
+        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+            button.titleLabel?.font = font
+        }
         
         // Optional subtle shadow
         button.layer.shadowColor = UIColor.black.cgColor

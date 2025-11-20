@@ -22,28 +22,32 @@ struct SplashScreen: View {
     
     
     var body: some View {
-        VStack(spacing: 60) {
-            Image("Jamly_LogoPDF").resizable()
-                .scaledToFit()
-                .frame(width: 300, height: 300)
+        ZStack {
+            Color(hex: "#FFEFE5")
+                .ignoresSafeArea()
             
-            ProgressView(value: min(max(progress, 0), 1))
-                .progressViewStyle(LinearProgressViewStyle(tint: .black))
-                .frame(height: 10)
-                .padding(.horizontal, 50)
-                .onAppear {
-                    Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
-                        if progress < 1 {
-                            progress += 0.01
-                        } else {
-                            timer.invalidate()
-                            onFinish?()
+            VStack(spacing: 60) {
+                Image("Jamly_LogoPDF").resizable()
+                    .scaledToFit()
+                    .frame(width: 300, height: 300)
+                
+                ProgressView(value: min(max(progress, 0), 1))
+                    .progressViewStyle(LinearProgressViewStyle(tint: .black))
+                    .frame(height: 10)
+                    .padding(.horizontal, 50)
+                    .onAppear {
+                        Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
+                            if progress < 1 {
+                                progress += 0.01
+                            } else {
+                                timer.invalidate()
+                                onFinish?()
+                            }
                         }
                     }
-                }
-            
+                
+            }
         }
-        
         
     }
 }

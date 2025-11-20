@@ -11,6 +11,7 @@ class SettingsTableViewCell: UITableViewCell {
 
     @IBOutlet weak var notificationSwitch: UISwitch!
 
+    @IBOutlet weak var connectbutton: UIButton!
     @IBOutlet weak var cellLabel: UILabel!
     @IBOutlet weak var darkModeSwitch: UISwitch!
     

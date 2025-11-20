@@ -15,13 +15,41 @@ class AccountSettingsVC: UIViewController{
     
     @IBOutlet weak var mobileNumberField: UITextField!
     
+    @IBOutlet weak var saveChangesButton: UIButton!
     @IBOutlet weak var nameText: UILabel!
     @IBOutlet weak var emailText: UILabel!
     
+    @IBOutlet weak var mobileLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 16) {
+            nameText.font = font
+            mobileLabel.font = font
+            nameLabel.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-Regular", size: 12) {
+            emailText.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-Regular", size: 14) {
+            nameField.font = font
+            mobileNumberField.font = font
+        }
+        
+        var config = UIButton.Configuration.filled()
+        config.title = "Save Changes"
+        config.baseBackgroundColor = UIColor(hex: "#FFC1CC")
+        config.baseForegroundColor = UIColor(hex: "#3D1F28")
+        config.cornerStyle = .medium
+        config.titleAlignment = .center
+        saveChangesButton.configuration = config
     }
     
     override func viewDidAppear(_ animated: Bool) {
