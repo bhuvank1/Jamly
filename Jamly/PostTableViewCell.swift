@@ -77,15 +77,21 @@ class PostTableViewCell: UITableViewCell {
             commentsButton.titleLabel?.font = font
         }
         
-        if let font = UIFont(name: "Poppins-SemiBold", size: 17) {
+        if let font = UIFont(name: "Poppins-SemiBold", size: 18) {
             usernameLabel.font = font
-            artistNameLabel.font = font
+        }
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 16) {
+            songNameLabel.font = font
         }
         
         if let font = UIFont(name: "Poppins-Regular", size: 14) {
             artistNameLabel.font = font
             captionText.font = font
         }
+        
+        likesButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        commentsButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
         
         
     }
@@ -133,7 +139,7 @@ class PostTableViewCell: UITableViewCell {
         trackRef.getDocument { document, error  in
             if let document = document, document.exists {
                 DispatchQueue.main.async {
-                    self.listenLaterButton.setTitle("🍓 ✓", for: .normal)
+                    self.listenLaterButton.setTitle("+ 🍓", for: .normal)
                 }
                 trackRef.delete { _ in
                     otherVC.makePopup(popupTitle: "Deleted a track from Listen Later", popupMessage: "Successfully removed \(track.name) from your playlist!")

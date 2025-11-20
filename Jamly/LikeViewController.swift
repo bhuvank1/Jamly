@@ -23,6 +23,9 @@ class LikeViewController: UIViewController, UITableViewDelegate, UITableViewData
         likesTableView.delegate = self
         fetchUsernamesForLikes()
         
+        likesTableView.backgroundColor = .clear
+        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        navigationItem.title = "Likes"
     }
     
     func fetchUsernamesForLikes() {
@@ -93,6 +96,12 @@ class LikeViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath)
         var content = cell.defaultContentConfiguration()
         content.text = likeDisplayNames[indexPath.row]
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 16) {
+            content.textProperties.font = font
+        }
+        
+        cell.backgroundColor = .clear
         
         cell.contentConfiguration = content
         return cell
