@@ -1004,7 +1004,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="108" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-MC-vri">
-                                                    <rect key="frame" x="20" y="17" width="231.33333333333334" height="80"/>
+                                                    <rect key="frame" x="20" y="17" width="231.33333333333331" height="80"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beach_test_image" translatesAutoresizingMaskIntoConstraints="NO" id="0zh-Tk-YqS">
                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
@@ -1095,7 +1095,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Friends"/>
                                 <connections>
-                                    <segue destination="Mkm-iK-KlA" kind="show" id="iQ3-T2-2zf"/>
+                                    <segue destination="bYr-HG-afs" kind="show" identifier="showAddFriendsSegue" id="BAU-Ij-Afu"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="01G-fa-WBR">
@@ -1392,11 +1392,13 @@
                     <navigationItem key="navigationItem" id="2uq-Vh-yza"/>
                     <connections>
                         <outlet property="tableView" destination="dCb-Oa-r7U" id="JVC-ER-grE"/>
+                        <segue destination="YvQ-RS-Xyl" kind="unwind" identifier="unwindToSearchFromUserFriends" unwindAction="unwindToSearchViewController:" id="4SO-8b-4kp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KGA-c1-V7a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="YvQ-RS-Xyl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-410" y="-1592"/>
+            <point key="canvasLocation" x="-1054" y="-1592"/>
         </scene>
         <!--Search View Controller-->
         <scene sceneID="PtN-yb-yf2">
@@ -1499,6 +1501,13 @@
                                     <action selector="friendsButtonTapped:" destination="ZIj-Ci-L1s" eventType="touchUpInside" id="uZZ-sd-wij"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="No posts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vof-7L-X0d">
+                                <rect key="frame" x="125" y="565" width="245" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="eMF-DA-L9Z"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1510,13 +1519,14 @@
                         <outlet property="displayPostTable" destination="utX-za-Win" id="j7v-3N-1n5"/>
                         <outlet property="friendsButton" destination="DvT-Z8-K6R" id="hgr-aG-7DB"/>
                         <outlet property="nameLabel" destination="7MJ-gJ-8Xh" id="Bw8-io-4ti"/>
+                        <outlet property="noPostsLabel" destination="vof-7L-X0d" id="sPQ-1L-L2b"/>
                         <outlet property="searchBar" destination="gFl-vh-Fw4" id="bRj-0i-RXv"/>
                         <segue destination="Mkm-iK-KlA" kind="show" identifier="showFriendsSegue" id="FPh-9V-nDN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qcb-jO-NOo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-410" y="-679"/>
+            <point key="canvasLocation" x="-410.4545454545455" y="-679.07949790794987"/>
         </scene>
         <!--Splash Screen View Controller-->
         <scene sceneID="dPw-Xm-Thv">
@@ -1563,15 +1573,54 @@
                     <navigationItem key="navigationItem" id="SM6-nY-e4R"/>
                     <connections>
                         <outlet property="tableView" destination="R7n-dD-Sn9" id="dbI-mB-fxb"/>
+                        <segue destination="oYO-Sm-bx8" kind="unwind" identifier="unwindToSearchFromuserFriends" unwindAction="unwindToSearchViewController:" id="feY-n5-TtX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sBn-R4-C71" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="oYO-Sm-bx8" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1113" y="-1406"/>
         </scene>
+        <!--My Friends View Controller-->
+        <scene sceneID="SVE-No-plS">
+            <objects>
+                <viewController id="bYr-HG-afs" customClass="MyFriendsViewController" customModule="Jamly" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FXm-ga-Vvv">
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="907"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Cd8-Re-GFG">
+                                <rect key="frame" x="0.0" y="110" width="440" height="772"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="myFriendCell" id="VuT-Y3-4tD">
+                                        <rect key="frame" x="0.0" y="50" width="440" height="43.666667938232422"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="VuT-Y3-4tD" id="TnT-ik-fYw">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="43.666667938232422"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="eIC-JV-Def"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="3Kl-eK-nW2"/>
+                    <connections>
+                        <outlet property="tableView" destination="Cd8-Re-GFG" id="XS3-rc-Kh7"/>
+                        <segue destination="ZIj-Ci-L1s" kind="show" identifier="showFriendInSearchFromMyFriends" id="Xg7-LW-y0F"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XYA-bH-ILc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-52" y="-1592"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="FPh-9V-nDN"/>
+        <segue reference="Xg7-LW-y0F"/>
         <segue reference="iAt-1U-dty"/>
         <segue reference="fH2-s1-MwC"/>
     </inferredMetricsTieBreakers>

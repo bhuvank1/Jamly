@@ -101,7 +101,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             destVC.post = postDocs[postIndex]
         }
 
-        // ✅ Handle Add Friends segue to navigation controller
+        // Handle Add Friends segue to navigation controller
         if segue.identifier == "showAddFriendsSegue" {
             if let nav = segue.destination as? UINavigationController,
                let searchVC = nav.topViewController as? SearchViewController {

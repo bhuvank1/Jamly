@@ -16,13 +16,12 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
     // Injected from SearchViewController
     var friendIDs: [String] = []
 
-    // Callback to send the selected friend's UID back to SearchViewController
-    var onSelectFriend: ((String) -> Void)?
+    // Selected UID to be read by SearchViewController during unwind
+    var selectedFriendUID: String?
 
     private let db = Firestore.firestore()
     private var tmp: [FriendRow] = []
 
-    // Keep UID internal; never display it
     struct FriendRow {
         let uid: String
         let displayName: String
@@ -31,19 +30,17 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        assert(tableView != nil, "tableView outlet not connected")
         tableView.dataSource = self
         tableView.delegate = self
     }
-    
+   
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        print("I am in view did appear")
+        super.viewDidAppear(animated)
         fetchFriends()
     }
 
     private func fetchFriends() {
-        if (friendIDs.isEmpty) {
+        if friendIDs.isEmpty {
             retrieveFriends()
             return
         }
@@ -51,48 +48,45 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
         tmp.removeAll()
 
         for uid in friendIDs {
-            //group.enter()
             db.collection("userInfo").document(uid).getDocument { (doc, error) in
                 if let error = error {
-                    print("Error fetching document.")
+                    print("Error fetching document: \(error.localizedDescription)")
                     return
                 }
                 guard let data = doc?.data() else { return }
                 let dn = data["displayName"] as? String ?? "(unknown)"
-                print("display name:", dn)
                 let em = data["email"] as? String ?? ""
                 self.tmp.append(FriendRow(uid: uid, displayName: dn, email: em))
                 self.tableView.reloadData()
             }
-            
         }
-        
-        func retrieveFriends() {
-            guard let currentUID = Auth.auth().currentUser?.uid else { return }
-            db.collection("userInfo").document(currentUID).getDocument { querySnapshot, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                    return
-                }
-                
-                guard let data = querySnapshot?.data(),
-                      let friendIDs = data["friends"] as? [String], !friendIDs.isEmpty else {
-                    print("No friends found")
-                    return
-                }
-                for uid in friendIDs {
-                    self.db.collection("userInfo").document(uid).getDocument { (doc, error) in
-                        if let error = error {
-                            print("Error fetching document.")
-                            return
-                        }
-                        guard let data = doc?.data() else { return }
-                        let dn = data["displayName"] as? String ?? "(unknown)"
-                        print("display name:", dn)
-                        let em = data["email"] as? String ?? ""
-                        self.tmp.append(FriendRow(uid: uid, displayName: dn, email: em))
-                        self.tableView.reloadData()
+    }
+   
+    private func retrieveFriends() {
+        guard let currentUID = Auth.auth().currentUser?.uid else { return }
+        db.collection("userInfo").document(currentUID).getDocument { querySnapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+           
+            guard let data = querySnapshot?.data(),
+                  let friendIDs = data["friends"] as? [String], !friendIDs.isEmpty else {
+                print("No friends found")
+                return
+            }
+            self.tmp.removeAll()
+            for uid in friendIDs {
+                self.db.collection("userInfo").document(uid).getDocument { (doc, error) in
+                    if let error = error {
+                        print("Error fetching document: \(error.localizedDescription)")
+                        return
                     }
+                    guard let data = doc?.data() else { return }
+                    let dn = data["displayName"] as? String ?? "(unknown)"
+                    let em = data["email"] as? String ?? ""
+                    self.tmp.append(FriendRow(uid: uid, displayName: dn, email: em))
+                    self.tableView.reloadData()
                 }
             }
         }
@@ -100,7 +94,6 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
 
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(tmp.count)
         return tmp.count
     }
 
@@ -119,12 +112,12 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let friend = tmp[indexPath.row]
-        onSelectFriend?(friend.uid)  // Send UID back so SearchVC can load the profile
-        if let nav = navigationController {
-            nav.popViewController(animated: true) // Go back to SearchViewController
-        } else {
-            dismiss(animated: true)
-        }
+       
+        // Store the selected UID so SearchViewController can read it in unwind
+        selectedFriendUID = friend.uid
+       
+        // Trigger unwind segue back to SearchViewController
+        performSegue(withIdentifier: "unwindToSearchFromUserFriends", sender: self)
     }
 }
 
