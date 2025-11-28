@@ -15,7 +15,10 @@ import UIKit
 final class SpotifyAuthManager: NSObject { // NSObject needed for ASWebAuth
     
     static let shared = SpotifyAuthManager()
-    private override init() {}
+    private override init() {
+        super.init()
+        loadTokensFromKeychain()
+    }
     
     // Constant setup
     private let clientID = SpotifyAuthConfig.clientID
@@ -34,6 +37,7 @@ final class SpotifyAuthManager: NSObject { // NSObject needed for ASWebAuth
     private var session: ASWebAuthenticationSession?
     
     // MARK: - Public Auth
+    
     
     /// Start Spotify login sequence using Authorization Code + PKCE
     func signIn(completion: @escaping (Bool) -> Void) {
@@ -122,6 +126,10 @@ final class SpotifyAuthManager: NSObject { // NSObject needed for ASWebAuth
         accessToken = nil
         refreshToken = nil
         expiry = nil
+
+        deleteFromKeychain(key: KeychainKeys.accessToken)
+        deleteFromKeychain(key: KeychainKeys.refreshToken)
+        deleteFromKeychain(key: KeychainKeys.expiry)
     }
     
     // MARK: - Token Exchange / Refresh
@@ -151,8 +159,13 @@ final class SpotifyAuthManager: NSObject { // NSObject needed for ASWebAuth
             
             self.accessToken = access
             self.expiry = Date().addingTimeInterval(expiresIn)
+
+            saveToKeychain(access, key: KeychainKeys.accessToken)
+            saveToKeychain(String(self.expiry!.timeIntervalSince1970), key: KeychainKeys.expiry)
+
             if let r = json["refresh_token"] as? String {
                 self.refreshToken = r
+                saveToKeychain(r, key: KeychainKeys.refreshToken)
             }
             completion(true)
         }.resume()
@@ -181,11 +194,26 @@ final class SpotifyAuthManager: NSObject { // NSObject needed for ASWebAuth
             
             self.accessToken = access
             self.expiry = Date().addingTimeInterval(expiresIn)
+
+            saveToKeychain(access, key: KeychainKeys.accessToken)
+            saveToKeychain(String(self.expiry!.timeIntervalSince1970), key: KeychainKeys.expiry)
+
             if let newRefresh = json["refresh_token"] as? String {
                 self.refreshToken = newRefresh
+                saveToKeychain(newRefresh, key: KeychainKeys.refreshToken)
             }
             completion(true)
         }.resume()
+    }
+    
+    private func loadTokensFromKeychain() {
+        accessToken = readFromKeychain(key: KeychainKeys.accessToken)
+        refreshToken = readFromKeychain(key: KeychainKeys.refreshToken)
+
+        if let expiryString = readFromKeychain(key: KeychainKeys.expiry),
+           let timeInterval = TimeInterval(expiryString) {
+            expiry = Date(timeIntervalSince1970: timeInterval)
+        }
     }
         
     // Fetch top tracks + top artists and store derived genres. No tempo/energy.
@@ -324,3 +352,45 @@ enum SpotifyAuthConfig {
     static let authorizeURL = URL(string: "https://accounts.spotify.com/authorize")!
     static let tokenURL = URL(string: "https://accounts.spotify.com/api/token")!
 }
+
+private enum KeychainKeys {
+    static let accessToken  = "spotify_access_token"
+    static let refreshToken = "spotify_refresh_token"
+    static let expiry       = "spotify_token_expiry"
+}
+
+private func saveToKeychain(_ value: String, key: String) {
+    let data = value.data(using: .utf8)
+
+    let query: [String: Any] = [
+        kSecClass as String: kSecClassGenericPassword,
+        kSecAttrAccount as String: key,
+        kSecValueData as String: data as Any
+    ]
+
+    SecItemDelete(query as CFDictionary)
+    SecItemAdd(query as CFDictionary, nil)
+}
+
+private func readFromKeychain(key: String) -> String? {
+    let query: [String: Any] = [
+        kSecClass as String: kSecClassGenericPassword,
+        kSecAttrAccount as String: key,
+        kSecReturnData as String: true
+    ]
+
+    var item: AnyObject?
+    SecItemCopyMatching(query as CFDictionary, &item)
+
+    guard let data = item as? Data else { return nil }
+    return String(decoding: data, as: UTF8.self)
+}
+
+private func deleteFromKeychain(key: String) {
+    let query: [String: Any] = [
+        kSecClass as String: kSecClassGenericPassword,
+        kSecAttrAccount as String: key
+    ]
+    SecItemDelete(query as CFDictionary)
+}
+
