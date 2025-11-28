@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+internal import Combine
 
 class RatingModel: ObservableObject {
     @Published var rating: Int = 0
