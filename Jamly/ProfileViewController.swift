@@ -25,13 +25,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
 
         applyJamThemeStyling()
+        if let navBar = navigationController?.navigationBar {
+            navBar.barTintColor = UIColor(hex: "#FFEFE5")
+        }
 
         displayPostTable.dataSource = self
         displayPostTable.delegate   = self
 
         displayPostTable.rowHeight  = UITableView.automaticDimension
         displayPostTable.estimatedRowHeight = 72
-        displayPostTable.separatorStyle = .none
+        displayPostTable.separatorStyle = .singleLine // Set to singleLine for separators between cells
 
         displayPostTable.backgroundColor = UIColor(hex: "#FFC1CC")
 
@@ -39,9 +42,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         bgView.backgroundColor = UIColor(hex: "#FFC1CC")
         displayPostTable.backgroundView = bgView
 
+        // Center the usernameLabel programmatically
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        usernameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+
         loadUserProfile()
         loadFriendList()
     }
+
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -56,6 +65,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
         usernameLabel.textColor = UIColor(hex: "#3D1F28")
         usernameLabel.font = UIFont(name: "Poppins-SemiBold", size: 26)
+        usernameLabel.textAlignment = .center // Center the usernameLabel text
 
         styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
         styleButton(addFriendsButton, title: "Add Friends", bgColor: "#FFC1CC")
@@ -221,7 +231,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.songName.text = post.trackObject.name
         cell.songRating.text = "\(post.rating)/5"
 
-        // MARK: 🔥 Cell UI Styling (Same color as buttons)
         cell.backgroundColor = UIColor(hex: "#FFC1CC")
         cell.contentView.backgroundColor = UIColor(hex: "#FFC1CC")
 
