@@ -13,10 +13,7 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
 
     @IBOutlet weak var tableView: UITableView!
 
-    // Injected from SearchViewController
     var friendIDs: [String] = []
-
-    // Selected UID to be read by SearchViewController during unwind
     var selectedFriendUID: String?
 
     private let db = Firestore.firestore()
@@ -103,7 +100,7 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
         bgView.backgroundColor = UIColor(hex: "#FFEFE5")
         tableView.backgroundView = bgView
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = UIColor(hex: "#3D1F28") // Set separator color
+        tableView.separatorColor = UIColor(hex: "#3D1F28")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 72
 
@@ -147,10 +144,7 @@ class UserFriendsViewController: UIViewController, UITableViewDataSource, UITabl
         tableView.deselectRow(at: indexPath, animated: true)
         let friend = tmp[indexPath.row]
 
-        // Store the selected UID so SearchViewController can read it in unwind
         selectedFriendUID = friend.uid
-
-        // Trigger unwind segue back to SearchViewController
         performSegue(withIdentifier: "unwindToSearchFromUserFriends", sender: self)
     }
 }

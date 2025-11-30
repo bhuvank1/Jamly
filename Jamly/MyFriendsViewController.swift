@@ -71,7 +71,7 @@ class MyFriendsViewController: UIViewController, UITableViewDataSource, UITableV
         bgView.backgroundColor = UIColor(hex: "#FFEFE5")
         tableView.backgroundView = bgView
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = UIColor(hex: "#3D1F28") // Set separator color
+        tableView.separatorColor = UIColor(hex: "#3D1F28") 
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 72
 

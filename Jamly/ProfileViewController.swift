@@ -248,7 +248,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cornerRadius: 12
         ).cgPath
 
-        // Album Art Styling
         cell.albumPic.layer.cornerRadius = 10
         cell.albumPic.clipsToBounds = true
         cell.albumPic.layer.borderWidth = 2
@@ -257,7 +256,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.albumPic.layer.shadowOffset = CGSize(width: 0, height: 2)
         cell.albumPic.layer.shadowRadius = 4
 
-        // Load album image
         if let urlStr = post.trackObject.albumArt, let url = URL(string: urlStr) {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data, let img = UIImage(data: data) {
