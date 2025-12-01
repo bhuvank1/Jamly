@@ -36,6 +36,14 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
         } else {
             titleLabel.isHidden = true
         }
+        
+        // THEME
+        let appBg = UIColor(hex: "#FFEFE5")
+        let accent = UIColor(hex: "#FFC1CC")
+
+        view.backgroundColor = appBg
+        playlistTableView.backgroundColor = appBg
+        playlistTableView.separatorColor = accent.withAlphaComponent(0.6)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,7 +52,6 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
         loadGroupPlaylist()
     }
     
-
     func didSelectSong(_ track: Track) {
         let docRef = db.collection("groups").document(group.id)
         docRef.getDocument { [weak self] snap, err in
@@ -166,6 +173,11 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
                 }
             }.resume()
         }
+        
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        let selected = UIView()
+        selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
+        cell.selectedBackgroundView = selected
         
         return cell
     }

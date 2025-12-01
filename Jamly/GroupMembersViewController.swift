@@ -37,6 +37,16 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
         membersTable.dataSource = self
         membersTable.delegate = self
         membersTable.allowsSelection = false // default in View Members
+        
+        // THEME
+        let appBg = UIColor(hex: "#FFEFE5")
+        let accent = UIColor(hex: "#FFC1CC")
+
+        view.backgroundColor = appBg
+        membersTable.backgroundColor = appBg
+        membersTable.separatorColor = accent.withAlphaComponent(0.6)
+        segmentedControl.backgroundColor = appBg
+        segmentedControl.selectedSegmentTintColor = accent
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -159,6 +169,13 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
         // Selection only in Add mode
         cell.selectionStyle = isAddMode ? .default : .none
         cell.accessoryType = isAddMode ? .disclosureIndicator : .none
+        
+        //Theme
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        let selected = UIView()
+        selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
+        cell.selectedBackgroundView = selected
+        
         return cell
     }
 

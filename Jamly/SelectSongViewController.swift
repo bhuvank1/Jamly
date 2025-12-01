@@ -40,6 +40,15 @@ class SelectSongViewController: UIViewController, UITableViewDataSource, UITable
         sb.sizeToFit()
         
         selectSongTable.tableHeaderView = sb
+        
+        // THEME
+        let appBg = UIColor(hex: "#FFEFE5")
+        let accent = UIColor(hex: "#FFC1CC")
+
+        view.backgroundColor = appBg
+        selectSongTable.backgroundColor = appBg
+        selectSongTable.separatorColor = accent.withAlphaComponent(0.6)
+        selectSongTable.tableFooterView = UIView()
 
         definesPresentationContext = true
     }
@@ -122,6 +131,11 @@ class SelectSongViewController: UIViewController, UITableViewDataSource, UITable
             
             cell.setNeedsLayout()
         }
+        
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        let selected = UIView()
+        selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
+        cell.selectedBackgroundView = selected
 
         return cell
     }

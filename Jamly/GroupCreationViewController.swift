@@ -22,6 +22,7 @@ class GroupCreationViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
     }
     
     override func viewWillAppear(_ animated: Bool) {

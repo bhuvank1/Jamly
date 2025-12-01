@@ -24,6 +24,14 @@ final class GroupRecommendationViewController: UIViewController, UITableViewData
         recommendationTableView.delegate = self
         recommendationTableView.rowHeight = 64
         recommendationTableView.tableFooterView = UIView()
+        
+        // THEME
+        let appBg = UIColor(hex: "#FFEFE5")
+        let accent = UIColor(hex: "#FFC1CC")
+
+        view.backgroundColor = appBg
+        recommendationTableView.backgroundColor = appBg
+        recommendationTableView.separatorColor = accent.withAlphaComponent(0.6)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -92,6 +100,11 @@ final class GroupRecommendationViewController: UIViewController, UITableViewData
                 }
             }.resume()
         }
+        
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        let selected = UIView()
+        selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
+        cell.selectedBackgroundView = selected
 
         return cell
     }
