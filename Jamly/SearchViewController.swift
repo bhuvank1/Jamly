@@ -62,7 +62,7 @@ class SearchViewController: UIViewController,
         view.backgroundColor = UIColor(hex: "#FFEFE5")
 
         displayNameLabel.textColor = UIColor(hex: "#3D1F28")
-        displayNameLabel.font = UIFont(name: "Poppins-SemiBold", size: 20)
+        displayNameLabel.font = UIFont(name: "Poppins-SemiBold", size: 28)
 
         noPostsLabel.textColor = UIColor(hex: "#3D1F28")
         noPostsLabel.font = UIFont(name: "Poppins-SemiBold", size: 18)
@@ -70,10 +70,21 @@ class SearchViewController: UIViewController,
         styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
         applyAddFriendStyle()
 
-        displayPostTable.backgroundColor = UIColor(hex: "#FFC1CC")
+
         let bg = UIView()
         bg.backgroundColor = UIColor(hex: "#FFC1CC")
-        displayPostTable.backgroundView = bg
+        displayPostTable.backgroundColor = UIColor(hex: "#FFEFE5")
+        displayPostTable.backgroundView = nil
+        displayPostTable.separatorStyle = .none
+        searchBar.searchBarStyle = .minimal
+        searchBar.barTintColor = UIColor(hex: "#FFEFE5")
+        searchBar.backgroundColor = UIColor(hex: "#FFEFE5")
+
+
+        if let bgView = searchBar.subviews.first?.subviews.first(where: { $0 is UIImageView }) {
+            bgView.isHidden = true
+        }
+
     }
 
     private func styleButton(_ button: UIButton, title: String, bgColor: String) {
@@ -201,7 +212,7 @@ class SearchViewController: UIViewController,
     private func updateProfileUI() {
         guard let u = user else { return }
 
-        displayNameLabel.text = "Display Name: \(u.displayName)"
+        displayNameLabel.text = "\(u.displayName)"
         displayNameLabel.isHidden = false
         friendsButton.isHidden = false
         addFriendButton.isHidden = false
@@ -327,6 +338,7 @@ class SearchViewController: UIViewController,
 
         let post = postDocs[indexPath.row]
 
+        // --- TEXT ---
         cell.songName.text = post.trackObject.name
         cell.songName.textColor = UIColor(hex: "#3D1F28")
         cell.songName.font = UIFont(name: "Poppins-SemiBold", size: 16)
@@ -335,13 +347,13 @@ class SearchViewController: UIViewController,
         cell.songRating.textColor = UIColor(hex: "#3D1F28")
         cell.songRating.font = UIFont(name: "Poppins-Regular", size: 14)
 
+        // --- IMAGE ---
         if let urlStr = post.trackObject.albumArt, let url = URL(string: urlStr) {
             cell.albumPic.image = UIImage(named: "albumPlaceholder")
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data, let img = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        if let visible = tableView.cellForRow(at: indexPath)
-                            as? PostThumbnailTableViewCell {
+                        if let visible = tableView.cellForRow(at: indexPath) as? PostThumbnailTableViewCell {
                             visible.albumPic.image = img
                         }
                     }
@@ -351,20 +363,25 @@ class SearchViewController: UIViewController,
             cell.albumPic.image = UIImage(named: "albumPlaceholder")
         }
 
-        cell.backgroundColor = UIColor(hex: "#FFC1CC")
-        cell.layer.cornerRadius = 12
-        cell.layer.masksToBounds = false
-        cell.contentView.layer.cornerRadius = 12
+        // --- STYLING ---
+        // Match table view background
+        let bgColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = bgColor
+        cell.contentView.backgroundColor = bgColor
+
+        // Very subtle border
+        cell.contentView.layer.cornerRadius = 10
+        cell.contentView.layer.borderWidth = 0.6
+        cell.contentView.layer.borderColor = UIColor(hex: "#3D1F28")
+            .withAlphaComponent(0.15).cgColor   // SUPER subtle line
         cell.contentView.layer.masksToBounds = true
 
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOpacity = 0.1
-        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.layer.shadowRadius = 4
-        cell.layer.shouldRasterize = true
-        cell.layer.rasterizationScale = UIScreen.main.scale
+        // No shadow for ultra-clean look
+        cell.layer.shadowOpacity = 0
+        cell.layer.shadowRadius = 0
 
-        cell.contentView.layoutMargins = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        // Small padding
+        cell.contentView.layoutMargins = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
 
         return cell
     }
