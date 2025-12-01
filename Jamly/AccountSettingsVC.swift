@@ -17,7 +17,7 @@ class AccountSettingsVC: UIViewController{
     
     @IBOutlet weak var groupsNumText: UILabel!
     @IBOutlet weak var postsNumText: UILabel!
-    @IBOutlet weak var saveChangesButton: UIButton!
+    //sta@IBOutlet weak var saveChangesButton: UIButton!
     @IBOutlet weak var nameText: UILabel!
     @IBOutlet weak var emailText: UILabel!
     
@@ -52,13 +52,13 @@ class AccountSettingsVC: UIViewController{
 //            mobileNumberField.font = font
 //        }
         
-        var config = UIButton.Configuration.filled()
-        config.title = "Save Changes"
-        config.baseBackgroundColor = UIColor(hex: "#FFC1CC")
-        config.baseForegroundColor = UIColor(hex: "#3D1F28")
-        config.cornerStyle = .medium
-        config.titleAlignment = .center
-        saveChangesButton.configuration = config
+//        var config = UIButton.Configuration.filled()
+//        config.title = "Save Changes"
+//        config.baseBackgroundColor = UIColor(hex: "#FFC1CC")
+//        config.baseForegroundColor = UIColor(hex: "#3D1F28")
+//        config.cornerStyle = .medium
+//        config.titleAlignment = .center
+//        saveChangesButton.configuration = config
     }
     
     override func viewDidAppear(_ animated: Bool) {

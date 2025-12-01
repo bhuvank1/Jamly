@@ -117,15 +117,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmz-aV-YVD">
-                                <rect key="frame" x="123" y="809" width="194" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Save changes"/>
-                                <connections>
-                                    <action selector="saveButtonPressed:" destination="Wst-yF-9t1" eventType="touchUpInside" id="Ryj-Jd-PVI"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Posts Created:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mG8-6Z-f8V">
                                 <rect key="frame" x="20" y="333" width="146" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -175,7 +166,6 @@
                         <outlet property="nameText" destination="DMV-iR-qp9" id="sHS-C4-2F5"/>
                         <outlet property="postCreatedLabel" destination="mG8-6Z-f8V" id="U9I-42-uZG"/>
                         <outlet property="postsNumText" destination="FyZ-de-7mr" id="idJ-Kw-I3J"/>
-                        <outlet property="saveChangesButton" destination="cmz-aV-YVD" id="E7r-Oz-7I8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qz-Ki-ufN" sceneMemberID="firstResponder"/>
