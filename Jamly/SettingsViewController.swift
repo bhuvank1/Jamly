@@ -136,95 +136,131 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func notificationSwitchToggled(_ sender: UISwitch) {
-        if (sender.isOn) {
-            UNUserNotificationCenter.current().requestAuthorization(options: .alert) { granted, error in
-                if granted { // got permission
-                    print("All set!")
+        if sender.isOn {
+                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                    
                     DispatchQueue.main.async {
-                        self.getScheduledInterval(sender: sender)
-                    }
-                } else if let error = error {
-                    print(error.localizedDescription)
-                    DispatchQueue.main.async {
-                        sender.isOn = false
-                        defaults.set(false, forKey: "jamlyNotifications")
+                        if granted {
+                            print("Notification permission granted.")
+                            defaults.set(true, forKey: "jamlyNotifications")
+                            SettingsViewController.scheduleDailyNudge()
+                        } else {
+                            print("Notification permission denied.")
+                            
+                            // Reset toggle
+                            sender.isOn = false
+                            defaults.set(false, forKey: "jamlyNotifications")
+                            
+                            // Show message telling user how to enable again
+                            let alert = UIAlertController(
+                                title: "Notifications Disabled",
+                                message: "To enable notifications, go to iPhone Settings → Jamly → Notifications.",
+                                preferredStyle: .alert
+                            )
+                            alert.addAction(UIAlertAction(title: "OK", style: .default))
+                            self.present(alert, animated: true)
+                        }
                     }
                 }
+            } else {
+                // user turned notifications OFF
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                defaults.set(false, forKey: "jamlyNotifications")
             }
-        } else {
-            // turn off pending notfications
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        }
     }
     
-    
-    
-    func getScheduledInterval(sender: UISwitch) {
-        let controller = UIAlertController (title: "Input Interval", message: "Enter the number of HOURS you would like to be reminded to open Jamly after inactivity.", preferredStyle: .alert)
+    static func scheduleDailyNudge() {
+        let center = UNUserNotificationCenter.current()
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-        // if user cancels, revert switch
-            sender.isOn = false
-            defaults.set(false, forKey: "jamlyNotifications")
-        }
+        // Cancel existing nudge
+        center.removePendingNotificationRequests(withIdentifiers: ["dailyNudge"])
         
-        controller.addTextField() {
-            (textField) in
-            textField.placeholder = "Enter a number"
-            textField.keyboardType = .decimalPad
-        }
-        
-        let okAction = UIAlertAction(title: "Ok", style: .default) {
-            (action) in
-            guard let timeInterval = controller.textFields![0].text, !timeInterval.isEmpty else {
-                self.makePopup(popupTitle: "Error", popupMessage: "Input cannot be empty")
-                DispatchQueue.main.async {
-                    sender.isOn = false
-                    defaults.set(false, forKey: "jamlyNotifications")
-                }
-                return
-            }
-            
-            guard let timeIntervalValue = Double(timeInterval) else {
-                self.makePopup(popupTitle: "Error", popupMessage: "Make sure to input a value")
-                sender.isOn = false
-                defaults.set(false, forKey: "jamlyNotifications")
-                return
-            }
-            
-            guard timeIntervalValue > 0 else {
-                self.makePopup(popupTitle: "Error", popupMessage: "Interval must be more than 0 hours.")
-                sender.isOn = false
-                defaults.set(false, forKey: "jamlyNotifications")
-                return
-            }
-            
-            self.scheduleNotification(timeIntervalValue: timeIntervalValue)
-            defaults.set(false, forKey: "jamlyNotifications")
-        }
-        
-        controller.addAction(cancelAction)
-        controller.addAction(okAction)
-        present(controller, animated: true)
-    }
-    
-    private func scheduleNotification(timeIntervalValue:Double) {
-        // create content
         let content = UNMutableNotificationContent()
-        content.title = "Jamly misses you."
-        content.subtitle = "You have not visited us in " + String(timeIntervalValue) + " hours"
-        content.sound = UNNotificationSound.default
+        content.title = "We miss you!"
+        content.body = "You haven't visted Jamly today."
+        content.sound = .default
         
-        // create trigger
-        // CHANGE TO MULTIPLY BY 3600
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeIntervalValue*3600, repeats: true)
+        // Schedule for 7 PM every day
+        var dateComponents = DateComponents()
+        dateComponents.hour = 19 // 7 PM
+        dateComponents.minute = 0
         
-        // combine it all into a request
-        let request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
-        
+        let request = UNNotificationRequest(identifier: "dailyNudge", content: content, trigger: trigger)
+        center.add(request) { error in
+            if let error = error {
+                print("Failed to schedule daily nudge: \(error.localizedDescription)")
+            }
+        }
     }
+    
+//    func getScheduledInterval(sender: UISwitch) {
+//        let controller = UIAlertController (title: "Input Interval", message: "Enter the number of HOURS you would like to be reminded to open Jamly after inactivity.", preferredStyle: .alert)
+//        
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+//        // if user cancels, revert switch
+//            sender.isOn = false
+//            defaults.set(false, forKey: "jamlyNotifications")
+//        }
+//        
+//        controller.addTextField() {
+//            (textField) in
+//            textField.placeholder = "Enter a number"
+//            textField.keyboardType = .decimalPad
+//        }
+//        
+//        let okAction = UIAlertAction(title: "Ok", style: .default) {
+//            (action) in
+//            guard let timeInterval = controller.textFields![0].text, !timeInterval.isEmpty else {
+//                self.makePopup(popupTitle: "Error", popupMessage: "Input cannot be empty")
+//                DispatchQueue.main.async {
+//                    sender.isOn = false
+//                    defaults.set(false, forKey: "jamlyNotifications")
+//                }
+//                return
+//            }
+//            
+//            guard let timeIntervalValue = Double(timeInterval) else {
+//                self.makePopup(popupTitle: "Error", popupMessage: "Make sure to input a value")
+//                sender.isOn = false
+//                defaults.set(false, forKey: "jamlyNotifications")
+//                return
+//            }
+//            
+//            guard timeIntervalValue > 0 else {
+//                self.makePopup(popupTitle: "Error", popupMessage: "Interval must be more than 0 hours.")
+//                sender.isOn = false
+//                defaults.set(false, forKey: "jamlyNotifications")
+//                return
+//            }
+//            
+//            self.scheduleNotification(timeIntervalValue: timeIntervalValue)
+//            defaults.set(false, forKey: "jamlyNotifications")
+//        }
+//        
+//        controller.addAction(cancelAction)
+//        controller.addAction(okAction)
+//        present(controller, animated: true)
+//    }
+//    
+//    private func scheduleNotification(timeIntervalValue:Double) {
+//        // create content
+//        let content = UNMutableNotificationContent()
+//        content.title = "Jamly misses you."
+//        content.subtitle = "You have not visited us in " + String(timeIntervalValue) + " hours"
+//        content.sound = UNNotificationSound.default
+//        
+//        // create trigger
+//        // CHANGE TO MULTIPLY BY 3600
+//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeIntervalValue*3600, repeats: true)
+//        
+//        // combine it all into a request
+//        let request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: trigger)
+//        UNUserNotificationCenter.current().add(request)
+//        
+//        
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settingsOptions.count
