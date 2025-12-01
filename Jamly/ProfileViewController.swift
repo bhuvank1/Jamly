@@ -15,6 +15,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var friendsButton: UIButton!
     @IBOutlet weak var addFriendsButton: UIButton!
 
+    @IBOutlet weak var yourPostsLabel: UILabel!
+    @IBOutlet weak var profileStatsButton: UIButton!
+    @IBOutlet weak var listenLaterButton: UIButton!
+    
     // MARK: - Properties
     private var postDocs: [Post] = []
     private var listener: ListenerRegistration?
@@ -36,11 +40,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         displayPostTable.estimatedRowHeight = 72
         displayPostTable.separatorStyle = .singleLine // Set to singleLine for separators between cells
 
-        displayPostTable.backgroundColor = UIColor(hex: "#FFC1CC")
+        displayPostTable.backgroundColor = UIColor(hex: "#FFEFE5")
 
-        let bgView = UIView()
-        bgView.backgroundColor = UIColor(hex: "#FFC1CC")
-        displayPostTable.backgroundView = bgView
 
         // Center the usernameLabel programmatically
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -67,8 +68,35 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         usernameLabel.font = UIFont(name: "Poppins-SemiBold", size: 26)
         usernameLabel.textAlignment = .center // Center the usernameLabel text
 
-        styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
+        // styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
         styleButton(addFriendsButton, title: "Add Friends", bgColor: "#FFC1CC")
+        
+        listenLaterButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        profileStatsButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        friendsButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 14) {
+            listenLaterButton.subtitleLabel?.font = font
+            profileStatsButton.subtitleLabel?.font = font
+            friendsButton.titleLabel?.font = font
+        }
+        
+        yourPostsLabel.textColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        if let font = UIFont(name: "Poppins-Bold", size: 18) {
+            yourPostsLabel.font = font
+        }
+        
+        friendsButton.layer.borderColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0).cgColor
+        friendsButton.layer.borderWidth = 1.5
+        friendsButton.layer.cornerRadius = 10
+        
+        listenLaterButton.layer.borderColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0).cgColor
+        listenLaterButton.layer.borderWidth = 1.5
+        listenLaterButton.layer.cornerRadius = 10
+        
+        profileStatsButton.layer.borderColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0).cgColor
+        profileStatsButton.layer.borderWidth = 1.5
+        profileStatsButton.layer.cornerRadius = 10
     }
 
     private func styleButton(_ button: UIButton, title: String, bgColor: String) {
@@ -80,7 +108,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         config.titleAlignment = .center
         button.configuration = config
 
-        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+        if let font = UIFont(name: "Poppins-SemiBold", size: 14) {
             button.titleLabel?.font = font
         }
 
@@ -230,8 +258,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.songName.text = post.trackObject.name
         cell.songRating.text = "\(post.rating)/5"
 
-        cell.backgroundColor = UIColor(hex: "#FFC1CC")
-        cell.contentView.backgroundColor = UIColor(hex: "#FFC1CC")
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.contentView.backgroundColor = UIColor(hex: "#FFEFE5")
 
         cell.layer.cornerRadius = 12
         cell.contentView.layer.cornerRadius = 12
@@ -249,8 +277,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
         cell.albumPic.layer.cornerRadius = 10
         cell.albumPic.clipsToBounds = true
-        cell.albumPic.layer.borderWidth = 2
-        cell.albumPic.layer.borderColor = UIColor(hex: "#FFF8F3").cgColor
         cell.albumPic.layer.shadowOpacity = 0.05
         cell.albumPic.layer.shadowOffset = CGSize(width: 0, height: 2)
         cell.albumPic.layer.shadowRadius = 4

@@ -19,6 +19,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
         applyAppearancePreference()
         applyGlobalTextColor()
+        
+        let appBg = UIColor(hex: "#FFEFE5")
+        let accent = UIColor(hex: "#FFC1CC")
+
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = appBg
+        tabBarAppearance.shadowColor = accent.withAlphaComponent(0.4)
+
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        if #available(iOS 15.0, *) {
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        }
+        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().tintColor = .label
+        UITabBar.appearance().unselectedItemTintColor = .secondaryLabel
+        UITabBar.appearance().tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        
+
     }
     
     private func applyGlobalTextColor() {

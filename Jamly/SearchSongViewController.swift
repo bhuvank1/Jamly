@@ -21,10 +21,17 @@ class SearchSongViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
         title = "Search Song"
         
         songTableView.dataSource = self
         songTableView.delegate = self
+        songTableView.backgroundColor = .clear
+
+        songTableView.dataSource = self
+        songTableView.delegate = self
+        
+
         
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -37,33 +44,6 @@ class SearchSongViewController: UIViewController, UITableViewDataSource, UITable
         sb.sizeToFit()
         
         songTableView.tableHeaderView = sb
-        
-        // THEME
-        let appBg = UIColor(hex: "#FFEFE5")
-        let accent = UIColor(hex: "#FFC1CC")
-
-        view.backgroundColor = appBg
-        songTableView.backgroundColor = appBg
-        songTableView.separatorColor = accent.withAlphaComponent(0.6)
-        songTableView.tableFooterView = UIView()
-        
-        // Code to stop tab bar changes
-        if let tabBar = tabBarController?.tabBar {
-            let appear = UITabBarAppearance()
-            appear.configureWithOpaqueBackground()
-            appear.backgroundColor = appBg
-            appear.shadowColor = accent.withAlphaComponent(0.4)
-
-            tabBar.standardAppearance = appear
-            if #available(iOS 15.0, *) {
-                tabBar.scrollEdgeAppearance = appear
-            }
-            tabBar.isTranslucent = false
-            tabBar.tintColor = .label
-            tabBar.unselectedItemTintColor = .secondaryLabel
-        }
-
-        definesPresentationContext = true
     }
     
     func updateSearchResults(for searchController: UISearchController) {
