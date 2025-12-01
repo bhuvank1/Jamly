@@ -110,31 +110,6 @@ class SearchSongViewController: UIViewController, UITableViewDataSource, UITable
         cell.textLabel?.numberOfLines = 1
         cell.detailTextLabel?.numberOfLines = 1
         
-        // add button
-        let button = UIButton(type: .system)
-        button.setTitle("+ 🍓", for: .normal)
-        button.backgroundColor = .clear
-
-        // Optional: tag the button so you know which row it belongs to
-        button.tag = indexPath.row
-
-        // Add action
-//        button.addTarget(self, action: #selector(addToListenLater(_:)), for: .touchUpInside)
-
-        // Set frame (or use Auto Layout for better layout)
-        let buttonWidth: CGFloat = 80
-        let buttonHeight: CGFloat = 30
-        button.frame = CGRect(
-            x: cell.contentView.frame.width - buttonWidth - 16,
-            y: (cell.contentView.frame.height - buttonHeight) / 2,
-            width: buttonWidth,
-            height: buttonHeight
-        )
-
-        // Add to cell
-        cell.contentView.addSubview(button)
-        
-        
         //image setup and check
         if let cachedImage = content.image {
             cell.imageView?.image = cachedImage
