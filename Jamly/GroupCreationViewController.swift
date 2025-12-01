@@ -9,11 +9,14 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class GroupCreationViewController: UIViewController {
+class GroupCreationViewController: UIViewController, SelectSongDelegate {
 
     @IBOutlet weak var groupNameTextField: UITextField!
     @IBOutlet weak var groupDescriptionTextField: UITextField!
     @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var selectGroupImageButton: UIButton!
+    @IBOutlet weak var groupImageView: UIImageView!
+    private var selectedCoverURL: String?
     
     private let db = Firestore.firestore()
     private var isLocked = false //variable to prevent duplicate creation
@@ -27,9 +30,31 @@ class GroupCreationViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        groupImageView.image = UIImage(systemName: "music.note")
+        groupImageView.tintColor = UIColor(hex: "#E983D8")
         errorLabel.isHidden = true
     }
     
+    // SelectSongDelegate
+    func didSelectSong(_ track: Track) {
+        selectedCoverURL = track.albumArt
+        
+        // Preview the chosen cover
+        if let urlStr = track.albumArt, let url = URL(string: urlStr) {
+            URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                guard let self = self, let data = data, let img = UIImage(data: data) else { return }
+                DispatchQueue.main.async {
+                    self.groupImageView.image = img
+                    self.groupImageView.layer.borderColor = UIColor(hex: "#FFF8F3").cgColor
+                }
+            }.resume()
+        } else {
+            // Fallback icon if no art on the track
+            groupImageView.image = UIImage(systemName: "music.note")
+            groupImageView.tintColor = UIColor(hex: "#E983D8")
+        }
+    }
+
     
     @IBAction func createButtonClicked(_ sender: Any) {
         guard !isLocked else { return }
@@ -64,6 +89,7 @@ class GroupCreationViewController: UIViewController {
             "creatorDisplayName": creatorDisplayName,
             "members": [user.uid],   // only the creator for now
             "postsID": [],           // intentionally empty
+            "groupImage": selectedCoverURL ?? "Missing"
         ]
 
         db.collection("groups").addDocument(data: doc) { [weak self] error in
@@ -80,6 +106,17 @@ class GroupCreationViewController: UIViewController {
                 self.dismiss(animated: true)
             } else {
                 self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "groupSelectCover" {
+            if let vc = segue.destination as? SelectSongViewController {
+                vc.delegate = self
+            } else if let nav = segue.destination as? UINavigationController,
+                      let vc = nav.topViewController as? SelectSongViewController {
+                vc.delegate = self
             }
         }
     }

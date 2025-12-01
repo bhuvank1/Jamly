@@ -49,6 +49,23 @@ class SelectSongViewController: UIViewController, UITableViewDataSource, UITable
         selectSongTable.backgroundColor = appBg
         selectSongTable.separatorColor = accent.withAlphaComponent(0.6)
         selectSongTable.tableFooterView = UIView()
+        
+        // Code to stop tab bar changes
+        if let tabBar = tabBarController?.tabBar {
+            let appear = UITabBarAppearance()
+            appear.configureWithOpaqueBackground()
+            appear.backgroundColor = appBg
+            appear.shadowColor = accent.withAlphaComponent(0.4)
+
+            tabBar.standardAppearance = appear
+            if #available(iOS 15.0, *) {
+                tabBar.scrollEdgeAppearance = appear
+            }
+            tabBar.isTranslucent = false
+            tabBar.tintColor = .label
+            tabBar.unselectedItemTintColor = .secondaryLabel
+        }
+        
 
         definesPresentationContext = true
     }

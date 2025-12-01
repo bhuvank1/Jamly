@@ -178,7 +178,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if segue.identifier == "showAddFriendsSegue",
            let nav = segue.destination as? UINavigationController,
            let _ = nav.topViewController as? SearchViewController {
-            print("Navigating to Add Friends screen")
         }
     }
 

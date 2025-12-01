@@ -12,6 +12,7 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
     
     var group: Group!
     
+    @IBOutlet weak var groupCoverImageView: UIImageView!
     @IBOutlet weak var groupDescription: UILabel!
     @IBOutlet weak var playlistTableView: UITableView!
     
@@ -25,6 +26,7 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         title = group?.name
         groupDescription.text = group?.description
+        applyGroupCover(group.groupImage)
         
         playlistTableView.dataSource = self
         playlistTableView.delegate = self
@@ -207,6 +209,26 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
         default:
             break
         }
+    }
+    
+    
+    //Helper func to load image
+    private func applyGroupCover(_ urlString: String?) {
+        // If missing or empty, keep whatever placeholder you already set
+        guard let urlStr = urlString, !urlStr.isEmpty, let url = URL(string: urlStr) else { return }
+
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let self = self, let data = data, let img = UIImage(data: data) else { return }
+            DispatchQueue.main.async {
+                self.groupCoverImageView.image = img
+                // Optional styling
+                self.groupCoverImageView.contentMode = .scaleAspectFill
+                self.groupCoverImageView.clipsToBounds = true
+                self.groupCoverImageView.layer.cornerRadius = 12
+                self.groupCoverImageView.layer.borderWidth = 2
+                self.groupCoverImageView.layer.borderColor = UIColor(hex: "#FFF8F3").cgColor
+            }
+        }.resume()
     }
     
 }
