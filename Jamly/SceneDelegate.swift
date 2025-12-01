@@ -42,6 +42,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
         }
     }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        if defaults.bool(forKey: "jamlyNotifications") {
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["dailyNudge"])
+            SettingsViewController.scheduleDailyNudge()
+        }
+    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
