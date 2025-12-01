@@ -43,6 +43,21 @@ class ProfileStatisticsViewController: UIViewController, UITableViewDataSource, 
         tableView.delegate = self
         tableView.tableFooterView = UIView()
         
+        // THEME
+        let appBg = UIColor(hex: "#FFEFE5")
+        let accent = UIColor(hex: "#FFC1CC")
+
+        view.backgroundColor = appBg
+        tableView.backgroundColor = appBg
+        tableView.separatorColor = accent.withAlphaComponent(0.6)
+        tableView.tableFooterView = UIView()
+
+        // Segmented controls
+        typeSeg.backgroundColor = appBg
+        typeSeg.selectedSegmentTintColor = accent
+        amountSeg.backgroundColor = appBg
+        amountSeg.selectedSegmentTintColor = accent
+        
         runQuery()
         
     }
@@ -140,6 +155,12 @@ class ProfileStatisticsViewController: UIViewController, UITableViewDataSource, 
             cell.imageView?.image = UIImage(systemName: "music.note")
             cell.setNeedsLayout()
         }
+        
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        let selected = UIView()
+        selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
+        cell.selectedBackgroundView = selected
+        
         return cell
     }
     

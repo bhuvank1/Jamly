@@ -2,233 +2,306 @@
 //  SearchViewController.swift
 //  Jamly
 //
-//  Created by Rohan Pant on 10/17/25.
-//
 
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
-   
+class SearchViewController: UIViewController,
+                            UISearchBarDelegate,
+                            UITableViewDataSource,
+                            UITableViewDelegate {
+
+    // MARK: - Outlets
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var displayNameLabel: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var friendsButton: UIButton!
     @IBOutlet weak var addFriendButton: UIButton!
     @IBOutlet weak var displayPostTable: UITableView!
-    
-    // NEW
     @IBOutlet weak var noPostsLabel: UILabel!
-   
+
+    // MARK: - Properties
     private var postDocs: [Post] = []
     private var foundUserID: String?
-    var user: User?
-    private let db = Firestore.firestore()
     private var isAlreadyFriend = false
-   
-    /// When coming from MyFriendsViewController, this will be set
+    private var user: User?
+    private let db = Firestore.firestore()
+
     var initialFriendUID: String?
-   
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+
+        applyJamThemeStyling()
+
         searchBar.delegate = self
-        displayPostTable.dataSource = self
         displayPostTable.delegate = self
-        displayPostTable.isScrollEnabled = true
+        displayPostTable.dataSource = self
         displayPostTable.rowHeight = UITableView.automaticDimension
         displayPostTable.estimatedRowHeight = 72
-       
-        // Hide UI until user found
-        [displayNameLabel, nameLabel, displayPostTable, noPostsLabel].forEach { $0?.isHidden = true }
+
+        // Start hidden
+        displayNameLabel.isHidden = true
         friendsButton.isHidden = true
         addFriendButton.isHidden = true
-        addFriendButton.isEnabled = false
-       
-        if let textField = searchBar.searchTextField as UITextField? {
-            textField.autocapitalizationType = .none
+        displayPostTable.isHidden = true
+        noPostsLabel.isHidden = true
+
+        if let tf = searchBar.searchTextField as UITextField? {
+            tf.autocapitalizationType = .none
         }
-       
-        // If opened with a specific friend UID
+
         if let uid = initialFriendUID {
             loadUser(byUID: uid)
         }
     }
-   
-    // MARK: - Search by display name
+
+    // MARK: - Styling
+    private func applyJamThemeStyling() {
+        view.backgroundColor = UIColor(hex: "#FFEFE5")
+
+        displayNameLabel.textColor = UIColor(hex: "#3D1F28")
+        displayNameLabel.font = UIFont(name: "Poppins-SemiBold", size: 20)
+
+        noPostsLabel.textColor = UIColor(hex: "#3D1F28")
+        noPostsLabel.font = UIFont(name: "Poppins-SemiBold", size: 18)
+
+        styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
+        applyAddFriendStyle()
+
+        displayPostTable.backgroundColor = UIColor(hex: "#FFC1CC")
+        let bg = UIView()
+        bg.backgroundColor = UIColor(hex: "#FFC1CC")
+        displayPostTable.backgroundView = bg
+    }
+
+    private func styleButton(_ button: UIButton, title: String, bgColor: String) {
+        var config = UIButton.Configuration.filled()
+        config.title = title
+        config.baseBackgroundColor = UIColor(hex: bgColor)
+        config.baseForegroundColor = UIColor(hex: "#3D1F28")
+        config.cornerStyle = .medium
+        config.titleAlignment = .center
+        button.configuration = config
+
+        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+            button.titleLabel?.font = font
+        }
+
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.1
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+    }
+
+    // MARK: - Add Friend Style (Pink)
+    private func applyAddFriendStyle() {
+        var config = UIButton.Configuration.filled()
+        config.title = "Add As Friend"
+        config.baseBackgroundColor = UIColor(hex: "#FFC1CC")    // Pink
+        config.baseForegroundColor = UIColor(hex: "#3D1F28")    // Dark text
+        config.cornerStyle = .medium
+        config.titleAlignment = .center
+        addFriendButton.configuration = config
+
+        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+            addFriendButton.titleLabel?.font = font
+        }
+    }
+
+    // MARK: - Remove Friend Style (Red)
+    private func applyRemoveFriendStyle() {
+        var config = UIButton.Configuration.filled()
+        config.title = "Remove As Friend"
+        config.baseBackgroundColor = UIColor(hex: "#FF6B6B")     // Soft red
+        config.baseForegroundColor = .white                     // White text
+        config.cornerStyle = .medium
+        config.titleAlignment = .center
+        addFriendButton.configuration = config
+
+        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+            addFriendButton.titleLabel?.font = font
+        }
+    }
+
+    // MARK: - Search
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.isEmpty else { return }
         searchUser(byDisplayName: text)
         searchBar.resignFirstResponder()
     }
-   
+
     private func searchUser(byDisplayName displayName: String) {
         db.collection("userInfo")
             .whereField("displayName", isEqualTo: displayName)
             .limit(to: 1)
             .getDocuments { [weak self] snap, err in
+
                 guard let self = self else { return }
                 if let err = err {
                     self.alert("Error", err.localizedDescription)
                     return
                 }
+
                 guard let doc = snap?.documents.first else {
-                    self.alert("Not found", "No user with that display name.")
-                    self.addFriendButton.isHidden = true
-                    self.friendsButton.isHidden = true
+                    self.alert("Not Found", "No user with that display name.")
                     return
                 }
-               
+
                 self.foundUserID = doc.documentID
                 let d = doc.data()
-                let friends = d["friends"] as? [String] ?? []
+
                 self.user = User(
                     displayName: d["displayName"] as? String ?? "",
-                    email:       d["email"] as? String ?? "",
-                    mobileNumber:d["mobileNumber"] as? String ?? "",
-                    name:        d["name"] as? String ?? "",
-                    friends:     friends
+                    email: d["email"] as? String ?? "",
+                    mobileNumber: d["mobileNumber"] as? String ?? "",
+                    name: d["name"] as? String ?? "",
+                    friends: d["friends"] as? [String] ?? []
                 )
-               
+
                 DispatchQueue.main.async {
                     self.updateProfileUI()
                     self.fetchPostsForUser()
                 }
             }
     }
-   
-    // MARK: - Load user directly by UID
+
+    // MARK: - Load by UID
     public func loadUser(byUID uid: String) {
         db.collection("userInfo").document(uid).getDocument { [weak self] doc, err in
             guard let self = self else { return }
+
             if let err = err {
                 self.alert("Error", err.localizedDescription)
                 return
             }
             guard let doc = doc, let data = doc.data() else {
-                self.alert("Not found", "Could not load this user.")
+                self.alert("Not Found", "Could not load this user.")
                 return
             }
-            let friends = data["friends"] as? [String] ?? []
+
             self.foundUserID = doc.documentID
             self.user = User(
                 displayName: data["displayName"] as? String ?? "",
-                email:       data["email"] as? String ?? "",
-                mobileNumber:data["mobileNumber"] as? String ?? "",
-                name:        data["name"] as? String ?? "",
-                friends:     friends
+                email: data["email"] as? String ?? "",
+                mobileNumber: data["mobileNumber"] as? String ?? "",
+                name: data["name"] as? String ?? "",
+                friends: data["friends"] as? [String] ?? []
             )
+
             DispatchQueue.main.async {
                 self.updateProfileUI()
                 self.fetchPostsForUser()
             }
         }
     }
-   
+
+    // MARK: - Update UI
     private func updateProfileUI() {
         guard let u = user else { return }
-       
+
         displayNameLabel.text = "Display Name: \(u.displayName)"
-        nameLabel.text        = "Name: \(u.name)"
-       
-        [displayNameLabel, nameLabel].forEach { $0?.isHidden = false }
+        displayNameLabel.isHidden = false
         friendsButton.isHidden = false
         addFriendButton.isHidden = false
-        
-        // Reset posts UI
+
         displayPostTable.isHidden = false
         noPostsLabel.isHidden = true
-       
-        // Default state
-        addFriendButton.isEnabled = false
-        addFriendButton.setTitle("Add Friend", for: .normal)
-       
-        // Disable if it's current user or already a friend
-        guard let currentUID = Auth.auth().currentUser?.uid,
-              let targetUID = self.foundUserID else { return }
-       
-        if currentUID == targetUID {
-            self.isAlreadyFriend = true
-            self.addFriendButton.isEnabled = false
-            self.addFriendButton.setTitle("This is You", for: .normal)
-            return
-        }
-       
-        db.collection("userInfo").document(currentUID).getDocument { [weak self] doc, _ in
+
+        guard let myID = Auth.auth().currentUser?.uid,
+              let targetID = foundUserID else { return }
+
+        db.collection("userInfo").document(myID).getDocument { [weak self] doc, _ in
             guard let self = self else { return }
             let mine = doc?.data()?["friends"] as? [String] ?? []
-            let already = mine.contains(targetUID)
+            self.isAlreadyFriend = mine.contains(targetID)
+
             DispatchQueue.main.async {
-                self.isAlreadyFriend = already
-                if already {
+                if myID == targetID {
                     self.addFriendButton.isEnabled = false
-                    self.addFriendButton.setTitle("Already Friends", for: .normal)
+                    var config = UIButton.Configuration.filled()
+                    config.title = "This is You"
+                    config.baseBackgroundColor = UIColor.gray
+                    config.baseForegroundColor = .white
+                    config.cornerStyle = .medium
+                    config.titleAlignment = .center
+                    self.addFriendButton.configuration = config
+                    if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
+                        self.addFriendButton.titleLabel?.font = font
+                    }
                 } else {
+                    // Other user
                     self.addFriendButton.isEnabled = true
-                    self.addFriendButton.setTitle("Add Friend", for: .normal)
+                    if self.isAlreadyFriend {
+                        self.applyRemoveFriendStyle()
+                    } else {
+                        self.applyAddFriendStyle()
+                    }
                 }
             }
         }
     }
-   
-    // MARK: - Fetch Posts for found user
+
+
+    // MARK: - Fetch Posts
     private func fetchPostsForUser() {
         guard let uid = foundUserID else { return }
-       
-        self.postDocs.removeAll()
-        self.displayPostTable.reloadData()
-       
-        db.collection("posts").whereField("userID", isEqualTo: uid).getDocuments {
-            (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let data = document.data()
-                    if let rating = data["rating"] as? Int ?? (data["rating"] as? NSNumber)?.intValue,
-                       let caption = data["caption"] as? String {
-                        let likes = data["likes"] as? [String] ?? []
-                       
-                        let commentDicts = data["comments"] as? [[String: Any]] ?? []
-                        var comments: [Comment] = []
-                        for dict in commentDicts {
-                            if let userID = dict["userID"] as? String,
-                               let commentText = dict["commentText"] as? String {
-                                let comment = Comment(userID: userID, commentText: commentText)
-                                comments.append(comment)
-                            }
-                        }
-                       
-                        let trackData = data["trackObject"] as? [String: Any]
-                        let track = Track(
-                            id: trackData?["id"] as? String ?? "",
-                            name: trackData?["name"] as? String ?? "Unknown Song",
-                            artists: trackData?["artists"] as? String ?? "Unknown Artist",
-                            duration_ms: trackData?["duration_ms"] as? Int ?? 0,
-                            albumArt: trackData?["albumArt"] as? String,
-                            image: nil
+
+        postDocs.removeAll()
+        displayPostTable.reloadData()
+
+        db.collection("posts")
+            .whereField("userID", isEqualTo: uid)
+            .getDocuments { [weak self] snap, err in
+
+                guard let self = self else { return }
+                if let err = err { print("Error fetching posts:", err); return }
+
+                for doc in snap?.documents ?? [] {
+                    let d = doc.data()
+
+                    guard let caption = d["caption"] as? String else { continue }
+                    let rating = d["rating"] as? Int ?? 0
+                    let likes = d["likes"] as? [String] ?? []
+
+                    let commentsArr = d["comments"] as? [[String:Any]] ?? []
+                    let comments = commentsArr.compactMap {
+                        Comment(
+                            userID: $0["userID"] as? String ?? "",
+                            commentText: $0["commentText"] as? String ?? ""
                         )
-                       
-                        let newPost = Post(userID: uid,
-                                           displayName: self.user?.displayName ?? "Unknown User",
-                                           postID: document.documentID,
-                                           rating: rating,
-                                           likes: likes,
-                                           caption: caption,
-                                           comments: comments,
-                                           trackObject: track)
-                        self.postDocs.append(newPost)
                     }
+
+                    let t = d["trackObject"] as? [String:Any]
+                    let track = Track(
+                        id: t?["id"] as? String ?? "",
+                        name: t?["name"] as? String ?? "Unknown Song",
+                        artists: t?["artists"] as? String ?? "Unknown Artist",
+                        duration_ms: t?["duration_ms"] as? Int ?? 0,
+                        albumArt: t?["albumArt"] as? String,
+                        image: nil
+                    )
+
+                    let post = Post(
+                        userID: uid,
+                        displayName: user?.displayName ?? "Unknown User",
+                        postID: doc.documentID,
+                        rating: rating,
+                        likes: likes,
+                        caption: caption,
+                        comments: comments,
+                        trackObject: track
+                    )
+                    self.postDocs.append(post)
                 }
-               
+
                 DispatchQueue.main.async {
                     self.displayPostTable.reloadData()
-                    
-                    // NEW — Show "No Posts to Display" if empty
+
                     if self.postDocs.isEmpty {
+                        self.noPostsLabel.text = "\(self.user?.displayName ?? "User") has no posts"
                         self.noPostsLabel.isHidden = false
-                        self.noPostsLabel.text = self.user!.displayName + " has no posts"
                         self.displayPostTable.isHidden = true
                     } else {
                         self.noPostsLabel.isHidden = true
@@ -236,122 +309,136 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDa
                     }
                 }
             }
-        }
     }
-   
-    // MARK: - TableView Data Source
+
+    // MARK: - TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return postDocs.count
     }
-   
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = displayPostTable.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as? PostThumbnailTableViewCell else {
+
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "postCell",
+            for: indexPath
+        ) as? PostThumbnailTableViewCell else {
             fatalError("Could not dequeue postCell")
         }
-       
-        let postData = postDocs[indexPath.row]
-        cell.songName.text = postData.trackObject.name
-        cell.songRating.text = "\(String(postData.rating))/5"
-       
-        if let albumArtURL = postData.trackObject.albumArt, let url = URL(string: albumArtURL) {
+
+        let post = postDocs[indexPath.row]
+
+        cell.songName.text = post.trackObject.name
+        cell.songName.textColor = UIColor(hex: "#3D1F28")
+        cell.songName.font = UIFont(name: "Poppins-SemiBold", size: 16)
+
+        cell.songRating.text = "\(post.rating)/5"
+        cell.songRating.textColor = UIColor(hex: "#3D1F28")
+        cell.songRating.font = UIFont(name: "Poppins-Regular", size: 14)
+
+        if let urlStr = post.trackObject.albumArt, let url = URL(string: urlStr) {
+            cell.albumPic.image = UIImage(named: "albumPlaceholder")
             URLSession.shared.dataTask(with: url) { data, _, _ in
-                guard let data = data, let img = UIImage(data: data) else { return }
-                DispatchQueue.main.async {
-                    if let visibleCell = tableView.cellForRow(at: indexPath) as? PostThumbnailTableViewCell {
-                        visibleCell.albumPic.image = img
+                if let data = data, let img = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        if let visible = tableView.cellForRow(at: indexPath)
+                            as? PostThumbnailTableViewCell {
+                            visible.albumPic.image = img
+                        }
                     }
                 }
             }.resume()
+        } else {
+            cell.albumPic.image = UIImage(named: "albumPlaceholder")
         }
+
+        cell.backgroundColor = UIColor(hex: "#FFC1CC")
+        cell.layer.cornerRadius = 12
+        cell.layer.masksToBounds = false
+        cell.contentView.layer.cornerRadius = 12
+        cell.contentView.layer.masksToBounds = true
+
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowOpacity = 0.1
+        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cell.layer.shadowRadius = 4
+        cell.layer.shouldRasterize = true
+        cell.layer.rasterizationScale = UIScreen.main.scale
+
+        cell.contentView.layoutMargins = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+
         return cell
     }
-   
-    // MARK: - Add Friend
+
+
+
+    // MARK: - Add/Remove Friend Toggle
     @IBAction func addFriendButtonTapped(_ sender: UIButton) {
-        guard let currentUID = Auth.auth().currentUser?.uid else {
+        guard let myID = Auth.auth().currentUser?.uid else {
             alert("Not signed in", "Please sign in first.")
             return
         }
-        guard let friendUID = foundUserID else { return }
-       
-        if currentUID == friendUID {
-            alert("Oops", "You can’t add yourself.")
-            return
-        }
-       
-        let myDoc = db.collection("userInfo").document(currentUID)
-        let friendDoc = db.collection("userInfo").document(friendUID)
-       
-        myDoc.getDocument { [weak self] snapshot, err in
-            guard let self = self else { return }
-            if let err = err { self.alert("Error", err.localizedDescription); return }
-           
-            let mine = snapshot?.data()?["friends"] as? [String] ?? []
-            if mine.contains(friendUID) {
-                self.isAlreadyFriend = true
-                self.addFriendButton.isEnabled = false
-                self.addFriendButton.setTitle("Already Friends", for: .normal)
-                self.alert("Already Friends", "You’ve already added this user.")
-                return
-            }
-           
-            self.addFriendButton.isEnabled = false
-            myDoc.updateData(["friends": FieldValue.arrayUnion([friendUID])]) { [weak self] err in
-                guard let self = self else { return }
-                if let err = err {
-                    self.alert("Error", err.localizedDescription)
-                    self.addFriendButton.isEnabled = true
-                    return
-                }
-               
-                friendDoc.updateData(["friends": FieldValue.arrayUnion([currentUID])]) { _ in }
-               
-                self.isAlreadyFriend = true
-                self.addFriendButton.setTitle("Already Friends", for: .normal)
-                self.addFriendButton.isEnabled = false
-               
-                if var u = self.user, !u.friends.contains(friendUID) {
-                    u.friends.append(friendUID)
-                    self.user = u
-                    self.friendsButton.setTitle("Friends (\(u.friends.count))", for: .normal)
-                }
-            }
+        guard let friendID = foundUserID else { return }
+
+        if myID == friendID { return }
+
+        let myDoc = db.collection("userInfo").document(myID)
+        let friendDoc = db.collection("userInfo").document(friendID)
+
+        addFriendButton.isEnabled = false
+
+        if isAlreadyFriend {
+            // REMOVE FRIEND
+            myDoc.updateData(["friends": FieldValue.arrayRemove([friendID])])
+            friendDoc.updateData(["friends": FieldValue.arrayRemove([myID])])
+
+            isAlreadyFriend = false
+            applyAddFriendStyle()
+            addFriendButton.isEnabled = true
+
+        } else {
+            // ADD FRIEND
+            myDoc.updateData(["friends": FieldValue.arrayUnion([friendID])])
+            friendDoc.updateData(["friends": FieldValue.arrayUnion([myID])])
+
+            isAlreadyFriend = true
+            applyRemoveFriendStyle()
+            addFriendButton.isEnabled = true
         }
     }
-   
-    // MARK: - Friends List
+
+    // MARK: - Friends button
     @IBAction func friendsButtonTapped(_ sender: UIButton) {
         guard let ids = user?.friends, !ids.isEmpty else {
-            alert("No friends", "This user has no friends yet.")
+            alert("No Friends", "This user has no friends.")
             return
         }
         performSegue(withIdentifier: "showFriendsSegue", sender: ids)
     }
-   
-    // MARK: - Segues OUT of SearchVC
+
+    // MARK: - Segues
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "postDetailSegue",
-           let postIndex = displayPostTable.indexPathForSelectedRow?.row,
-           let destVC = segue.destination as? PostDetailViewController {
-            destVC.post = postDocs[postIndex]
+           let i = displayPostTable.indexPathForSelectedRow?.row,
+           let dest = segue.destination as? PostDetailViewController {
+            dest.post = postDocs[i]
         }
-       
+
         if segue.identifier == "showFriendsSegue",
            let dest = segue.destination as? UserFriendsViewController {
             dest.friendIDs = user?.friends ?? []
         }
     }
-   
-    // MARK: - Unwind from UserFriendsViewController
+
+    // MARK: - Unwind
     @IBAction func unwindToSearchViewController(_ segue: UIStoryboardSegue) {
-        if let friendsVC = segue.source as? UserFriendsViewController,
-           let uid = friendsVC.selectedFriendUID {
+        if let src = segue.source as? UserFriendsViewController,
+           let uid = src.selectedFriendUID {
             searchBar.text = ""
             loadUser(byUID: uid)
         }
     }
-   
-    // MARK: - Alert Helper
+
+    // MARK: - Alerts
     private func alert(_ title: String, _ msg: String) {
         let ac = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))

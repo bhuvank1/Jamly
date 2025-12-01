@@ -25,13 +25,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
 
         applyJamThemeStyling()
+        if let navBar = navigationController?.navigationBar {
+            navBar.barTintColor = UIColor(hex: "#FFEFE5")
+        }
 
         displayPostTable.dataSource = self
         displayPostTable.delegate   = self
 
         displayPostTable.rowHeight  = UITableView.automaticDimension
         displayPostTable.estimatedRowHeight = 72
-        displayPostTable.separatorStyle = .none
+        displayPostTable.separatorStyle = .singleLine // Set to singleLine for separators between cells
 
         displayPostTable.backgroundColor = UIColor(hex: "#FFC1CC")
 
@@ -39,9 +42,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         bgView.backgroundColor = UIColor(hex: "#FFC1CC")
         displayPostTable.backgroundView = bgView
 
+        // Center the usernameLabel programmatically
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        usernameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+
         loadUserProfile()
         loadFriendList()
     }
+
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -56,6 +65,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
         usernameLabel.textColor = UIColor(hex: "#3D1F28")
         usernameLabel.font = UIFont(name: "Poppins-SemiBold", size: 26)
+        usernameLabel.textAlignment = .center // Center the usernameLabel text
 
         styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
         styleButton(addFriendsButton, title: "Add Friends", bgColor: "#FFC1CC")
@@ -221,7 +231,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.songName.text = post.trackObject.name
         cell.songRating.text = "\(post.rating)/5"
 
-        // MARK: 🔥 Cell UI Styling (Same color as buttons)
         cell.backgroundColor = UIColor(hex: "#FFC1CC")
         cell.contentView.backgroundColor = UIColor(hex: "#FFC1CC")
 
@@ -239,7 +248,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cornerRadius: 12
         ).cgPath
 
-        // Album Art Styling
         cell.albumPic.layer.cornerRadius = 10
         cell.albumPic.clipsToBounds = true
         cell.albumPic.layer.borderWidth = 2
@@ -248,7 +256,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.albumPic.layer.shadowOffset = CGSize(width: 0, height: 2)
         cell.albumPic.layer.shadowRadius = 4
 
-        // Load album image
         if let urlStr = post.trackObject.albumArt, let url = URL(string: urlStr) {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data, let img = UIImage(data: data) {
