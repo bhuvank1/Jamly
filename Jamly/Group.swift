@@ -16,6 +16,7 @@ struct Group {
     let creatorDisplayName: String
     let members: [String]
     let playlist: [Track]
+    let groupImage: String
 
     init?(doc: DocumentSnapshot) {
         let data = doc.data() ?? [:]
@@ -31,6 +32,7 @@ struct Group {
         self.creatorID = creatorID
         self.creatorDisplayName = "Unknown"
         self.members = data["members"] as? [String] ?? []
+        self.groupImage = data["groupImage"] as? String ?? "Missing"
         
         if let rawPlaylist = data["playlist"] as? [[String: Any]] {
             self.playlist = rawPlaylist.compactMap { Track.fromDictionary($0) }

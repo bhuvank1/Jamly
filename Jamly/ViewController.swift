@@ -88,9 +88,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                  cell.likesButton.setTitle(String(post.likes.count), for: .normal)
                 
                 if post.likes.contains(currentUID) {
-                   cell.likesButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                   cell.likeHeartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                   cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
                    } else {
-                    cell.likesButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                    cell.likeHeartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                    cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
                    }
             }
             
@@ -289,9 +291,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // likes button image
         guard let currentUID = Auth.auth().currentUser?.uid else { return cell }
         if post.likes.contains(currentUID) {
-            cell.likesButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            cell.likeHeartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
         } else {
-            cell.likesButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            cell.likeHeartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
         }
         return cell
     }
