@@ -980,6 +980,16 @@
             </objects>
             <point key="canvasLocation" x="2420.4545454545455" y="-845.39748953974902"/>
         </scene>
+        <!--ListenLaterVC-->
+        <scene sceneID="rky-EK-uC4">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ListenLater" referencedIdentifier="ListenLaterVC" id="bI2-cV-Oz3" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="a0H-jH-OPX"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sla-N2-g8v" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2582" y="-731"/>
+        </scene>
         <!--Profile View Controller-->
         <scene sceneID="6Sn-bL-jrf">
             <objects>
@@ -1001,7 +1011,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="108" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-MC-vri">
-                                                    <rect key="frame" x="20" y="17" width="231.33333333333331" height="80"/>
+                                                    <rect key="frame" x="20" y="17" width="231.33333333333334" height="80"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beach_test_image" translatesAutoresizingMaskIntoConstraints="NO" id="0zh-Tk-YqS">
                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
@@ -1046,55 +1056,8 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RpN-OM-u0y" userLabel="FFEFE5&quot;">
-                                <rect key="frame" x="0.0" y="328" width="440" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.99612146615982056" green="0.98822838068008423" blue="0.99607044458389282" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <items>
-                                    <navigationItem id="FYn-1k-LRm">
-                                        <nil key="title"/>
-                                        <leftBarButtonItems>
-                                            <barButtonItem style="plain" id="DKv-TY-s6k">
-                                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="42b-Ae-jhe">
-                                                    <rect key="frame" x="0.0" y="5" width="53.333333333333336" height="34.333333333333336"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="chart.bar.xaxis.ascending" catalog="system" title="">
-                                                        <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </buttonConfiguration>
-                                                    <connections>
-                                                        <segue destination="795-aZ-ngM" kind="show" id="SFx-V1-kN7"/>
-                                                    </connections>
-                                                </button>
-                                            </barButtonItem>
-                                            <barButtonItem style="plain" id="bZm-PR-g92">
-                                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="WwK-qP-M0n">
-                                                    <rect key="frame" x="61.333333333333329" y="5" width="42.333333333333329" height="34.333333333333336"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="music.note" catalog="system" title="">
-                                                        <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </buttonConfiguration>
-                                                    <connections>
-                                                        <segue destination="hdZ-lM-9L2" kind="show" id="qCU-YX-GCc"/>
-                                                    </connections>
-                                                </button>
-                                            </barButtonItem>
-                                        </leftBarButtonItems>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7te-I9-IXM">
-                                <rect key="frame" x="235" y="217" width="138" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Friends"/>
-                                <connections>
-                                    <segue destination="bYr-HG-afs" kind="show" identifier="showAddFriendsSegue" id="BAU-Ij-Afu"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="01G-fa-WBR">
-                                <rect key="frame" x="24" y="217" width="116" height="35"/>
+                                <rect key="frame" x="35" y="90" width="116" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Add Friends"/>
@@ -1103,9 +1066,43 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Username" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qMp-RT-aQI">
-                                <rect key="frame" x="20" y="151" width="400" height="26"/>
+                                <rect key="frame" x="20" y="150" width="400" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="756" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7te-I9-IXM">
+                                <rect key="frame" x="45" y="184" width="114" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="friends"/>
+                                <connections>
+                                    <segue destination="bYr-HG-afs" kind="show" identifier="showAddFriendsSegue" id="BAU-Ij-Afu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="1wa-8U-Lpk">
+                                <rect key="frame" x="167" y="184" width="119" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="music.note.list" catalog="system" title="" subtitle="Listen Later"/>
+                                <connections>
+                                    <segue destination="bI2-cV-Oz3" kind="show" id="oKD-I5-GAj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="vzR-lg-mzl">
+                                <rect key="frame" x="301" y="184" width="85" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="chart.xyaxis.line" catalog="system" title="" subtitle="Stats"/>
+                                <connections>
+                                    <segue destination="795-aZ-ngM" kind="show" id="P3c-HN-feo"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your Posts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CWP-tQ-2HV">
+                                <rect key="frame" x="161" y="309" width="118" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -1115,7 +1112,7 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="Ka6-WH-d1i">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="g4h-Bt-dQc">
+                        <barButtonItem key="rightBarButtonItem" image="gearshape" catalog="system" style="plain" id="g4h-Bt-dQc">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="lcF-Ry-fwU">
                                 <rect key="frame" x="333" y="5" width="87" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1132,7 +1129,10 @@
                         <outlet property="addFriendsButton" destination="01G-fa-WBR" id="GC8-Cw-hSu"/>
                         <outlet property="displayPostTable" destination="cVY-pT-pGe" id="cDg-Nb-2g1"/>
                         <outlet property="friendsButton" destination="7te-I9-IXM" id="5u3-A7-tgn"/>
+                        <outlet property="listenLaterButton" destination="1wa-8U-Lpk" id="4xt-jd-Qy6"/>
+                        <outlet property="profileStatsButton" destination="vzR-lg-mzl" id="lLB-Na-EoY"/>
                         <outlet property="usernameLabel" destination="qMp-RT-aQI" id="Y0S-Aj-aXC"/>
+                        <outlet property="yourPostsLabel" destination="CWP-tQ-2HV" id="TC3-Ih-6Xm"/>
                         <segue destination="ZIj-Ci-L1s" kind="show" identifier="showAddFriendsSegue" id="eUS-3B-pfB"/>
                     </connections>
                 </viewController>
@@ -1556,12 +1556,13 @@
         <image name="Home 2" width="24" height="24"/>
         <image name="Jamly_LogoPDF" width="159" height="160"/>
         <image name="beach_test_image" width="2726" height="2047"/>
-        <image name="chart.bar.xaxis.ascending" catalog="system" width="128" height="97"/>
+        <image name="chart.xyaxis.line" catalog="system" width="128" height="102"/>
+        <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="lightbulb.circle.fill" catalog="system" width="128" height="123"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="magnifyingglass.circle.fill" catalog="system" width="128" height="123"/>
         <image name="message" catalog="system" width="128" height="116"/>
-        <image name="music.note" catalog="system" width="96" height="128"/>
+        <image name="music.note.list" catalog="system" width="128" height="115"/>
         <image name="person.3" catalog="system" width="128" height="66"/>
         <image name="person.3.sequence.fill" catalog="system" width="128" height="63"/>
         <image name="person.badge.plus" catalog="system" width="128" height="124"/>
