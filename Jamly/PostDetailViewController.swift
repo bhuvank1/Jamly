@@ -18,6 +18,7 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
     var contentView: UIContentView!
     @IBOutlet weak var captionTextView: UITextView!
     
+    @IBOutlet weak var likeHeartButton: UIButton!
     @IBOutlet weak var artistNameLabel: UILabel!
     @IBOutlet weak var songNameLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
@@ -103,7 +104,8 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
         
         // Update heart icon
         let heartImage = post.likes.contains(currentUID) ? "heart.fill" : "heart"
-        likesCount.setImage(UIImage(systemName: heartImage), for: .normal)
+        likeHeartButton.setImage(UIImage(systemName: heartImage), for: .normal)
+        likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
     }
     
     @IBAction func handleDoubleTap(recognizer: UITapGestureRecognizer) {
@@ -128,6 +130,27 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
     }
     
    
+    @IBAction func heartButtonTapped(_ sender: Any) {
+        guard let post else {return}
+        guard let currentUID = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        let postRef = db.collection("posts").document(post.postID)
+        
+        if let index = post.likes.firstIndex(of: currentUID) {
+                post.likes.remove(at: index)
+            } else {
+                post.likes.append(currentUID)
+            }
+        
+        updateLikesUI()
+        
+        postRef.updateData(["likes": post.likes]) { error in
+                if let error = error {
+                    print("Error updating likes: \(error.localizedDescription)")
+                }
+        }
+    }
+    
     func changeComments(postID: String, newComment: Comment) {
         guard let post = post else { return }
             post.comments.append(newComment)

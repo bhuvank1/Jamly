@@ -84,16 +84,29 @@
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="p29-Mc-LzF">
                                                         <rect key="frame" x="0.0" y="515.66666666666663" width="440" height="34.333333333333371"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XVf-Pu-dOv">
-                                                                <rect key="frame" x="0.0" y="0.0" width="71.333333333333329" height="34.333333333333336"/>
-                                                                <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system" title="50"/>
-                                                                <connections>
-                                                                    <segue destination="jy2-Yf-jBS" kind="presentation" identifier="likesSegue" id="PvK-Vv-75c"/>
-                                                                </connections>
-                                                            </button>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="-20" translatesAutoresizingMaskIntoConstraints="NO" id="t66-ez-481">
+                                                                <rect key="frame" x="0.0" y="0.0" width="75.333333333333329" height="34.333333333333336"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RuK-ql-t6W">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="50.666666666666664" height="34.333333333333336"/>
+                                                                        <state key="normal" title="Button"/>
+                                                                        <buttonConfiguration key="configuration" style="plain" image="suit.heart" catalog="system"/>
+                                                                        <connections>
+                                                                            <action selector="heartButtonTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="rfn-ud-nk5"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XVf-Pu-dOv">
+                                                                        <rect key="frame" x="30.666666666666657" y="0.0" width="44.666666666666671" height="34.333333333333336"/>
+                                                                        <state key="normal" title="Button"/>
+                                                                        <buttonConfiguration key="configuration" style="plain" title="50"/>
+                                                                        <connections>
+                                                                            <segue destination="jy2-Yf-jBS" kind="presentation" identifier="likesSegue" id="PvK-Vv-75c"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                            </stackView>
                                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H8R-Hj-1Pk">
-                                                                <rect key="frame" x="80.333333333333314" y="0.0" width="80.666666666666686" height="34.333333333333336"/>
+                                                                <rect key="frame" x="84.333333333333314" y="0.0" width="80.666666666666686" height="34.333333333333336"/>
                                                                 <state key="normal" title="Button"/>
                                                                 <buttonConfiguration key="configuration" style="plain" image="message" catalog="system" title="100"/>
                                                                 <connections>
@@ -101,7 +114,7 @@
                                                                 </connections>
                                                             </button>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4/5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gdo-BM-nZN">
-                                                                <rect key="frame" x="170" y="0.0" width="270" height="34.333333333333336"/>
+                                                                <rect key="frame" x="174" y="0.0" width="266" height="34.333333333333336"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -169,6 +182,7 @@
                         <outlet property="artistNameLabel" destination="c2B-dF-Qgp" id="tDv-ln-pnX"/>
                         <outlet property="captionTextView" destination="Oxg-FJ-jG3" id="Iqc-RN-zKB"/>
                         <outlet property="commentCount" destination="H8R-Hj-1Pk" id="h0h-y3-c68"/>
+                        <outlet property="likeHeartButton" destination="RuK-ql-t6W" id="l1F-ih-4aY"/>
                         <outlet property="likesCount" destination="XVf-Pu-dOv" id="7xQ-B8-c3S"/>
                         <outlet property="postImageView" destination="lfP-eD-Jw4" id="jej-Jf-A3s"/>
                         <outlet property="ratingLabel" destination="Gdo-BM-nZN" id="iEj-zq-aT4"/>
@@ -308,8 +322,8 @@
     </scenes>
     <resources>
         <image name="arrow.up" catalog="system" width="118" height="128"/>
-        <image name="heart" catalog="system" width="128" height="107"/>
         <image name="message" catalog="system" width="128" height="116"/>
+        <image name="suit.heart" catalog="system" width="128" height="107"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

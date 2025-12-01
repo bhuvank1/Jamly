@@ -20,6 +20,7 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var postImageView: UIImageView!
     
+    @IBOutlet weak var likeHeartButton: UIButton!
     @IBOutlet weak var mutualGroupsButton: UIButton!
     @IBOutlet weak var artistNameLabel: UILabel!
     @IBOutlet weak var songNameLabel: UILabel!
@@ -178,6 +179,13 @@ class PostTableViewCell: UITableViewCell {
                     self.listenLaterButton.setTitle("+ 🍓", for: .normal)
                 }
             }
+        }
+    }
+    
+    @IBAction func heartButtonTapped(_ sender: Any) {
+        if let post = post {
+            let otherVC = delegate as! ChangeLikesSocialFeed
+            otherVC.changeLikes(for: post, cell: self)
         }
     }
     
