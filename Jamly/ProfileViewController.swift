@@ -36,11 +36,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         displayPostTable.estimatedRowHeight = 72
         displayPostTable.separatorStyle = .singleLine // Set to singleLine for separators between cells
 
-        displayPostTable.backgroundColor = UIColor(hex: "#FFC1CC")
-
-        let bgView = UIView()
-        bgView.backgroundColor = UIColor(hex: "#FFC1CC")
-        displayPostTable.backgroundView = bgView
+        displayPostTable.backgroundColor = UIColor(hex: "#FFEFE5")
+//
+//        let bgView = UIView()
+//        bgView.backgroundColor = UIColor(hex: "#FFC1CC")
+//        displayPostTable.backgroundView = bgView
 
         // Center the usernameLabel programmatically
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -61,7 +61,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     // MARK: - Styling
     private func applyJamThemeStyling() {
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = .clear
 
         usernameLabel.textColor = UIColor(hex: "#3D1F28")
         usernameLabel.font = UIFont(name: "Poppins-SemiBold", size: 26)
@@ -231,8 +231,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.songName.text = post.trackObject.name
         cell.songRating.text = "\(post.rating)/5"
 
-        cell.backgroundColor = UIColor(hex: "#FFC1CC")
-        cell.contentView.backgroundColor = UIColor(hex: "#FFC1CC")
+        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.contentView.backgroundColor = UIColor(hex: "#FFEFE5")
 
         cell.layer.cornerRadius = 12
         cell.contentView.layer.cornerRadius = 12
@@ -251,7 +251,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.albumPic.layer.cornerRadius = 10
         cell.albumPic.clipsToBounds = true
         cell.albumPic.layer.borderWidth = 2
-        cell.albumPic.layer.borderColor = UIColor(hex: "#FFF8F3").cgColor
+        cell.albumPic.layer.borderColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0).cgColor
         cell.albumPic.layer.shadowOpacity = 0.05
         cell.albumPic.layer.shadowOffset = CGSize(width: 0, height: 2)
         cell.albumPic.layer.shadowRadius = 4
