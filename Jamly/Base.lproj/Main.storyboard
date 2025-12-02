@@ -1033,7 +1033,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="108" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-MC-vri">
-                                                    <rect key="frame" x="20.000000000000014" y="17" width="231.33333333333337" height="80"/>
+                                                    <rect key="frame" x="20" y="17" width="231.33333333333331" height="80"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beach_test_image" translatesAutoresizingMaskIntoConstraints="NO" id="0zh-Tk-YqS">
                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
@@ -1126,16 +1126,10 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="Ka6-WH-d1i">
-                        <barButtonItem key="rightBarButtonItem" image="gearshape" catalog="system" style="plain" id="g4h-Bt-dQc">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="lcF-Ry-fwU">
-                                <rect key="frame" x="333" y="5" width="87" height="34.333333333333336"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Settings"/>
-                                <connections>
-                                    <segue destination="rCq-kJ-33D" kind="show" id="qZW-CA-K01"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="gearshape.fill" catalog="system" style="plain" id="g4h-Bt-dQc">
+                            <connections>
+                                <segue destination="rCq-kJ-33D" kind="show" id="bRf-oe-Rgs"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -1578,7 +1572,7 @@
         <image name="Jamly_LogoPDF" width="159" height="160"/>
         <image name="beach_test_image" width="2726" height="2047"/>
         <image name="chart.xyaxis.line" catalog="system" width="128" height="102"/>
-        <image name="gearshape" catalog="system" width="128" height="123"/>
+        <image name="gearshape.fill" catalog="system" width="128" height="123"/>
         <image name="lightbulb.circle.fill" catalog="system" width="128" height="123"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="magnifyingglass.circle.fill" catalog="system" width="128" height="123"/>
