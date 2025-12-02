@@ -27,7 +27,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
         applyJamThemeStyling()
         if let navBar = navigationController?.navigationBar {
             navBar.barTintColor = UIColor(hex: "#FFEFE5")
@@ -69,7 +68,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         usernameLabel.textAlignment = .center // Center the usernameLabel text
 
         // styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
-        styleButton(addFriendsButton, title: "Add Friends", bgColor: "#FFC1CC")
+//        styleButton(addFriendsButton, title: "Add Friends", bgColor: "#FFC1CC")
         
         listenLaterButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
         profileStatsButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
@@ -175,10 +174,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             dest.post = postDocs[postIndex]
         }
 
-        if segue.identifier == "showAddFriendsSegue",
-           let nav = segue.destination as? UINavigationController,
-           let _ = nav.topViewController as? SearchViewController {
-        }
+//        if segue.identifier == "showAddFriendsSegue",
+//           let nav = segue.destination as? UINavigationController,
+//           let _ = nav.topViewController as? SearchViewController {
+//        }
     }
 
     // MARK: - Fetch Posts
@@ -260,26 +259,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
         cell.backgroundColor = UIColor(hex: "#FFEFE5")
         cell.contentView.backgroundColor = UIColor(hex: "#FFEFE5")
-
-        cell.layer.cornerRadius = 12
-        cell.contentView.layer.cornerRadius = 12
-        cell.layer.masksToBounds = false
-
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOpacity = 0.10
-        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.layer.shadowRadius = 4
-
-        cell.layer.shadowPath = UIBezierPath(
-            roundedRect: cell.bounds,
-            cornerRadius: 12
-        ).cgPath
-
-        cell.albumPic.layer.cornerRadius = 10
-        cell.albumPic.clipsToBounds = true
-        cell.albumPic.layer.shadowOpacity = 0.05
-        cell.albumPic.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.albumPic.layer.shadowRadius = 4
 
         if let urlStr = post.trackObject.albumArt, let url = URL(string: urlStr) {
             URLSession.shared.dataTask(with: url) { data, _, _ in

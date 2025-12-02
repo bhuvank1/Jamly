@@ -1062,6 +1062,7 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="0zh-Tk-YqS" firstAttribute="height" secondItem="EpQ-el-PA5" secondAttribute="height" id="8JP-ED-gw3"/>
+                                                        <constraint firstItem="0zh-Tk-YqS" firstAttribute="leading" secondItem="Bww-MC-vri" secondAttribute="leading" constant="20" id="Bfh-hz-e8g"/>
                                                     </constraints>
                                                 </stackView>
                                             </subviews>
@@ -1078,15 +1079,6 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="01G-fa-WBR">
-                                <rect key="frame" x="35" y="90" width="116" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Add Friends"/>
-                                <connections>
-                                    <action selector="addFriendsButtonTapped:" destination="xbV-Vh-Vjb" eventType="touchUpInside" id="cld-fP-Uaf"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Username" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qMp-RT-aQI">
                                 <rect key="frame" x="20" y="150" width="400" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1148,7 +1140,6 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="addFriendsButton" destination="01G-fa-WBR" id="GC8-Cw-hSu"/>
                         <outlet property="displayPostTable" destination="cVY-pT-pGe" id="cDg-Nb-2g1"/>
                         <outlet property="friendsButton" destination="7te-I9-IXM" id="5u3-A7-tgn"/>
                         <outlet property="listenLaterButton" destination="1wa-8U-Lpk" id="4xt-jd-Qy6"/>
@@ -1556,10 +1547,18 @@
                         <viewLayoutGuide key="safeArea" id="eIC-JV-Def"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="3Kl-eK-nW2"/>
+                    <navigationItem key="navigationItem" id="3Kl-eK-nW2">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="person.fill.badge.plus" catalog="system" style="plain" id="5Wd-mB-X6v">
+                            <connections>
+                                <action selector="addFriendsButtonTapped:" destination="bYr-HG-afs" id="b8P-Fs-eh0"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="addFriendsButton" destination="5Wd-mB-X6v" id="YV5-2B-zYm"/>
                         <outlet property="tableView" destination="Cd8-Re-GFG" id="XS3-rc-Kh7"/>
                         <segue destination="ZIj-Ci-L1s" kind="show" identifier="showFriendInSearchFromMyFriends" id="Xg7-LW-y0F"/>
+                        <segue destination="ZIj-Ci-L1s" kind="show" identifier="showAddFriendsSegue" id="BKh-ys-WB3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XYA-bH-ILc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1568,8 +1567,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Xg7-LW-y0F"/>
-        <segue reference="iAt-1U-dty"/>
+        <segue reference="eUS-3B-pfB"/>
+        <segue reference="3bv-J2-5pg"/>
         <segue reference="spb-ZY-rbU"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -1589,6 +1588,7 @@
         <image name="person.3.sequence.fill" catalog="system" width="128" height="63"/>
         <image name="person.badge.plus" catalog="system" width="128" height="124"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
+        <image name="person.fill.badge.plus" catalog="system" width="128" height="126"/>
         <image name="plus.app" catalog="system" width="128" height="114"/>
         <image name="questionmark.app.fill" catalog="system" width="128" height="114"/>
         <image name="suit.heart" catalog="system" width="128" height="107"/>
@@ -1603,7 +1603,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
