@@ -48,13 +48,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         usernameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
 
         loadUserProfile()
-        loadFriendList()
+        
     }
 
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         startListeningForPosts()
+        loadFriendList()
     }
 
     deinit { listener?.remove() }
@@ -77,6 +78,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if let font = UIFont(name: "Poppins-SemiBold", size: 14) {
             listenLaterButton.subtitleLabel?.font = font
             profileStatsButton.subtitleLabel?.font = font
+            friendsButton.titleLabel?.font = font
+        }
+        
+        
+        if let font = UIFont(name: "Poppins-SemiBold", size: 13) {
             friendsButton.titleLabel?.font = font
         }
         
@@ -152,6 +158,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
 
                 self.myFriendIDs = snap?.data()?["friends"] as? [String] ?? []
+                
+                DispatchQueue.main.async {
+                    let count = self.myFriendIDs.count
+                    self.friendsButton.setTitle("\(count) friends", for: .normal)
+                }
             }
     }
 
