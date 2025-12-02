@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 class MyFriendsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet weak var addFriendsButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
 
     private let db = Firestore.firestore()
@@ -26,6 +27,7 @@ class MyFriendsViewController: UIViewController, UITableViewDataSource, UITableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "My Friends"
         applyJamThemeStyling()
 
         tableView.dataSource = self
@@ -117,12 +119,20 @@ class MyFriendsViewController: UIViewController, UITableViewDataSource, UITableV
         selectedFriendUID = friend.uid
         performSegue(withIdentifier: "showFriendInSearchFromMyFriends", sender: self)
     }
-
+    @IBAction func addFriendsButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "showAddFriendsSegue", sender: nil)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showFriendInSearchFromMyFriends",
            let dest = segue.destination as? SearchViewController,
            let uid = selectedFriendUID {
             dest.initialFriendUID = uid
+        }
+        
+        if segue.identifier == "showAddFriendsSegue",
+           let nav = segue.destination as? UINavigationController,
+           let _ = nav.topViewController as? SearchViewController {
         }
     }
 }
