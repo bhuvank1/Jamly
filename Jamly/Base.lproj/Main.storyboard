@@ -1033,7 +1033,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="108" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-MC-vri">
-                                                    <rect key="frame" x="20.000000000000014" y="17" width="231.33333333333337" height="80"/>
+                                                    <rect key="frame" x="20" y="17" width="231.33333333333331" height="80"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beach_test_image" translatesAutoresizingMaskIntoConstraints="NO" id="0zh-Tk-YqS">
                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
@@ -1062,6 +1062,7 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="0zh-Tk-YqS" firstAttribute="height" secondItem="EpQ-el-PA5" secondAttribute="height" id="8JP-ED-gw3"/>
+                                                        <constraint firstItem="0zh-Tk-YqS" firstAttribute="leading" secondItem="Bww-MC-vri" secondAttribute="leading" constant="20" id="Bfh-hz-e8g"/>
                                                     </constraints>
                                                 </stackView>
                                             </subviews>
@@ -1566,7 +1567,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="BKh-ys-WB3"/>
+        <segue reference="eUS-3B-pfB"/>
         <segue reference="3bv-J2-5pg"/>
         <segue reference="spb-ZY-rbU"/>
     </inferredMetricsTieBreakers>

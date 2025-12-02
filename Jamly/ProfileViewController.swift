@@ -260,26 +260,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.backgroundColor = UIColor(hex: "#FFEFE5")
         cell.contentView.backgroundColor = UIColor(hex: "#FFEFE5")
 
-        cell.layer.cornerRadius = 12
-        cell.contentView.layer.cornerRadius = 12
-        cell.layer.masksToBounds = false
-
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOpacity = 0.10
-        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.layer.shadowRadius = 4
-
-        cell.layer.shadowPath = UIBezierPath(
-            roundedRect: cell.bounds,
-            cornerRadius: 12
-        ).cgPath
-
-        cell.albumPic.layer.cornerRadius = 10
-        cell.albumPic.clipsToBounds = true
-        cell.albumPic.layer.shadowOpacity = 0.05
-        cell.albumPic.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.albumPic.layer.shadowRadius = 4
-
         if let urlStr = post.trackObject.albumArt, let url = URL(string: urlStr) {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data, let img = UIImage(data: data) {
