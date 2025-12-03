@@ -23,6 +23,10 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
     private var addCandidates: [AppUser] = []
     // Toggle based on segmented control
     private var isAddMode = false
+    
+    // Variable to store/send info
+    private var selectedMemberUID: String?
+
 
     // Computed datasource based on the toggle
     private var dataSource: [AppUser] {
@@ -36,7 +40,7 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
         
         membersTable.dataSource = self
         membersTable.delegate = self
-        membersTable.allowsSelection = false // default in View Members
+        membersTable.allowsSelection = true // default
         
         // THEME
         let appBg = UIColor(hex: "#FFEFE5")
@@ -56,7 +60,6 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBAction func onSegmentChanged(_ sender: Any) {
         isAddMode = (segmentedControl.selectedSegmentIndex == 1)
-        membersTable.allowsSelection = isAddMode
         membersTable.reloadData()
 
         // Debug print statements
@@ -152,7 +155,7 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
 
-    // MARK: - UITableView
+    // Tableview stuff
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         dataSource.count
     }
@@ -163,12 +166,12 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
             ?? UITableViewCell(style: .subtitle, reuseIdentifier: "MemberCell")
 
         cell.textLabel?.text = user.displayName.isEmpty ? "(no name)" : user.displayName
-        cell.detailTextLabel?.text = user.email
-        cell.detailTextLabel?.textColor = .secondaryLabel
+//        cell.detailTextLabel?.text = user.email
+//        cell.detailTextLabel?.textColor = .secondaryLabel
 
         // Selection only in Add mode
-        cell.selectionStyle = isAddMode ? .default : .none
-        cell.accessoryType = isAddMode ? .disclosureIndicator : .none
+        cell.selectionStyle = .default
+        cell.accessoryType = isAddMode ? .none : .disclosureIndicator
         
         //Theme
         cell.backgroundColor = UIColor(hex: "#FFEFE5")
@@ -180,23 +183,35 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard isAddMode else { return } // Only allowed to select rows in Add Mode
-        tableView.deselectRow(at: indexPath, animated: true)
-
-        let candidate = addCandidates[indexPath.row]
-
-        db.collection("groups").document(group.id)
-            .updateData([
-                "members": FieldValue.arrayUnion([candidate.uid]),
-                "lastActivityAt": Timestamp(date: Date())
-            ]) { [weak self] err in
-                guard let self = self else { return }
-                if let err = err {
-                    print("Add failed: \(err.localizedDescription)")
-                    return
+        if isAddMode {
+            // Existing add logic
+            let candidate = addCandidates[indexPath.row]
+            db.collection("groups").document(group.id)
+                .updateData([
+                    "members": FieldValue.arrayUnion([candidate.uid]),
+                    "lastActivityAt": Timestamp(date: Date())
+                ]) { [weak self] err in
+                    guard let self = self else { return }
+                    if let err = err {
+                        print("Add failed: \(err.localizedDescription)")
+                        return
+                    }
+                    self.fetchMembersAndCandidates()
                 }
-                // Refresh lists & update counts
-                self.fetchMembersAndCandidates()
-            }
+            return
+        } else {
+            // Navigate to profile
+            let member = currentMembers[indexPath.row]
+            selectedMemberUID = member.uid
+            performSegue(withIdentifier: "showFriendFromGroupMembers", sender: self)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showFriendFromGroupMembers",
+           let dest = segue.destination as? SearchViewController,
+           let uid = selectedMemberUID {
+            dest.initialFriendUID = uid
+        }
     }
 }
