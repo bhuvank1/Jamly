@@ -30,7 +30,7 @@ class AccountSettingsVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         
         if let font = UIFont(name: "Poppins-SemiBold", size: 16) {
             groupsNumLabel.font = font

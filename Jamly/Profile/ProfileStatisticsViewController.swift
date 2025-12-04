@@ -44,7 +44,7 @@ class ProfileStatisticsViewController: UIViewController, UITableViewDataSource, 
         tableView.tableFooterView = UIView()
         
         // THEME
-        let appBg = UIColor(hex: "#FFEFE5")
+        let appBg = UIColor(named: "BackgroundAppColor")!
         let accent = UIColor(hex: "#FFC1CC")
 
         view.backgroundColor = appBg
@@ -138,6 +138,7 @@ class ProfileStatisticsViewController: UIViewController, UITableViewDataSource, 
             cell.setNeedsLayout()
         } else if let urlStr = t.albumArt, let url = URL(string: urlStr) {
             cell.imageView?.image = UIImage(systemName: "music.note")
+            cell.imageView?.image?.withTintColor(UIColor(named: "AppTextColor")!)
             let rowIndex = indexPath.row
             URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
                 guard let self = self, let data = data, let img = UIImage(data: data) else { return }
@@ -153,12 +154,13 @@ class ProfileStatisticsViewController: UIViewController, UITableViewDataSource, 
             }.resume()
         } else {
             cell.imageView?.image = UIImage(systemName: "music.note")
+            cell.imageView?.image?.withTintColor(UIColor(named: "AppTextColor")!)
             cell.setNeedsLayout()
         }
         
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")!
         let selected = UIView()
-        selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
+        selected.backgroundColor = UIColor(named: "BackgroundAppColor")!.withAlphaComponent(0.25)
         cell.selectedBackgroundView = selected
         
         return cell

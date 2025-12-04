@@ -15,9 +15,9 @@ class AboutPageViewController: UIViewController {
         super.viewDidLoad()
 
         self.title = "About Jamly"
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
-        aboutTextView.backgroundColor = UIColor(hex: "#FFEFE5")
-        versionTextView.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
+       aboutTextView.backgroundColor = UIColor(named: "BackgroundAppColor")!
+       versionTextView.backgroundColor = UIColor(named: "BackgroundAppColor")!
         
         if let font = UIFont(name: "Poppins-Regular", size: 14) {
             aboutTextView.font = font
