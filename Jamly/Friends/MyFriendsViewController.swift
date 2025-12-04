@@ -66,22 +66,22 @@ class MyFriendsViewController: UIViewController, UITableViewDataSource, UITableV
 
     // MARK: - Styling
     private func applyJamThemeStyling() {
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
 
-        tableView.backgroundColor = UIColor(hex: "#FFEFE5")
+        tableView.backgroundColor = UIColor(named: "BackgroundAppColor")!
         let bgView = UIView()
-        bgView.backgroundColor = UIColor(hex: "#FFEFE5")
+        bgView.backgroundColor = UIColor(named: "BackgroundAppColor")!
         tableView.backgroundView = bgView
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = UIColor(hex: "#3D1F28") 
+        tableView.separatorColor = UIColor(named: "AppTextColor")!
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 72
 
         let cellAppearance = UITableViewCell.appearance()
         cellAppearance.textLabel?.font = UIFont(name: "Poppins-SemiBold", size: 16)
         cellAppearance.detailTextLabel?.font = UIFont(name: "Poppins-Regular", size: 14)
-        cellAppearance.textLabel?.textColor = UIColor(hex: "#3D1F28")
-        cellAppearance.detailTextLabel?.textColor = UIColor(hex: "#3D1F28")
+        cellAppearance.textLabel?.textColor = UIColor(named: "AppTextColor")!
+        cellAppearance.detailTextLabel?.textColor = UIColor(named: "AppTextColor")!
     }
 
     // MARK: - UITableViewDataSource
@@ -99,9 +99,9 @@ class MyFriendsViewController: UIViewController, UITableViewDataSource, UITableV
         cell.detailTextLabel?.text = f.email
         cell.accessoryType = .disclosureIndicator
 
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
-        cell.textLabel?.textColor = UIColor(hex: "#3D1F28")
-        cell.detailTextLabel?.textColor = UIColor(hex: "#3D1F28")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")!
+        cell.textLabel?.textColor = UIColor(named: "AppTextColor")!
+        cell.detailTextLabel?.textColor = UIColor(named: "AppTextColor")!
         cell.layer.cornerRadius = 12
         cell.layer.masksToBounds = true
         cell.layer.shadowColor = UIColor.black.cgColor

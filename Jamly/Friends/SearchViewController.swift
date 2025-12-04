@@ -59,12 +59,12 @@ class SearchViewController: UIViewController,
 
     // MARK: - Styling
     private func applyJamThemeStyling() {
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
 
-        displayNameLabel.textColor = UIColor(hex: "#3D1F28")
+        displayNameLabel.textColor = UIColor(named: "AppTextColor")!
         displayNameLabel.font = UIFont(name: "Poppins-SemiBold", size: 28)
 
-        noPostsLabel.textColor = UIColor(hex: "#3D1F28")
+        noPostsLabel.textColor = UIColor(named: "AppTextColor")!
         noPostsLabel.font = UIFont(name: "Poppins-SemiBold", size: 18)
 
         styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
@@ -73,12 +73,12 @@ class SearchViewController: UIViewController,
 
         let bg = UIView()
         bg.backgroundColor = UIColor(hex: "#FFC1CC")
-        displayPostTable.backgroundColor = UIColor(hex: "#FFEFE5")
+        displayPostTable.backgroundColor = UIColor(named: "BackgroundAppColor")!
         displayPostTable.backgroundView = nil
         displayPostTable.separatorStyle = .none
         searchBar.searchBarStyle = .minimal
-        searchBar.barTintColor = UIColor(hex: "#FFEFE5")
-        searchBar.backgroundColor = UIColor(hex: "#FFEFE5")
+        searchBar.barTintColor = UIColor(named: "BackgroundAppColor")!
+        searchBar.backgroundColor = UIColor(named: "BackgroundAppColor")!
 
 
         if let bgView = searchBar.subviews.first?.subviews.first(where: { $0 is UIImageView }) {
@@ -340,11 +340,11 @@ class SearchViewController: UIViewController,
 
         // --- TEXT ---
         cell.songName.text = post.trackObject.name
-        cell.songName.textColor = UIColor(hex: "#3D1F28")
+        cell.songName.textColor = UIColor(named: "AppTextColor")!
         cell.songName.font = UIFont(name: "Poppins-SemiBold", size: 16)
 
         cell.songRating.text = "\(post.rating)/5"
-        cell.songRating.textColor = UIColor(hex: "#3D1F28")
+        cell.songRating.textColor = UIColor(named: "AppTextColor")!
         cell.songRating.font = UIFont(name: "Poppins-Regular", size: 14)
 
         // --- IMAGE ---
@@ -365,14 +365,14 @@ class SearchViewController: UIViewController,
 
         // --- STYLING ---
         // Match table view background
-        let bgColor = UIColor(hex: "#FFEFE5")
+        let bgColor = UIColor(named: "BackgroundAppColor")
         cell.backgroundColor = bgColor
         cell.contentView.backgroundColor = bgColor
 
         // Very subtle border
         cell.contentView.layer.cornerRadius = 10
         cell.contentView.layer.borderWidth = 0.6
-        cell.contentView.layer.borderColor = UIColor(hex: "#3D1F28")
+        cell.contentView.layer.borderColor = UIColor(named: "AppTextColor")!
             .withAlphaComponent(0.15).cgColor   // SUPER subtle line
         cell.contentView.layer.masksToBounds = true
 

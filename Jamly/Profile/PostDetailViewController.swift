@@ -43,7 +43,7 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
         usernameLabel.text = post?.displayName
         songNameLabel.text = post?.trackObject.name
         artistNameLabel.text = post?.trackObject.artists
-        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         
         // image
         if let albumArtURL = post?.trackObject.albumArt, let url = URL(string: albumArtURL) {
@@ -62,10 +62,10 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
         postImageView.addGestureRecognizer(doubleTap)
         postImageView.isUserInteractionEnabled = true
         
-        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         
-        likesCount.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
-        commentCount.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        likesCount.tintColor = UIColor(named: "AppTextColor")!
+        commentCount.tintColor = UIColor(named: "AppTextColor")!
         
         if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
             ratingLabel.font = font
@@ -105,7 +105,7 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
         // Update heart icon
         let heartImage = post.likes.contains(currentUID) ? "heart.fill" : "heart"
         likeHeartButton.setImage(UIImage(systemName: heartImage), for: .normal)
-        likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        likeHeartButton.tintColor = UIColor(named: "AppTextColor")!
     }
     
     @IBAction func handleDoubleTap(recognizer: UITapGestureRecognizer) {
