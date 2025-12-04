@@ -343,32 +343,36 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         // delete likes from user
                         self.deleteUserLikes {
                             
-                            // delete any database info about this user
-                            self.deleteDatabaseInfo {
+                            // delete user friends
+                            self.deleteUserFriends {
                                 
-                                user.delete() { error in
-                                    if let error = error {
-                                        print("Error deleting user: \(error.localizedDescription)")
-                                    } else {
-                                        print("Account successfully deleted.")
-                                        
-                                        // Clear any user-related data if needed
-                                        do {
-                                            try Auth.auth().signOut()
-                                        } catch let signOutError as NSError {
-                                            print("Error signing out: \(signOutError.localizedDescription)")
-                                        }
-                                        
-                                        
-                                        // reroute back to login screen
-                                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                                        let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC")
-                                        
-                                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                           let sceneDelegate = windowScene.delegate as? SceneDelegate,
-                                           let window = sceneDelegate.window {
-                                            window.rootViewController = loginVC
-                                            window.makeKeyAndVisible()
+                                // delete any database info about this user
+                                self.deleteDatabaseInfo {
+                                    
+                                    user.delete() { error in
+                                        if let error = error {
+                                            print("Error deleting user: \(error.localizedDescription)")
+                                        } else {
+                                            print("Account successfully deleted.")
+                                            
+                                            // Clear any user-related data if needed
+                                            do {
+                                                try Auth.auth().signOut()
+                                            } catch let signOutError as NSError {
+                                                print("Error signing out: \(signOutError.localizedDescription)")
+                                            }
+                                            
+                                            
+                                            // reroute back to login screen
+                                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                            let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC")
+                                            
+                                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                               let sceneDelegate = windowScene.delegate as? SceneDelegate,
+                                               let window = sceneDelegate.window {
+                                                window.rootViewController = loginVC
+                                                window.makeKeyAndVisible()
+                                            }
                                         }
                                     }
                                 }
@@ -383,6 +387,47 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         controller.addAction(okAction)
         present(controller, animated: true)
     }
+    
+    func deleteUserFriends(completion: @escaping () -> Void) {
+        guard let user = Auth.auth().currentUser else { completion(); return }
+        let db = Firestore.firestore()
+        let uid = user.uid
+
+        // Get all userInfo documents
+        db.collection("userInfo").getDocuments { snapshot, error in
+            guard let docs = snapshot?.documents else {
+                completion()
+                return
+            }
+
+            if docs.isEmpty {
+                completion()
+                return
+            }
+
+            var remaining = docs.count
+
+            for doc in docs {
+                var friends = doc["friends"] as? [String] ?? []
+                let originalCount = friends.count
+
+                // Remove this user from others' friend lists
+                friends.removeAll { $0 == uid }
+
+                // Only update when a change is needed
+                if friends.count != originalCount {
+                    doc.reference.updateData(["friends": friends]) { _ in
+                        remaining -= 1
+                        if remaining == 0 { completion() }
+                    }
+                } else {
+                    remaining -= 1
+                    if remaining == 0 { completion() }
+                }
+            }
+        }
+    }
+
     
     func deleteDatabaseInfo(completion: @escaping () -> Void) {
         guard let user = Auth.auth().currentUser else { completion(); return }
