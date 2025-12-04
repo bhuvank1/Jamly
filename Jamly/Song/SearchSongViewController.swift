@@ -21,7 +21,7 @@ class SearchSongViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         title = "Search Song"
         
         songTableView.dataSource = self
@@ -112,9 +112,9 @@ class SearchSongViewController: UIViewController, UITableViewDataSource, UITable
             cell.setNeedsLayout()
         }
         
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")!
         let selected = UIView()
-        selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
+        selected.backgroundColor = UIColor(named: "BackgroundAppColor")!.withAlphaComponent(0.25)
         cell.selectedBackgroundView = selected
 
         return cell

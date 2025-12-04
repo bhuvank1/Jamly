@@ -26,7 +26,7 @@ final class GroupRecommendationViewController: UIViewController, UITableViewData
         recommendationTableView.tableFooterView = UIView()
         
         // THEME
-        let appBg = UIColor(hex: "#FFEFE5")
+        let appBg = UIColor(named: "BackgroundAppColor")!
         let accent = UIColor(hex: "#FFC1CC")
 
         view.backgroundColor = appBg
@@ -101,7 +101,7 @@ final class GroupRecommendationViewController: UIViewController, UITableViewData
             }.resume()
         }
         
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")!
         let selected = UIView()
         selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
         cell.selectedBackgroundView = selected

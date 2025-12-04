@@ -43,7 +43,7 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
         membersTable.allowsSelection = true // default
         
         // THEME
-        let appBg = UIColor(hex: "#FFEFE5")
+        let appBg = UIColor(named: "BackgroundAppColor")!
         let accent = UIColor(hex: "#FFC1CC")
 
         view.backgroundColor = appBg
@@ -174,7 +174,7 @@ class GroupMembersViewController: UIViewController, UITableViewDataSource, UITab
         cell.accessoryType = isAddMode ? .none : .disclosureIndicator
         
         //Theme
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")!
         let selected = UIView()
         selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
         cell.selectedBackgroundView = selected

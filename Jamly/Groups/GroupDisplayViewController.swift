@@ -40,7 +40,7 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
         }
         
         // THEME
-        let appBg = UIColor(hex: "#FFEFE5")
+        let appBg = UIColor(named: "BackgroundAppColor")!
         let accent = UIColor(hex: "#FFC1CC")
 
         view.backgroundColor = appBg
@@ -176,9 +176,9 @@ class GroupDisplayViewController: UIViewController, UITableViewDataSource, UITab
             }.resume()
         }
         
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")!
         let selected = UIView()
-        selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
+        selected.backgroundColor = UIColor(named: "BackgroundAppColor")!.withAlphaComponent(0.25)
         cell.selectedBackgroundView = selected
         
         return cell
