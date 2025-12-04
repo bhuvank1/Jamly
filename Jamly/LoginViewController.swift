@@ -23,14 +23,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: "#FFEFE5")
-        
-//        // setting fonts
-//        if let font = UIFont(name: "Poppins-SemiBold", size: 15) {
-//            ratingLabel.font = font
-//            likesButton.titleLabel?.font = font
-//            commentsButton.titleLabel?.font = font
-//        }
-//        
+  
         if let font = UIFont(name: "Poppins-SemiBold", size: 24) {
             accountTitle.font = font
         }

@@ -67,9 +67,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         usernameLabel.textColor = UIColor(hex: "#3D1F28")
         usernameLabel.font = UIFont(name: "Poppins-SemiBold", size: 26)
         usernameLabel.textAlignment = .center // Center the usernameLabel text
-
-        // styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
-//        styleButton(addFriendsButton, title: "Add Friends", bgColor: "#FFC1CC")
         
         listenLaterButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
         profileStatsButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
@@ -184,11 +181,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
            let dest = segue.destination as? PostDetailViewController {
             dest.post = postDocs[postIndex]
         }
-
-//        if segue.identifier == "showAddFriendsSegue",
-//           let nav = segue.destination as? UINavigationController,
-//           let _ = nav.topViewController as? SearchViewController {
-//        }
     }
 
     // MARK: - Fetch Posts

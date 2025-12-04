@@ -127,8 +127,6 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         cell.backgroundColor = .clear
-        
-        //cell.contentConfiguration = content
         return cell
     }
     
