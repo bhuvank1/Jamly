@@ -32,7 +32,8 @@ struct SplashScreen: View {
                     .frame(width: 300, height: 300)
                 
                 ProgressView(value: min(max(progress, 0), 1))
-                    .progressViewStyle(LinearProgressViewStyle(tint: .black))
+                    .progressViewStyle(LinearProgressViewStyle())
+                        .tint((Color (hex: "#3D1F28")))
                     .frame(height: 10)
                     .padding(.horizontal, 50)
                     .onAppear {
