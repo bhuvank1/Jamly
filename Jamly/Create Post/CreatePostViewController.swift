@@ -35,10 +35,10 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
         styleButton(selectSongButton, title: "Choose your Track", bgColor: "#FFC1CC")
 
         setCaptionFieldStyling()
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         
         // Track info
-        trackTitle.textColor = UIColor(hex: "#3D1F28")
+        trackTitle.textColor = UIColor(named: "AppTextColor")!
         if let font = UIFont(name: "Poppins-SemiBold", size: 17) {
             trackTitle.font = font
         }
@@ -60,7 +60,7 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
         var config = UIButton.Configuration.filled()
         config.title = title
         config.baseBackgroundColor = UIColor(hex: bgColor)
-        config.baseForegroundColor = UIColor(hex: "#3D1F28")
+        config.baseForegroundColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
         config.cornerStyle = .medium
         config.titleAlignment = .center
         button.configuration = config
@@ -79,11 +79,15 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
     
     func setCaptionFieldStyling() {
         captionField.backgroundColor = UIColor(hex: "#FFF8F3")
-        captionField.textColor = UIColor(hex: "#3D1F28")
-        captionField.font = UIFont(name: "Inter-Regular", size: 16)
+        captionField.textColor = UIColor(named: "BackgroundAppColor")!
+        
+        if let font = UIFont(name: "Poppins-Regular", size: 16) {
+            captionField.font = font
+        }
+    
         captionField.layer.cornerRadius = 8
         captionField.layer.borderWidth = 1
-        captionField.layer.borderColor = UIColor(hex: "#FFEFE5").cgColor
+        captionField.layer.borderColor = UIColor(named: "BackgroundAppColor")!.cgColor
         captionField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         captionField.isScrollEnabled = true      // Optional: true if text might exceed box
     }
