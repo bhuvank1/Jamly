@@ -79,7 +79,7 @@ class CreatePostViewController: UIViewController, SelectSongDelegate {
     
     func setCaptionFieldStyling() {
         captionField.backgroundColor = UIColor(hex: "#FFF8F3")
-        captionField.textColor = UIColor(named: "BackgroundAppColor")!
+        captionField.textColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
         
         if let font = UIFont(name: "Poppins-Regular", size: 16) {
             captionField.font = font

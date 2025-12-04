@@ -163,6 +163,7 @@ class PostDetailViewController: UIViewController, UIScrollViewDelegate, ChangeCo
             destVC.likes = post?.likes ?? []
         } else if segue.identifier == "commentsSegue",
                   let destVC = segue.destination as? CommentsViewController {
+            print("HERE")
             destVC.comments = post?.comments ?? []
             destVC.delegate = self
             destVC.postID = post?.postID ?? ""

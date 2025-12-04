@@ -84,6 +84,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         let db = Firestore.firestore()
         print(comments.count)
         for comment in comments {
+            guard !comment.commentText.isEmpty else { continue }
             db.collection("userInfo").document(comment.userID).getDocument { snapshot, err in
                 if let err = err {
                     print("Error fetching display name for \(comment.userID): \(err)")
