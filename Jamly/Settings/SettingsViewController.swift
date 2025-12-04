@@ -333,41 +333,46 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     return
                 }
                 
-                // delete any database info about this user
-                self.deleteDatabaseInfo()
                 
                 // delete all posts from this user
-                self.deleteUserPots()
-                
-                // delete comments from user
-                self.deleteUserComments()
-                
-                // delete likes from user
-                self.deleteUserLikes()
-                
-                user.delete() { error in
-                    if let error = error {
-                        print("Error deleting user: \(error.localizedDescription)")
-                    } else {
-                        print("Account successfully deleted.")
+                self.deleteUserPosts {
+                    
+                    // delete comments from user
+                    self.deleteUserComments {
                         
-                        // Clear any user-related data if needed
-                                do {
-                                    try Auth.auth().signOut()
-                                } catch let signOutError as NSError {
-                                    print("Error signing out: \(signOutError.localizedDescription)")
+                        // delete likes from user
+                        self.deleteUserLikes {
+                            
+                            // delete any database info about this user
+                            self.deleteDatabaseInfo {
+                                
+                                user.delete() { error in
+                                    if let error = error {
+                                        print("Error deleting user: \(error.localizedDescription)")
+                                    } else {
+                                        print("Account successfully deleted.")
+                                        
+                                        // Clear any user-related data if needed
+                                        do {
+                                            try Auth.auth().signOut()
+                                        } catch let signOutError as NSError {
+                                            print("Error signing out: \(signOutError.localizedDescription)")
+                                        }
+                                        
+                                        
+                                        // reroute back to login screen
+                                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                                        let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC")
+                                        
+                                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                           let sceneDelegate = windowScene.delegate as? SceneDelegate,
+                                           let window = sceneDelegate.window {
+                                            window.rootViewController = loginVC
+                                            window.makeKeyAndVisible()
+                                        }
+                                    }
                                 }
-                        
-                        
-                        // reroute back to login screen
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC")
-                        
-                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                           let sceneDelegate = windowScene.delegate as? SceneDelegate,
-                           let window = sceneDelegate.window {
-                            window.rootViewController = loginVC
-                            window.makeKeyAndVisible()
+                            }
                         }
                     }
                 }
@@ -379,10 +384,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         present(controller, animated: true)
     }
     
-    func deleteDatabaseInfo() {
-        guard let user = Auth.auth().currentUser else { return }
+    func deleteDatabaseInfo(completion: @escaping () -> Void) {
+        guard let user = Auth.auth().currentUser else { completion(); return }
         let uid = user.uid
-        
+
         let db = Firestore.firestore()
         db.collection("userInfo").document(uid).delete { error in
             if let error = error {
@@ -390,37 +395,40 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             } else {
                 print("User data deleted from Firestore.")
             }
+            completion()
         }
     }
     
-    func deleteUserPots() {
-        guard let user = Auth.auth().currentUser else { return }
+    func deleteUserPosts(completion: @escaping () -> Void) {
+        guard let user = Auth.auth().currentUser else { completion(); return }
         let db = Firestore.firestore()
-        
-        db.collection("posts").whereField("userID", isEqualTo: user.uid).getDocuments() { (querySnapshot, error) in
+
+        db.collection("posts").whereField("userID", isEqualTo: user.uid).getDocuments { snapshot, error in
             if let error = error {
-                print("Error fetching user posts: \(error.localizedDescription)")
+                print("Error fetching posts: \(error.localizedDescription)")
+                completion()
                 return
             }
-            
-            guard let documents = querySnapshot?.documents, !documents.isEmpty else {
-                print("No posts found for user.")
+
+            let documents = snapshot?.documents ?? []
+            if documents.isEmpty {
+                completion()
                 return
             }
-            
-            // Delete each post
-            for document in documents {
-                document.reference.delete { error in
-                    if let error = error {
-                        print("Error deleting post \(document.documentID): \(error.localizedDescription)")
-                    } else {
-                        print("Successfully deleted post \(document.documentID)")
+
+            var remaining = documents.count
+
+            for doc in documents {
+                doc.reference.delete { _ in
+                    remaining -= 1
+                    if remaining == 0 {
+                        completion()
                     }
                 }
             }
         }
-        
     }
+
     
     func makePopup(popupTitle:String, popupMessage:String) {
             
@@ -433,30 +441,67 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             present(controller,animated:true)
         }
     
-    func deleteUserComments() {
-        guard let user = Auth.auth().currentUser else { return }
+    func deleteUserComments(completion: @escaping () -> Void) {
+        guard let user = Auth.auth().currentUser else { completion(); return }
         let db = Firestore.firestore()
-        
-        db.collection("posts").getDocuments() { snapshot, error in
-            guard let docs = snapshot?.documents else { return }
+
+        db.collection("posts").getDocuments { snapshot, error in
+            let docs = snapshot?.documents ?? []
+            if docs.isEmpty {
+                completion()
+                return
+            }
+
+            var remaining = docs.count
+
             for doc in docs {
-                var comments = doc["comments"] as? [[String:Any]] ?? []
+                var comments = doc["comments"] as? [[String: Any]] ?? []
+                let originalCount = comments.count
+
                 comments.removeAll { $0["userID"] as? String == user.uid }
-                db.collection("posts").document(doc.documentID).updateData(["comments": comments])
+
+                // Only update if something changed
+                if comments.count != originalCount {
+                    doc.reference.updateData(["comments": comments]) { _ in
+                        remaining -= 1
+                        if remaining == 0 { completion() }
+                    }
+                } else {
+                    remaining -= 1
+                    if remaining == 0 { completion() }
+                }
             }
         }
     }
     
-    func deleteUserLikes() {
-        guard let user = Auth.auth().currentUser else { return }
+    func deleteUserLikes(completion: @escaping () -> Void) {
+        guard let user = Auth.auth().currentUser else { completion(); return }
         let db = Firestore.firestore()
-        
-        db.collection("posts").getDocuments() { snapshot, error in
-            guard let docs = snapshot?.documents else { return }
+
+        db.collection("posts").getDocuments { snapshot, error in
+            let docs = snapshot?.documents ?? []
+            if docs.isEmpty {
+                completion()
+                return
+            }
+
+            var remaining = docs.count
+
             for doc in docs {
                 var likes = doc["likes"] as? [String] ?? []
+                let originalCount = likes.count
+
                 likes.removeAll { $0 == user.uid }
-                db.collection("posts").document(doc.documentID).updateData(["likes": likes])
+
+                if likes.count != originalCount {
+                    doc.reference.updateData(["likes": likes]) { _ in
+                        remaining -= 1
+                        if remaining == 0 { completion() }
+                    }
+                } else {
+                    remaining -= 1
+                    if remaining == 0 { completion() }
+                }
             }
         }
     }
