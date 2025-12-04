@@ -31,8 +31,6 @@ class SearchSongViewController: UIViewController, UITableViewDataSource, UITable
         songTableView.dataSource = self
         songTableView.delegate = self
         
-
-        
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false  // important when no nav bar
