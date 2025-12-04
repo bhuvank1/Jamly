@@ -15,7 +15,7 @@ struct StarRatingView: View {
         VStack(spacing: 12) {
             Text("Rate Your Jam!")
                 .font(.headline)
-                .foregroundColor(Color(hex: "#3D1F28"))
+                .foregroundColor(Color("AppTextColor"))
                 .padding(.top, 8)
             
         HStack(spacing: 8) {
@@ -34,7 +34,7 @@ struct StarRatingView: View {
         .padding(.vertical, 8)
         }
         .frame(width: 389.0, height: 128.0)
-        .background(Color(hex: "#FFEFE5"))
+        .background(Color("BackgroundAppColor"))
         .edgesIgnoringSafeArea(.all)
     }
 }
