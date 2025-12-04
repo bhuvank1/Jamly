@@ -45,7 +45,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         feedTableView.delegate = self
         
         feedTableView.backgroundColor = .clear
-        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         self.title = "Jamly 🍓"
         
         //fetchSocialFeed()
@@ -58,7 +58,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         // fixing white top nav bar issue
         guard let navBar = navigationController?.navigationBar else { return }
-        navBar.barTintColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        navBar.barTintColor = UIColor(named: "BackgroundAppColor")!
         navBar.titleTextAttributes = [.font: UIFont(name: "Poppins-SemiBold", size: 20)!]
     }
     
@@ -89,10 +89,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 if post.likes.contains(currentUID) {
                    cell.likeHeartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                   cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+                    cell.likeHeartButton.tintColor = UIColor(named: "AppTextColor")!
                    } else {
                     cell.likeHeartButton.setImage(UIImage(systemName: "heart"), for: .normal)
-                    cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+                    cell.likeHeartButton.tintColor = UIColor(named: "AppTextColor")!
                    }
             }
             
@@ -292,10 +292,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         guard let currentUID = Auth.auth().currentUser?.uid else { return cell }
         if post.likes.contains(currentUID) {
             cell.likeHeartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+            cell.likeHeartButton.tintColor = UIColor(named: "AppTextColor")!
         } else {
             cell.likeHeartButton.setImage(UIImage(systemName: "heart"), for: .normal)
-            cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+            cell.likeHeartButton.tintColor = UIColor(named: "AppTextColor")!
         }
         return cell
     }

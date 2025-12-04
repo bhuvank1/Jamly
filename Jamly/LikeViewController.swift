@@ -24,7 +24,7 @@ class LikeViewController: UIViewController, UITableViewDelegate, UITableViewData
         fetchUsernamesForLikes()
         
         likesTableView.backgroundColor = .clear
-        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         navigationItem.title = "Likes"
     }
     
@@ -76,10 +76,10 @@ class LikeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 
                 if post.likes.contains(currentUID) {
                    cell.likeHeartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                    cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+                    cell.likeHeartButton.tintColor = UIColor(named: "AppTextColor")!
                    } else {
                     cell.likeHeartButton.setImage(UIImage(systemName: "heart"), for: .normal)
-                    cell.likeHeartButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+                    cell.likeHeartButton.tintColor = UIColor(named: "AppTextColor")!
                    }
             }
             

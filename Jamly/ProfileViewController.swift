@@ -29,7 +29,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
         applyJamThemeStyling()
         if let navBar = navigationController?.navigationBar {
-            navBar.barTintColor = UIColor(hex: "#FFEFE5")
+            navBar.barTintColor = UIColor(named: "BackgroundAppColor")!
         }
 
         displayPostTable.dataSource = self
@@ -62,18 +62,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     // MARK: - Styling
     private func applyJamThemeStyling() {
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
 
-        usernameLabel.textColor = UIColor(hex: "#3D1F28")
+        usernameLabel.textColor = UIColor(named: "AppTextColor")!
         usernameLabel.font = UIFont(name: "Poppins-SemiBold", size: 26)
         usernameLabel.textAlignment = .center // Center the usernameLabel text
 
         // styleButton(friendsButton, title: "Friends", bgColor: "#FFC1CC")
 //        styleButton(addFriendsButton, title: "Add Friends", bgColor: "#FFC1CC")
         
-        listenLaterButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
-        profileStatsButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
-        friendsButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        listenLaterButton.tintColor = UIColor(named: "AppTextColor")!
+        profileStatsButton.tintColor = UIColor(named: "AppTextColor")!
+        friendsButton.tintColor = UIColor(named: "AppTextColor")!
         
         if let font = UIFont(name: "Poppins-SemiBold", size: 14) {
             listenLaterButton.subtitleLabel?.font = font
@@ -86,20 +86,20 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             friendsButton.titleLabel?.font = font
         }
         
-        yourPostsLabel.textColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        yourPostsLabel.textColor = UIColor(named: "AppTextColor")!
         if let font = UIFont(name: "Poppins-Bold", size: 18) {
             yourPostsLabel.font = font
         }
         
-        friendsButton.layer.borderColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0).cgColor
+        friendsButton.layer.borderColor = UIColor(named: "AppTextColor")!.cgColor
         friendsButton.layer.borderWidth = 1.5
         friendsButton.layer.cornerRadius = 10
         
-        listenLaterButton.layer.borderColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0).cgColor
+        listenLaterButton.layer.borderColor = UIColor(named: "AppTextColor")!.cgColor
         listenLaterButton.layer.borderWidth = 1.5
         listenLaterButton.layer.cornerRadius = 10
         
-        profileStatsButton.layer.borderColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0).cgColor
+        profileStatsButton.layer.borderColor = UIColor(named: "AppTextColor")!.cgColor
         profileStatsButton.layer.borderWidth = 1.5
         profileStatsButton.layer.cornerRadius = 10
     }
@@ -268,8 +268,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.songName.text = post.trackObject.name
         cell.songRating.text = "\(post.rating)/5"
 
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
-        cell.contentView.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")!
+        cell.contentView.backgroundColor = UIColor(named: "BackgroundAppColor")!
 
         if let urlStr = post.trackObject.albumArt, let url = URL(string: urlStr) {
             URLSession.shared.dataTask(with: url) { data, _, _ in

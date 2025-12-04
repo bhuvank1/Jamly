@@ -91,8 +91,8 @@ class PostTableViewCell: UITableViewCell {
             captionText.font = font
         }
         
-        likesButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
-        commentsButton.tintColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        likesButton.tintColor = UIColor(named: "AppTextColor")!
+        commentsButton.tintColor = UIColor(named: "AppTextColor")!
         
         
     }
