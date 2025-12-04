@@ -30,9 +30,9 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
         groupsTableView.refreshControl = refresh
         refresh.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         
-        groupsTableView.backgroundColor = UIColor(hex: "#FFEFE5")
+        groupsTableView.backgroundColor = UIColor(named: "BackgroundAppColor")!
         groupsTableView.separatorColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.6)
         reloadGroups()
     }
@@ -93,7 +93,7 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
         cell.detailTextLabel?.numberOfLines = 2
         cell.accessoryType = .disclosureIndicator
         
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")!
         let selected = UIView()
         selected.backgroundColor = UIColor(hex: "#FFC1CC").withAlphaComponent(0.25)
         cell.selectedBackgroundView = selected

@@ -25,7 +25,7 @@ class GroupCreationViewController: UIViewController, SelectSongDelegate {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -41,7 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func applyGlobalTextColor() {
-        let appTextColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        let appTextColor = UIColor(named: "AppTextColor")!
         
         UILabel.appearance().textColor = appTextColor
         UITextView.appearance().textColor = appTextColor

@@ -21,7 +21,7 @@ class MutualGroupsViewController: UIViewController, UITableViewDataSource, UITab
         groupsTableView.delegate = self
         
         groupsTableView.backgroundColor = .clear
-        view.backgroundColor = UIColor(red: 1.0, green: 0.9372549019607843, blue: 0.8980392156862745, alpha: 1.0)
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")!
         navigationItem.title = "Mututal Groups"
     }
     
@@ -90,8 +90,8 @@ class MutualGroupsViewController: UIViewController, UITableViewDataSource, UITab
             cell.textLabel?.font = font
         }
         
-        cell.textLabel?.textColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
-        cell.detailTextLabel?.textColor = UIColor(red: 0.23921568627450981, green: 0.12156862745098039, blue: 0.1568627450980392, alpha: 1.0)
+        cell.textLabel?.textColor = UIColor(named: "AppTextColor")!
+        cell.detailTextLabel?.textColor = UIColor(named: "AppTextColor")!
         
         return cell
     }

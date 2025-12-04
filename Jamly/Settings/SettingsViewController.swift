@@ -33,7 +33,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         settingsTableView.dataSource = self
         settingsTableView.delegate = self
         settingsTableView.backgroundColor = .clear
-        view.backgroundColor = UIColor(hex: "#FFEFE5")
+        view.backgroundColor = UIColor(named: "BackgroundAppColor")
     }
     
     @IBAction func darkModeToggled(_ sender: UISwitch) {
@@ -203,7 +203,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTextCell", for: indexPath) as! SettingsTableViewCell
         let option = settingsOptions[indexPath.row]
         
-        cell.backgroundColor = UIColor(hex: "#FFEFE5")
+        cell.backgroundColor = UIColor(named: "BackgroundAppColor")
         cell.cellLabel.text = option.title
         if let font = UIFont(name: "Poppins-Regular", size: 16) {
             cell.cellLabel.font = font
